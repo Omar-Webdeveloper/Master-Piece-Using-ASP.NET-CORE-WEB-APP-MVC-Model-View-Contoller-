@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Ensure it takes full height of viewport */
+        padding-top: 70px; /* Push it below the fixed header */
+        background: url("https://stripesexb.com/wp-content/uploads/2023/07/service06.jpg") no-repeat center center/cover;
+    }
+
+    .login-form {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 90%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #ff0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .login-btn:hover {
+            background-color: #e6e600;
+        }
+
+</style>
+
+<div class="login-container">
+    <form class="login-form">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Email or phone number" aria-label="Email or phone number">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" aria-label="Password">
+        </div>
+        <div class="form-group">
+            <p><a asp-area="" asp-controller="Home" asp-action="Reset">Did you forget your password? Click here</a></p>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="login-btn">Login</button>
+        </div>
+        <div class="form-group">
+            <p>If you don’t have an account <a asp-area="" asp-controller="Home" asp-action="Rigster">click here to Create Account</a></p>
+        </div>
+    </form>
+</div>
