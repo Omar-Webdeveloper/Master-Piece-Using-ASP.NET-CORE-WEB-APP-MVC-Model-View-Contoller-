@@ -194,16 +194,43 @@
         </div>
         <div class="sixth_text">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home </a>
+
+                <!-- Links visible to all users -->
+                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">User Profile</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Employee Profile</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Join Our Network</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
 
+                <!-- Conditional links based on TempData -->
+                @if (TempData["Role"] != null)
+                {
+                    string role = TempData["Role"].ToString();
+
+                    if (role == "Admin")
+                    {
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Admin" asp-action="Admin_Dashboard">Admin Dashboard</a>
+                    }
+                    else if (role == "Employee")
+                    {
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Employee" asp-action="Employee_Dashboard">Employee Dashboard</a>
+                    }
+                    else if (role == "User")
+                    {
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Profile</a>
+                    }
+                }
+                else
+                {
+                    <!-- Links for guests -->
+                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
+                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Join Our Network</a>
+                }
+
+                <!-- Logout link visible to all logged-in users -->
+                @if (TempData["Role"] != null && TempData["Role"].ToString() != "Guest")
+                {
+                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
+                }
             </div>
         </div>
         <div class="map">
