@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
           rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    
+    @RenderSection("Styles", required: false)
     <style>
         * {
             margin: 0px;
@@ -18,7 +18,9 @@
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
-            font-variation-settings: "wdth" 100, "YTLC" 500;
+            /* font-variation-settings: "wdth" 100, "YTLC" 500; */
+            font-stretch: 100%; /* Equivalent to "wdth" */
+            font-weight: 500; /* Adjust weight instead of "YTLC" */
         }
 
 
@@ -26,13 +28,14 @@
             background-color: #d9eafd;
             opacity: 70%;
             padding: 10px 20px;
-            position: fixed;
+            /* position: fixed; */
+            position:static;
             width: 100%;
             height: 60px;
             z-index: 1000;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            /* justify-content: space-between; */
         }
 
         .logo {
@@ -43,6 +46,7 @@
         .nav {
             display: flex;
             gap: 15px;
+            margin-left: 500px;
         }
 
         .nav-link {
@@ -150,6 +154,7 @@
                 }
 
     </style>
+    @* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous"> *@
 </head>
 <body>
     <div class="header">
@@ -166,11 +171,40 @@
             <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
             <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
             <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">User Profile</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Employee Profile</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Join Our Network</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
+            <!-- Conditional links based on TempData -->
+            @if (TempData["Role"] != null)
+            {
+
+                string role = TempData["Role"] as string ?? string.Empty;
+
+                if (role == "Admin")
+                {
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
+                }
+                else if (role == "Employee")
+                {
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Employee Dashboard</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
+                }
+                else if (role == "User")
+                {
+                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">User Profile</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
+                }
+            }
+            else
+            {
+                <!-- Links for guests -->
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a>
+            }
+
+          
+           
+
+
+
 
         </div>
     </div>
@@ -198,39 +232,41 @@
                 <!-- Links visible to all users -->
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
 
                 <!-- Conditional links based on TempData -->
                 @if (TempData["Role"] != null)
                 {
-                    string role = TempData["Role"].ToString();
+                    string role = TempData["Role"] as string ?? string.Empty;
 
                     if (role == "Admin")
                     {
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Admin" asp-action="Admin_Dashboard">Admin Dashboard</a>
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
+
                     }
                     else if (role == "Employee")
                     {
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Employee" asp-action="Employee_Dashboard">Employee Dashboard</a>
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
+
                     }
                     else if (role == "User")
                     {
-                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Profile</a>
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Profile">Profile</a>
+                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
+
                     }
                 }
                 else
                 {
                     <!-- Links for guests -->
                     <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
-                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Join Our Network</a>
+                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a>
                 }
 
-                <!-- Logout link visible to all logged-in users -->
-                @if (TempData["Role"] != null && TempData["Role"].ToString() != "Guest")
-                {
-                    <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
-                }
+     
             </div>
         </div>
         <div class="map">
@@ -275,6 +311,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -19,6 +19,8 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? Image { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ServiceProvider? ServiceProvider { get; set; }

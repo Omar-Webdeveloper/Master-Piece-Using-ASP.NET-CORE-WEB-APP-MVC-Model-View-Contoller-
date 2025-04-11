@@ -1,0 +1,127 @@
+﻿<style>
+    .profile-container {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avatar {
+        background-color: #8bc34a;
+        color: white;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .upload-btn {
+        background-color: #d3d3d3;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    .user-info {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .user-info p {
+            margin: 5px 0;
+        }
+
+    .stats {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+        .stats div {
+            text-align: center;
+            flex: 1;
+        }
+
+    .settings-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .settings-btn {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+        cursor: pointer;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        width: 80%;
+    }
+
+    .logout-btn {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 80%;
+    }
+
+</style>
+<div class="profile-container">
+    <div class="avatar">OA</div>
+    <button class="upload-btn">Upload Photo</button>
+    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+    <img id="imagePreview" src="" alt="Selected Image" style="display: none; width: 200px; margin-top: 10px;">
+
+    <script>
+        document.querySelector(".upload-btn").addEventListener("click", function () {
+            document.getElementById("imageInput").click();
+        });
+
+        document.getElementById("imageInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById("imagePreview");
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    <div class="user-info">
+        <p>omar abo jolban</p>
+        <p>omarabojolban@gmail.com</p>
+    </div>
+    <div class="stats">
+        <div>
+            <p>0</p>
+            <p>Projects</p>
+        </div>
+        <div>
+            <p>0</p>
+            <p>Reviews</p>
+        </div>
+    </div>
+</div>
+<div class="settings-container">
+    <button class="settings-btn"><a asp-action="EditProfile">Edit Profile</a></button>
+    <button class="settings-btn"><a asp-action="BookedServicesHistory">History</a></button>
+    <button class="logout-btn"><a asp-controller="Home" asp-action="Logout">Log Out</a></button>
+</div>

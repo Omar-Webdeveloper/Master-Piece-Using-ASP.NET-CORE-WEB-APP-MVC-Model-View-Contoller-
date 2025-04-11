@@ -1,0 +1,102 @@
+﻿<style>
+
+    .container {
+        display: flex;
+        align-items: flex-start;
+        background-color: #BCCCDC;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .form-section {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .image-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .image-section img {
+            width: 60%;
+            border-radius: 10px;
+        }
+
+    .headline {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .subheadline {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .signup-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-field {
+        width: 80%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .dropdown {
+        width: 84%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .submit-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .status-link {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+        .status-link a {
+            color: #0288d1;
+            text-decoration: none;
+        }
+
+</style>
+<div class="container">
+    <div class="form-section">
+        <h1 class="headline">Start earning money this week!</h1>
+        <p class="subheadline">Gain access to hundreds of jobs in your city and build your own schedule.</p>
+        <form class="signup-form">
+            <input type="text" class="input-field" placeholder="First name">
+            <input type="text" class="input-field" placeholder="Last name">
+            <input type="text" class="input-field" placeholder="Email or phone number">
+            <input type="text" class="input-field" placeholder="Your Country">
+            <input type="text" class="input-field" placeholder="Your Governorate">
+            <select class="dropdown">
+                <option>Your primary service</option>
+            </select>
+            <button type="submit" class="submit-button">Let's Get Started</button>
+        </form>
+        <p class="status-link">Already applied? <a href="#">Check your application status here.</a></p>
+    </div>
+    <div class="image-section">
+        <img src="./master pictures/Hello_our_Employee.png" alt="Job opportunity image">
+    </div>
+</div>
