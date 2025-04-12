@@ -11,8 +11,6 @@ public partial class User
 
     public string? LastName { get; set; }
 
-    public string? Email { get; set; }
-
     public string? PasswordHash { get; set; }
 
     public string? Role { get; set; }
@@ -20,6 +18,18 @@ public partial class User
     public DateTime? CreatedAt { get; set; }
 
     public string? Image { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string? Address { get; set; }
+
+    public DateOnly? DateOfBirth { get; set; }
+
+    public string? PhoneNumber { get; set; }
+
+    public string? Gender { get; set; }
+
+    public bool? IsActive { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 

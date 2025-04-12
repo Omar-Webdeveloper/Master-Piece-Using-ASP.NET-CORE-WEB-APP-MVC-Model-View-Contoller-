@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Service>
 @{
     ViewData["Title"] = "Services";
 }
@@ -112,64 +112,27 @@
     }
 
 </style>
-<h1>Services</h1>
-
 <div class="second_section">
     <div class="search-container">
         <input type="text" class="search-box" placeholder="Search...">
         <button class="search-button">Search</button>
     </div>
 </div>
-
 <table class="services-table">
     <tr>
-        <td class="service-card">
-            <img src="./master pictures/cleaning.jpg" alt="Cleaning Services">
-            <div class="service-name"><a href="">Cleaning Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/plumbing.jpg" alt="Plumbing Services">
-            <div class="service-name"><a href="Booking stage 1.html">Plumbing Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/download.jpg" alt="Electrical Services">
-            <div class="service-name"><a href="">Electrical Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/HVAC Services.jpg" alt="HVAC Services">
-            <div class="service-name"><a href="">HVAC Services</a></div>
-        </td>
-    </tr>
-    <tr>
-        <td class="service-card">
-            <img src="./master pictures/Handyman Services.jpg" alt="Handyman Services">
-            <div class="service-name"><a href="">Handyman Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/Pest Control Services.jpg" alt="Pest Control Services">
-            <div class="service-name"><a href="">Pest Control Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/Landscaping and Gardening Services.jpg" alt="Landscaping and Gardening Services">
-            <div class="service-name"><a href="">Landscaping and Gardening Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/Home Improvement Services.jpg" alt="Home Improvement Services">
-            <div class="service-name"><a href="">Home Improvement Services</a></div>
-        </td>
-    </tr>
-    <tr>
-        <td class="service-card">
-            <img src="./master pictures/Security Services.png" alt="Security Services">
-            <div class="service-name"><a href="">Security Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/Appliance Repair Services.jpg" alt="Appliance Repair Services">
-            <div class="service-name"><a href="">Appliance Repair Services</a></div>
-        </td>
-        <td class="service-card">
-            <img src="./master pictures/Moving and Storage Services.jpg" alt="Moving and Storage Services">
-            <div class="service-name"><a href="">Moving and Storage Services</a></div>
-        </td>
+        @foreach (var service in Model)
+        {
+            <td class="service-card">
+                <img src="@service.Image" alt="@service.ServiceName" href="">
+                <div class="service-name"><a asp-action="Show_Workers_for_Specfic_Service_" asp-route-id="@service.ServiceId">@service.ServiceName</a></div>
+                <p>@service.Description</p>
+                <p><strong>Price:</strong> $@service.StartingPrices</p>
+            </td>
+
+            @if ((Model.ToList().IndexOf(service) + 1) % 4 == 0) // Display 4 items per row
+            {
+                <tr></tr> <!-- Correctly ends and starts new rows -->
+            }
+        }
     </tr>
 </table>

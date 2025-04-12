@@ -8,12 +8,12 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Protect session cookie
+    options.Cookie.IsEssential = true; // Make it essential for GDPR compliance
 });
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var role = Context.Session.GetString("Role");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -110,15 +113,17 @@
             gap: 10px;
         }
 
-        .nav-item a {
+        .nav-item a 
+        {
             color: white;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
-            .nav-item a:hover {
+        .nav-item a:hover 
+        {
                 color: #0073e6;
-            }
+        }
 
         .map {
             flex: 1;
@@ -168,21 +173,21 @@
         </select>
         <div class="nav">
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a>
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>
             <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
             <!-- Conditional links based on TempData -->
-            @if (TempData["Role"] != null)
+            @if (role != null)
             {
 
-                string role = TempData["Role"] as string ?? string.Empty;
+                @* string role = HttpContext.Session.GetString("Role"); *@
 
-                if (role == "Admin")
+                if (role == "Manager")
                 {
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
                 }
-                else if (role == "Employee")
+                else if (role == "ServiceProvider")
                 {
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Employee Dashboard</a>
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
@@ -190,7 +195,7 @@
                 else if (role == "User")
                 {
                     <a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">User Profile</a>
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
                 }
             }
             else
@@ -231,22 +236,22 @@
 
                 <!-- Links visible to all users -->
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
+                <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
 
                 <!-- Conditional links based on TempData -->
-                @if (TempData["Role"] != null)
+                @if (role != null)
                 {
-                    string role = TempData["Role"] as string ?? string.Empty;
+                    @* string role = HttpContext.Session.GetString("Role"); *@
 
-                    if (role == "Admin")
+                    if (role == "Manager")
                     {
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Admin" asp-action="Admin_Dashboard">Admin Dashboard</a>
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
 
                     }
-                    else if (role == "Employee")
+                    else if (role == "ServiceProvider")
                     {
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Employee" asp-action="Employee_Dashboard">Employee Dashboard</a>
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
@@ -311,6 +316,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/dist/jquery.validate.unobtrusive.min.js"></script>
     @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>

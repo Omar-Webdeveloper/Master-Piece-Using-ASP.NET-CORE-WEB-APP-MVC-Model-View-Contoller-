@@ -1,0 +1,177 @@
+﻿@model IEnumerable<Master_Piece.Models.ServiceProvider>
+<style>
+
+    .second_section {
+        background-image: url("./master pictures/bathroom-plumbing.jpg");
+        height: 555px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.8);
+        transition: filter 0.3s ease-in-out;
+    }
+
+        .second_section:hover {
+            filter: brightness(1);
+        }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .search-container:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .search-box {
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+        .search-box:focus {
+            border-color: #007BFF;
+        }
+
+    .search-button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 10px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .search-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+
+    section.card {
+        width: 900px;
+        height: 215px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        margin: 20px 0;
+        padding: 20px;
+        position: relative;
+        margin-left: 50px;
+    }
+
+    section.card-image-section {
+        display: flex;
+        align-items: center;
+    }
+
+    .card-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+
+    section.card-content {
+        flex-grow: 1;
+        padding: 0 20px;
+    }
+
+        section.card-content h3 {
+            margin: 5px 0;
+        }
+
+        section.card-content h6 {
+            margin: 5px 0;
+        }
+
+    section.card-extra {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .extra-image {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+
+    .action-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+</style>
+<div class="second_section">
+    <div class="search-container">
+        <input type="text" class="search-box" placeholder="Search...">
+        <button class="search-button">Search</button>
+    </div>
+</div>
+
+
+<div class="providers-container">
+    @foreach (var provider in Model)
+    {
+        <section class="card">
+            <!-- Provider Image -->
+            <section class="card-image-section">
+                <img src="@provider.Photos" alt="Provider Image" class="card-image">
+            </section>
+
+            <!-- Provider Content -->
+            <section class="card-content">
+                <h3>@provider.WorkerName</h3>
+                <h3>
+                    @if (provider.Rating != null)
+                    {
+                        @:Very Good ⭐⭐⭐⭐⭐ (@provider.Rating)
+                    }
+                    else
+                    {
+                        @:Rating not available
+                    }
+                </h3>
+                <h3>Available Now</h3>
+                <p>@provider.Intro</p>
+            </section>
+
+            <!-- Extra Content -->
+            <section class="card-extra">
+                <h3>$130.00</h3>
+                <h6>Starting Price</h6>
+                <h6>Feature projects:</h6>
+                <img src="./master pictures/nozzle-repair-before-after.jpg" alt="Additional Image" class="extra-image">
+                <button class="action-button">
+                    <a asp-controller="User" asp-action="More_Details_About_ThatWorker" asp-route-id="@provider.ProviderId">Book Now</a>
+                </button>
+            </section>
+        </section>
+    }
+    }

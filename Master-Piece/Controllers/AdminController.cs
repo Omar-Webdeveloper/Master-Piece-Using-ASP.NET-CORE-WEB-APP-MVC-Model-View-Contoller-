@@ -28,5 +28,12 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clears all session data
+            HttpContext.Session.Remove("Role");
+            Response.Cookies.Delete(".AspNetCore.Session");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

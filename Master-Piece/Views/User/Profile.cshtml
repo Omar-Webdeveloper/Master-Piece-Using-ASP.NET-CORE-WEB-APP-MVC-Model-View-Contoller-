@@ -1,127 +1,156 @@
 ﻿<style>
-    .profile-container {
-        background-color: #f0f0f0;
-        padding: 20px;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .body-content {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fb;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
     }
 
-    .avatar {
-        background-color: #8bc34a;
-        color: white;
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        margin-bottom: 10px;
+    .header {
+        background-color: #f4f7fb;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 1px solid #ccc;
     }
 
-    .upload-btn {
-        background-color: #d3d3d3;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 10px;
-    }
-
-    .user-info {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-        .user-info p {
-            margin: 5px 0;
+        .header a {
+            color: #2b4c7e;
+            text-decoration: none;
+            margin-right: 25px;
+            font-weight: 500;
         }
 
-    .stats {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-        .stats div {
-            text-align: center;
-            flex: 1;
-        }
-
-    .settings-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .settings-btn {
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-        cursor: pointer;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        width: 80%;
-    }
-
-    .logout-btn {
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 5px;
-        width: 80%;
-    }
-
-</style>
-<div class="profile-container">
-    <div class="avatar">OA</div>
-    <button class="upload-btn">Upload Photo</button>
-    <input type="file" id="imageInput" accept="image/*" style="display: none;">
-    <img id="imagePreview" src="" alt="Selected Image" style="display: none; width: 200px; margin-top: 10px;">
-
-    <script>
-        document.querySelector(".upload-btn").addEventListener("click", function () {
-            document.getElementById("imageInput").click();
-        });
-
-        document.getElementById("imageInput").addEventListener("change", function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const preview = document.getElementById("imagePreview");
-                    preview.src = e.target.result;
-                    preview.style.display = "block";
-                };
-                reader.readAsDataURL(file);
+            .header a:hover {
+                text-decoration: underline;
             }
-        });
-    </script>
-    <div class="user-info">
-        <p>omar abo jolban</p>
-        <p>omarabojolban@gmail.com</p>
+
+    .profile-table {
+        width: 90%;
+        max-width: 1100px;
+        margin: 40px auto;
+        border-spacing: 40px;
+    }
+
+        .profile-table td {
+            width: 50%;
+            vertical-align: top;
+        }
+
+    .profile-container {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    }
+
+    .profile-image img {
+        max-width: 100%;
+        border-radius: 12px;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #355c8c;
+        margin-bottom: 25px;
+    }
+
+    .profile-item {
+        margin-bottom: 20px;
+    }
+
+        .profile-item label {
+            display: block;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .profile-item p {
+            margin: 0;
+            color: #666;
+        }
+         
+    /* media (max-width: 768px) { */
+   /*     .profile-table
+
+    /* { */
+    /*     display: block; */
+    /* } */
+
+    /* .profile-table tr, */
+    /* .profile-table td { */
+    /*     display: block; */
+    /*     width: 100%; */
+    /* } */
+
+    /* .profile-table td { */
+    /*     margin-bottom: 20px; */
+    /* } */
+
+    /* } */
+</style>
+
+<div class="body-content">
+    <div class="header">
+        <a href="@Url.Action("Profile", "User")">Profile</a>
+        <a href="@Url.Action("EditProfile", "User")">Edit Profile</a>
+        <a href="@Url.Action("ResetPassword", "Account")">Reset Password</a>
+        <a href="@Url.Action("OrderHistory", "Orders")">Order History</a>
     </div>
-    <div class="stats">
-        <div>
-            <p>0</p>
-            <p>Projects</p>
-        </div>
-        <div>
-            <p>0</p>
-            <p>Reviews</p>
-        </div>
-    </div>
-</div>
-<div class="settings-container">
-    <button class="settings-btn"><a asp-action="EditProfile">Edit Profile</a></button>
-    <button class="settings-btn"><a asp-action="BookedServicesHistory">History</a></button>
-    <button class="logout-btn"><a asp-controller="Home" asp-action="Logout">Log Out</a></button>
+
+    <table class="profile-table">
+        <tr>
+            <td class="profile-image">
+                <div class="profile-container">
+                    <img src="@Model.Image" alt="User Profile Image" />
+                </div>
+            </td>
+            <td>
+                <div class="profile-container">
+                    <h2>User Profile</h2>
+                    <div class="profile-item">
+                        <label>Full Name:</label>
+                        <p>@Model.FullName</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Email:</label>
+                        <p>@Model.Email</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Phone:</label>
+                        <p>@Model.PhoneNumber</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Role:</label>
+                        <p>@Model.Role</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Address:</label>
+                        <p>@Model.Address</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Date of Birth:</label>
+                        <p>@Model.DateOfBirth</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Gender:</label>
+                        <p>@Model.Gender</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Account Created:</label>
+                        <p>@Model.CreatedAt</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Active:</label>
+                        <p>@Model.IsActive</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

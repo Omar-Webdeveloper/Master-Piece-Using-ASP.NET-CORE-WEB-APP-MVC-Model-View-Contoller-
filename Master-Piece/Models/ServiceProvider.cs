@@ -9,7 +9,7 @@ public partial class ServiceProvider
 
     public int? UserId { get; set; }
 
-    public string? BusinessName { get; set; }
+    public string? WorkerName { get; set; }
 
     public string? ServiceType { get; set; }
 
@@ -20,8 +20,6 @@ public partial class ServiceProvider
     public string? Intro { get; set; }
 
     public string? Photos { get; set; }
-
-    public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
