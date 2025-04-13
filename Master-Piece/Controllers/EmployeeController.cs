@@ -16,6 +16,11 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        public IActionResult WorkHistory()
+        {
+            return View();
+        }
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Clears all session data

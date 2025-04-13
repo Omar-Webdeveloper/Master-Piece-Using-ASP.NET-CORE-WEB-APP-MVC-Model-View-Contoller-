@@ -45,59 +45,68 @@ namespace Master_Piece.Controllers
             }
 
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.PasswordHash == user.PasswordHash);
-            if (existingUser != null) {
-                // User found, redirect to the appropriate page based on role
-                if (existingUser.Role == "Manager")
+            //if (existingUser != null) {
+            //    // User found, redirect to the appropriate page based on role
+            //    if (existingUser.Role == "Manager")
+            //    {
+            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+
+            //        return RedirectToAction("Admin_Dashboard", "Admin");
+            //    }
+            //    else if (existingUser.Role == "ServiceProvider")
+            //    {
+            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+
+            //        return RedirectToAction("Employee_Dashboard", "Employee");
+            //    }
+            //    else if (existingUser.Role == "User")
+            //    {
+            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+            //        return RedirectToAction("Index", "Home");
+            //    }
+            //}
+            try
+            {
+                if (existingUser != null)
                 {
-                    HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-                    HttpContext.Session.SetString("FirstName", existingUser.FirstName ?? string.Empty);
-                    HttpContext.Session.SetString("LastName", existingUser.LastName ?? string.Empty);
-                    HttpContext.Session.SetString("PasswordHash", existingUser.PasswordHash ?? string.Empty);
-                    HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-                    HttpContext.Session.SetString("CreatedAt", existingUser.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? string.Empty);
-                    HttpContext.Session.SetString("Image", existingUser.Image ?? string.Empty);
-                    HttpContext.Session.SetString("Email", existingUser.Email);
-                    HttpContext.Session.SetString("Address", existingUser.Address ?? string.Empty);
-                    HttpContext.Session.SetString("DateOfBirth", existingUser.DateOfBirth?.ToString("yyyy-MM-dd") ?? string.Empty);
-                    HttpContext.Session.SetString("PhoneNumber", existingUser.PhoneNumber ?? string.Empty);
-                    HttpContext.Session.SetString("Gender", existingUser.Gender ?? string.Empty);
-                    HttpContext.Session.SetString("IsActive", existingUser.IsActive?.ToString() ?? "false");
-                    return RedirectToAction("Admin_Dashboard", "Admin");
+                    // User found, redirect to the appropriate page based on role
+                    if (existingUser.Role == "Manager")
+                    {
+                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+
+                        return RedirectToAction("Admin_Dashboard", "Admin");
+                    }
+                    else if (existingUser.Role == "ServiceProvider")
+                    {
+                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+
+                        return RedirectToAction("Employee_Dashboard", "Employee");
+                    }
+                    else if (existingUser.Role == "User")
+                    {
+                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
-                else if (existingUser.Role == "ServiceProvider")
-                {
-                    HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-                    HttpContext.Session.SetString("FirstName", existingUser.FirstName ?? string.Empty);
-                    HttpContext.Session.SetString("LastName", existingUser.LastName ?? string.Empty);
-                    HttpContext.Session.SetString("PasswordHash", existingUser.PasswordHash ?? string.Empty);
-                    HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-                    HttpContext.Session.SetString("CreatedAt", existingUser.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? string.Empty);
-                    HttpContext.Session.SetString("Image", existingUser.Image ?? string.Empty);
-                    HttpContext.Session.SetString("Email", existingUser.Email);
-                    HttpContext.Session.SetString("Address", existingUser.Address ?? string.Empty);
-                    HttpContext.Session.SetString("DateOfBirth", existingUser.DateOfBirth?.ToString("yyyy-MM-dd") ?? string.Empty);
-                    HttpContext.Session.SetString("PhoneNumber", existingUser.PhoneNumber ?? string.Empty);
-                    HttpContext.Session.SetString("Gender", existingUser.Gender ?? string.Empty);
-                    HttpContext.Session.SetString("IsActive", existingUser.IsActive?.ToString() ?? "false");
-                    return RedirectToAction("Employee_Dashboard", "Employee");
-                }
-                else if (existingUser.Role == "User")
-                {
-                    HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-                    HttpContext.Session.SetString("FirstName", existingUser.FirstName ?? string.Empty);
-                    HttpContext.Session.SetString("LastName", existingUser.LastName ?? string.Empty);
-                    HttpContext.Session.SetString("PasswordHash", existingUser.PasswordHash ?? string.Empty);
-                    HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-                    HttpContext.Session.SetString("CreatedAt", existingUser.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? string.Empty);
-                    HttpContext.Session.SetString("Image", existingUser.Image ?? string.Empty);
-                    HttpContext.Session.SetString("Email", existingUser.Email);
-                    HttpContext.Session.SetString("Address", existingUser.Address ?? string.Empty);
-                    HttpContext.Session.SetString("DateOfBirth", existingUser.DateOfBirth?.ToString("yyyy-MM-dd") ?? string.Empty);
-                    HttpContext.Session.SetString("PhoneNumber", existingUser.PhoneNumber ?? string.Empty);
-                    HttpContext.Session.SetString("Gender", existingUser.Gender ?? string.Empty);
-                    HttpContext.Session.SetString("IsActive", existingUser.IsActive?.ToString() ?? "false");
-                    return RedirectToAction("Index", "Home");
-                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception to the console
+                Console.WriteLine($"An error occurred: {ex.Message}");
+
+                // Optionally, log the stack trace for debugging
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+
+                // Handle the error gracefully
+                TempData["ErrorMessage"] = "An unexpected error occurred. Please try again later.";
+                return View("Error"); // Redirect to an error view
             }
             // If user not found or credentials are invalid
             HttpContext.Session.SetString("Role", "Guest");
@@ -134,30 +143,6 @@ namespace Master_Piece.Controllers
 
         }
 
-        //[HttpPost]
-        //public IActionResult Register(User user)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        HttpContext.Session.SetString("Role", "Guest");
-        //        return View(user);
-        //    }
-        //    if (user.PasswordHash != user.RepeatPassword)
-        //    {
-        //        return View();
-        //    }
-        //    // Assign default role and created date
-        //    user.Role = "User";
-        //    user.Image = "Waiting";
-        //    user.CreatedAt = DateTime.Now;
-
-        //    // Add user to database using Entity Framework
-        //    _context.Users.Add(user);
-        //    _context.SaveChanges();
-
-        //    return RedirectToAction("Login", "Home");
-
-        //}
         public IActionResult Forget_Password()
         {
             return View();
