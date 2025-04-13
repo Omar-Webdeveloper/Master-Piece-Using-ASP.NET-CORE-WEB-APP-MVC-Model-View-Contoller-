@@ -1,7 +1,222 @@
-﻿
-@{
-    ViewData["Title"] = "BookedServicesHistory";
-}
+﻿@* @model List<Booking> *@
 
-<h1>BookedServicesHistory</h1>
+@* <style> *@
+@*     .body-content { *@
+@*         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; *@
+@*         background-color: #f4f7fb; *@
+@*         padding: 30px; *@
+@*         min-height: 100vh; *@
+@*     } *@
+
+@*     .section-title { *@
+@*         color: #2b4c7e; *@
+@*         font-size: 24px; *@
+@*         margin-top: 40px; *@
+@*         margin-bottom: 20px; *@
+@*         border-bottom: 2px solid #dbe4f0; *@
+@*         padding-bottom: 10px; *@
+@*     } *@
+
+@*     .booking-table { *@
+@*         width: 100%; *@
+@*         border-collapse: collapse; *@
+@*         background: #fff; *@
+@*         border-radius: 12px; *@
+@*         box-shadow: 0 3px 10px rgba(0,0,0,0.05); *@
+@*         overflow: hidden; *@
+@*     } *@
+
+@*         .booking-table th, *@
+@*         .booking-table td { *@
+@*             padding: 16px; *@
+@*             border-bottom: 1px solid #f0f0f0; *@
+@*             text-align: left; *@
+@*         } *@
+
+@*         .booking-table th { *@
+@*             background-color: #f0f4fa; *@
+@*             color: #355c8c; *@
+@*             font-weight: 600; *@
+@*         } *@
+
+@*         .booking-table td a { *@
+@*             color: #2b4c7e; *@
+@*             text-decoration: none; *@
+@*             font-weight: 500; *@
+@*         } *@
+
+@*             .booking-table td a:hover { *@
+@*                 text-decoration: underline; *@
+@*             } *@
+
+@*     .no-bookings { *@
+@*         color: #888; *@
+@*         font-style: italic; *@
+@*     } *@
+@* </style> *@
+
+@* <div class="body-content"> *@
+@*     <h2 class="section-title">Recent Booking</h2> *@
+
+@*     @{ *@
+@*         var recentBooking = Model.OrderByDescending(b => b.BookingDate).FirstOrDefault(); *@
+@*     } *@
+
+@*     @if (recentBooking != null) *@
+@*     { *@
+@*         <table class="booking-table"> *@
+@*             <thead> *@
+@*                 <tr> *@
+@*                     <th>Service</th> *@
+@*                     <th>Status</th> *@
+@*                     <th>Booking Date</th> *@
+@*                     <th>Created At</th> *@
+@*                 </tr> *@
+@*             </thead> *@
+@*             <tbody> *@
+@*                 <tr> *@
+@*                     <td> *@
+@*                         <a asp-action="Details" asp-controller="Service" asp-route-id="@recentBooking.ServiceId"> *@
+@*                             @recentBooking.Service?.ServiceName *@
+@*                         </a> *@
+@*                     </td> *@
+@*                     <td>@recentBooking.Status</td> *@
+@*                     <td>@recentBooking.BookingDate?.ToString("yyyy-MM-dd")</td> *@
+@*                     <td>@recentBooking.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td> *@
+@*                 </tr> *@
+@*             </tbody> *@
+@*         </table> *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         <p class="no-bookings">No recent booking found.</p> *@
+@*     } *@
+
+@*     <h2 class="section-title">Previous Bookings</h2> *@
+
+@*     @{ *@
+@*         var previousBookings = Model *@
+@*         .OrderByDescending(b => b.BookingDate) *@
+@*         .Skip(1) *@
+@*         .ToList(); *@
+@*     } *@
+
+@*     @if (previousBookings.Any()) *@
+@*     { *@
+@*         <table class="booking-table"> *@
+@*             <thead> *@
+@*                 <tr> *@
+@*                     <th>Service</th> *@
+@*                     <th>Status</th> *@
+@*                     <th>Booking Date</th> *@
+@*                     <th>Created At</th> *@
+@*                 </tr> *@
+@*             </thead> *@
+@*             <tbody> *@
+@*                 @foreach (var booking in previousBookings) *@
+@*                 { *@
+@*                     <tr> *@
+@*                         <td> *@
+@*                             <a asp-action="Details" asp-controller="Service" asp-route-id="@booking.ServiceId"> *@
+@*                                 @booking.Service?.ServiceName *@
+@*                             </a> *@
+@*                         </td> *@
+@*                         <td>@booking.Status</td> *@
+@*                         <td>@booking.BookingDate?.ToString("yyyy-MM-dd")</td> *@
+@*                         <td>@booking.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td> *@
+@*                     </tr> *@
+@*                 } *@
+@*             </tbody> *@
+@*         </table> *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         <p class="no-bookings">No previous bookings found.</p> *@
+@*     } *@
+@* </div> *@
+@model List<Booking>
+
+<style>
+    .body-content {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fb;
+        padding: 30px;
+        min-height: 100vh;
+    }
+
+    h2 {
+        color: #2b4c7e;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background-color: #eaf0fb;
+        color: #333;
+    }
+
+    td a {
+        color: #2b4c7e;
+        text-decoration: none;
+    }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+    .no-data {
+        color: #777;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="body-content">
+    <h2>Your Bookings</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Booking Date</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model.OrderByDescending(b => b.BookingDate))
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Service" asp-action="Details" asp-route-id="@booking.ServiceId">
+                                @booking.Service?.ServiceName
+                            </a>
+                        </td>
+                        <td>@booking.Status</td>
+                        <td>@booking.BookingDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@booking.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-data">You have no bookings yet.</p>
+    }
+</div>
 

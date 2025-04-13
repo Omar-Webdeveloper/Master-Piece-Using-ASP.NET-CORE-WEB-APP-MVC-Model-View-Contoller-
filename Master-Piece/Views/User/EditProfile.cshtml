@@ -1,77 +1,169 @@
-﻿<style>
-    * {
-        font-family: 'Nunito Sans', sans-serif;
-        background-color: #f4f7fc;
+﻿@model User
+<style>
+    .body-content {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fb;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
     }
+
+    .header {
+        background-color: #f4f7fb;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 1px solid #ccc;
+    }
+
+        .header a {
+            color: #2b4c7e;
+            text-decoration: none;
+            margin-right: 25px;
+            font-weight: 500;
+        }
+
+            .header a:hover {
+                text-decoration: underline;
+            }
+
+    .profile-table {
+        width: 90%;
+        max-width: 1100px;
+        margin: 40px auto;
+        border-spacing: 40px;
+    }
+
+        .profile-table td {
+            width: 50%;
+            vertical-align: top;
+        }
 
     .profile-container {
-        max-width: 600px;
-        margin: 40px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
     }
 
-    .avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-color: #ddd;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 40px;
-        color: #555;
-        margin: 0 auto 15px;
+    .profile-image img {
+        max-width: 100%;
+        border-radius: 12px;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-custom {
-        background-color: #0073e6;
-        color: white;
-        border-radius: 5px;
+    h2 {
+        text-align: center;
+        color: #355c8c;
+        margin-bottom: 25px;
     }
 
-        .btn-custom:hover {
-            background-color: #005bb5;
+    .profile-item {
+        margin-bottom: 20px;
+    }
+
+        .profile-item label {
+            display: block;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
         }
+
+        .profile-item p {
+            margin: 0;
+            color: #666;
+        }
+
+    /* media (max-width: 768px) { */
+    /*     .profile-table
+
+        /* { */
+    /*     display: block; */
+    /* } */
+
+    /* .profile-table tr, */
+    /* .profile-table td { */
+    /*     display: block; */
+    /*     width: 100%; */
+    /* } */
+
+    /* .profile-table td { */
+    /*     margin-bottom: 20px; */
+    /* } */
+
+    /* } */
 </style>
-<div class="profile-container">
-    <div class="avatar" id="avatar">OA</div>
-    <div class="text-center">
-        <input type="file" id="imageInput" accept="image/*" hidden>
-        <button class="btn btn-custom" onclick="document.getElementById('imageInput').click();">Upload Photo</button>
+<div class="body-content">
+    <div class="header">
+        <a asp-action="Profile" asp-controller="User">Profile</a>
+        <a asp-action="EditProfile" asp-controller="User">Edit Profile</a>
+        <a asp-action="BookedServicesHistory" asp-controller="User">Order History</a>
+        <a asp-action="Reset_Password" asp-controller="User">Reset Password</a>
     </div>
 
-    <form class="mt-3">
-        <div class="mb-3">
-            <label for="userName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="userName" value="Your Name">
-        </div>
-        <div class="mb-3">
-            <label for="userEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="userEmail" value="Your Email">
-        </div>
-        <div class="mb-3">
-            <label for="userGender" class="form-label">Gender</label>
-            <select class="form-select" id="userGender">
-                <option>Male</option>
-                <option>Female</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="userBirthdate" class="form-label">Birthdate</label>
-            <input type="date" class="form-control" id="userBirthdate">
-        </div>
-        <div class="mb-3">
-            <label for="userPhone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="userPhone" value="Your Phone Number">
-        </div>
-        <div class="mb-3">
-            <label for="userAddress" class="form-label">Address</label>
-            <input type="text" class="form-control" id="userAddress" value="Your Address">
-        </div>
-        <button type="submit" class="btn btn-custom w-100" >Save Changes</button>
-        <button type="button" class="btn btn-custom w-100"><a asp-action="Reset_password" style="color: #bbb;">Change Password</a></button>
+    <form asp-action="EditProfile" >
+        <table class="profile-table">
+            <tr>
+                <td class="profile-image">
+                    <div class="profile-container">
+                        <img src="@Model.Image" alt="User Profile Image" />
+                    </div>
+                </td>
+                <td>
+                    <div class="profile-container">
+                        <h2>Edit Profile</h2>
+                        <div class="profile-item">
+                            <label asp-for="FirstName">First Name:</label>
+                            <input asp-for="FirstName" type="text" id="FirstName" name="FirstName" value="@Model.FirstName" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="LastName">Last Name:</label>
+                            <input type="text" asp-for="LastName" id="LastName" name="LastName" value="@Model.LastName" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="Email">Email:</label>
+                            <input type="email" asp-for="Email" id="Email" name="Email" value="@Model.Email" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="PhoneNumber">Phone:</label>
+                            <input type="tel" asp-for="PhoneNumber"  id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="Address">Address:</label>
+                            <input type="text" asp-for="Address" id="Address" name="Address" value="@Model.Address" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="DateOfBirth">Date of Birth:</label>
+                            <input type="date" asp-for="DateOfBirth" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth" class="form-control" />
+                        </div>
+                        <div class="profile-item">
+                            <label asp-for="Gender">Gender:</label>
+                            <select id="Gender" asp-for="Gender" name="Gender" class="form-control">
+                                @if (Model.Gender == "Male")
+                                {
+                                    <option value="Male" selected>Male</option>
+                                    <option value="Female">Female</option>
+                                }
+                                else if (Model.Gender == "Female")
+                                {
+                                    <option value="Male">Male</option>
+                                    <option value="Female" selected>Female</option>
+                                }
+                                else
+                                {
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>

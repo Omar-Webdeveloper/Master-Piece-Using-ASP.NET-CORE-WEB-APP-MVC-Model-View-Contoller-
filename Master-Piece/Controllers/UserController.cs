@@ -15,32 +15,92 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Profile()
         {
-            var userProfile = new
+            var user = new User
             {
-                UserID = HttpContext.Session.GetString("UserID"), // Retrieve UserID
-                FullName = $"{HttpContext.Session.GetString("FirstName")} {HttpContext.Session.GetString("LastName")}", // Combine first and last name
+                UserId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0"),
                 FirstName = HttpContext.Session.GetString("FirstName"),
                 LastName = HttpContext.Session.GetString("LastName"),
-                Email = HttpContext.Session.GetString("Email"),
+                Email = HttpContext.Session.GetString("Email") ?? string.Empty,
                 PhoneNumber = HttpContext.Session.GetString("PhoneNumber"),
                 Role = HttpContext.Session.GetString("Role"),
-                CreatedAt = HttpContext.Session.GetString("CreatedAt"),
-                Image = HttpContext.Session.GetString("Image") ?? "~/images/default-user.png", // Fallback for profile image
+                CreatedAt = DateTime.TryParse(HttpContext.Session.GetString("CreatedAt"), out DateTime createdAt) ? (DateTime?)createdAt : null,
+                Image = HttpContext.Session.GetString("Image") ?? "~/images/default-user.png",
                 Address = HttpContext.Session.GetString("Address"),
-                DateOfBirth = HttpContext.Session.GetString("DateOfBirth"),
+                DateOfBirth = DateOnly.TryParse(HttpContext.Session.GetString("DateOfBirth"), out var dob) ? dob : null,
                 Gender = HttpContext.Session.GetString("Gender"),
-                IsActive = HttpContext.Session.GetString("IsActive") // Retrieve Active Status
+                IsActive = HttpContext.Session.GetString("IsActive") == "true"
             };
-            return View(userProfile);
+            return View(user); // Pass the User object to the view
         }
+        [HttpGet]
         public IActionResult EditProfile()
         {
-            return View();
+            var user = new User
+            {
+                UserId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0"),
+                FirstName = HttpContext.Session.GetString("FirstName"),
+                LastName = HttpContext.Session.GetString("LastName"),
+                Email = HttpContext.Session.GetString("Email") ?? string.Empty,
+                PhoneNumber = HttpContext.Session.GetString("PhoneNumber"),
+                Role = HttpContext.Session.GetString("Role"),
+                CreatedAt = DateTime.TryParse(HttpContext.Session.GetString("CreatedAt"), out DateTime createdAt) ? (DateTime?)createdAt : null,
+                Image = HttpContext.Session.GetString("Image") ?? "~/images/default-user.png",
+                Address = HttpContext.Session.GetString("Address"),
+                DateOfBirth = DateOnly.TryParse(HttpContext.Session.GetString("DateOfBirth"), out var dob) ? dob : null,
+                Gender = HttpContext.Session.GetString("Gender"),
+                IsActive = HttpContext.Session.GetString("IsActive") == "true"
+            };
+            return View(user); // Pass the User object to the view
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(User updatedUser)
+        {
+            
+                //var user = _context.Users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
+                if (updatedUser == null)
+                {
+                    return NotFound(); // Handle missing user
+                }
+
+            // Update user details
+            updatedUser.UserId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+                //user.FirstName = updatedUser.FirstName;
+                //user.LastName = updatedUser.LastName;
+                //user.Email = updatedUser.Email;
+                //user.PhoneNumber = updatedUser.PhoneNumber;
+                //user.Address = updatedUser.Address;
+                //user.DateOfBirth = updatedUser.DateOfBirth;
+                //user.Gender = updatedUser.Gender;
+                //user.IsActive = updatedUser.IsActive;
+                _context.Users.Update(updatedUser);
+                _context.SaveChanges(); // Save updates to the database
+
+                // Update session data
+                HttpContext.Session.SetString("FirstName", updatedUser.FirstName);
+                HttpContext.Session.SetString("LastName", updatedUser.LastName);
+                HttpContext.Session.SetString("Email", updatedUser.Email);
+                HttpContext.Session.SetString("PhoneNumber", updatedUser.PhoneNumber);
+                HttpContext.Session.SetString("Address", updatedUser.Address);
+                HttpContext.Session.SetString("DateOfBirth", updatedUser.DateOfBirth?.ToString("yyyy-MM-dd") ?? string.Empty);
+                HttpContext.Session.SetString("Gender", updatedUser.Gender);
+                HttpContext.Session.SetString("IsActive", updatedUser.IsActive ==true ? "true" : "false");
+
+            return RedirectToAction("Profile");
         }
         public IActionResult BookedServicesHistory()
         {
-            return View();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            var bookings = _context.Bookings
+                //.Include(b => b.Service)
+                //.Where(b => b.UserId == userId)
+                //.OrderByDescending(b => b.BookingDate)
+                .ToList();
+
+            return View(bookings);
         }
+
+
         public IActionResult Reset_Password()
         {
             return View();

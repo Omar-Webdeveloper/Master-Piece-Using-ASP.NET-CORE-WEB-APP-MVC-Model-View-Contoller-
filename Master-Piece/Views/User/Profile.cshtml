@@ -1,4 +1,5 @@
-﻿<style>
+﻿@model User
+<style>
     .body-content {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f4f7fb;
@@ -97,10 +98,10 @@
 
 <div class="body-content">
     <div class="header">
-        <a href="@Url.Action("Profile", "User")">Profile</a>
-        <a href="@Url.Action("EditProfile", "User")">Edit Profile</a>
-        <a href="@Url.Action("ResetPassword", "Account")">Reset Password</a>
-        <a href="@Url.Action("OrderHistory", "Orders")">Order History</a>
+        <a asp-action="Profile" asp-controller="User">Profile</a>
+        <a asp-action="EditProfile" asp-controller="User" asp-route-id="@Model.UserId">Edit Profile</a>
+        <a asp-action="BookedServicesHistory" asp-controller="User">Order History</a>
+        <a asp-action="Reset_Password" asp-controller="User">Reset Password</a>
     </div>
 
     <table class="profile-table">
@@ -114,8 +115,12 @@
                 <div class="profile-container">
                     <h2>User Profile</h2>
                     <div class="profile-item">
-                        <label>Full Name:</label>
-                        <p>@Model.FullName</p>
+                        <label>First Name:</label>
+                        <p>@Model.FirstName</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Last Name:</label>
+                        <p>@Model.LastName</p>
                     </div>
                     <div class="profile-item">
                         <label>Email:</label>
@@ -135,7 +140,7 @@
                     </div>
                     <div class="profile-item">
                         <label>Date of Birth:</label>
-                        <p>@Model.DateOfBirth</p>
+                        <p>@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>
                     </div>
                     <div class="profile-item">
                         <label>Gender:</label>
@@ -143,11 +148,14 @@
                     </div>
                     <div class="profile-item">
                         <label>Account Created:</label>
-                        <p>@Model.CreatedAt</p>
+                        <p>@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss")</p>
                     </div>
                     <div class="profile-item">
                         <label>Active:</label>
-                        <p>@Model.IsActive</p>
+                        <p>@(Model.IsActive == true ? "Active" : "Inactive")</p>
+                    </div>
+                    <div>
+                        <button><a asp-action="EditProfile" asp-route-id="@Model.UserId">Edit Profile</a></button>
                     </div>
                 </div>
             </td>
