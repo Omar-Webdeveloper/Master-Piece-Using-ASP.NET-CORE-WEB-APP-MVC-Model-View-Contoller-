@@ -16,6 +16,23 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        public IActionResult Assgined_Task()
+        {
+            return View();
+        }
+        public IActionResult EmployeeProfile()
+        {
+            return View();
+        }
+        public IActionResult EmployeeEditProfile()
+        {
+            return View();
+        }
+        public IActionResult EmployeeResetPassword()
+        {
+            return View();
+        }
+
         public IActionResult WorkHistory()
         {
             return View();

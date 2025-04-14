@@ -32,6 +32,18 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        public IActionResult ManagerProfile()
+        {
+            return View();
+        }
+        public IActionResult ManagerEditProfile()
+        {
+            return View();
+        }
+        public IActionResult ManagerResetPassword()
+        {
+            return View();
+        }
         public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Clears all session data

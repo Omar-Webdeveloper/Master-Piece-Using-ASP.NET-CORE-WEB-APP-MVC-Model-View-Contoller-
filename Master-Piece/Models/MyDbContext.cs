@@ -17,6 +17,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<Booking> Bookings { get; set; }
 
+    public virtual DbSet<ContactU> ContactUs { get; set; }
+
     public virtual DbSet<Review> Reviews { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
@@ -44,6 +46,9 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.Message)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.Status)
                 .HasMaxLength(20)
@@ -57,6 +62,33 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Bookings__UserID__44FF419A");
+        });
+
+        modelBuilder.Entity<ContactU>(entity =>
+        {
+            entity.HasKey(e => e.ContactId).HasName("PK__ContactU__5C6625BBF8DF04DC");
+
+            entity.Property(e => e.ContactId).HasColumnName("ContactID");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Message)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ContactUs)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__ContactUs__UserI__6B24EA82");
         });
 
         modelBuilder.Entity<Review>(entity =>

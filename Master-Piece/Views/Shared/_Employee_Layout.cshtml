@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             width: 200px;
-            background-color: #f1f1f1;
+            background-color: #4e73df;
             position: fixed;
             height: 100%;
             overflow: auto;
@@ -47,10 +47,13 @@
 <body>
     <!-- The sidebar -->
     <div class="sidebar">
-        <a class="active" href="#home">Home</a>
-        <a href="#news">News</a>
-        <a href="#contact">Contact</a>
-        <a asp-controller="Home" asp-action="Logout">Logout</a>
+        <a asp-controller="Employee" asp-action="Employee_Dashboard">Dashboard</a>
+        <a asp-controller="Employee" asp-action="Assgined_Task">Assigned Tasks</a>
+        <a asp-controller="Employee" asp-action="EmployeeProfile">Profile</a>
+        <a asp-controller="Employee" asp-action="EmployeeEditProfile">Edit Profile</a>
+        <a asp-controller="Employee" asp-action="EmployeeResetPassword">Reset Password</a>
+        <a asp-controller="Employee" asp-action="WorkHistory">Work History</a>
+        <a asp-controller="Employee" asp-action="Logout">Logout</a>
     </div>
 
     <!-- Page content -->

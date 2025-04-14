@@ -131,10 +131,6 @@
                         <p>@Model.PhoneNumber</p>
                     </div>
                     <div class="profile-item">
-                        <label>Role:</label>
-                        <p>@Model.Role</p>
-                    </div>
-                    <div class="profile-item">
                         <label>Address:</label>
                         <p>@Model.Address</p>
                     </div>
@@ -145,14 +141,6 @@
                     <div class="profile-item">
                         <label>Gender:</label>
                         <p>@Model.Gender</p>
-                    </div>
-                    <div class="profile-item">
-                        <label>Account Created:</label>
-                        <p>@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm:ss")</p>
-                    </div>
-                    <div class="profile-item">
-                        <label>Active:</label>
-                        <p>@(Model.IsActive == true ? "Active" : "Inactive")</p>
                     </div>
                     <div>
                         <button><a asp-action="EditProfile" asp-route-id="@Model.UserId">Edit Profile</a></button>

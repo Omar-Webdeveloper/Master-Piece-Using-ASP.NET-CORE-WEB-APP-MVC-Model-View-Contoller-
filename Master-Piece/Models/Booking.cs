@@ -17,6 +17,8 @@ public partial class Booking
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? Message { get; set; }
+
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual Service? Service { get; set; }

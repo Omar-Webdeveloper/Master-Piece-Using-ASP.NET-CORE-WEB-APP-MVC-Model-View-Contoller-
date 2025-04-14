@@ -1,91 +1,97 @@
-﻿@model List<dynamic> 
+﻿@model List<dynamic>
 
-<style> 
-      .body-content { 
-          font-family: Arial, sans-serif;  
-          background-color: #f4f7fb;  
-          padding: 30px;  
-          min-height: 100vh;  
-      }  
+<style>
+    .body-content {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fb;
+        padding: 30px;
+        min-height: 100vh;
+    }
 
-      h2 {  
-          color: #2b4c7e;  
-          margin-bottom: 20px;  
-      }  
+    h2 {
+        color: #2b4c7e;
+        margin-bottom: 20px;
+    }
 
-      table {  
-          width: 100%;  
-          border-collapse: collapse;  
-          background: #fff;  
-          border-radius: 10px;  
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);  
-      }  
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
 
-      th, td {  
-          padding: 14px;  
-          text-align: left;  
-          border-bottom: 1px solid #eee;  
-      }  
+    th, td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
 
-      th {
-          background-color: #eaf0fb;  
-          color: #333;  
-      }  
+    th {
+        background-color: #eaf0fb;
+        color: #333;
+    }
 
-      td {  
-          color: #555;  
-      }  
+    td {
+        color: #555;
+    }
 
-          td a {  
-              color: #2b4c7e;  
-              text-decoration: none;  
-          }  
+        td a {
+            color: #2b4c7e;
+            text-decoration: none;
+        }
 
-              td a:hover {  
-                  text-decoration: underline;  
-              }  
+            td a:hover {
+                text-decoration: underline;
+            }
 
-      .no-data {  
-          color: #777;  
-          margin-top: 20px;  
-      }  
-  </style>  
+    .no-data {
+        color: #777;
+        margin-top: 20px;
+    }
+</style>
 
-  <div class="body-content">  
-      <h2>Your Booking History</h2>  
+<div class="body-content">
+    <h2>Your Booking History</h2>
 
-      @if (Model != null && Model.Any())  
-      {  
-          <table>  
-              <thead>  
-                  <tr>  
-                      <th>Worker Name</th>  
-                      <th>Service Type</th>  
-                      <th>Rating</th>  
-                      <th>Service Name</th>  
-                      <th>Description</th>  
-                      <th>Starting Price</th>  
-                      <th>Service Created At</th>  
-                  </tr>  
-              </thead>  
-              <tbody>  
-                  @foreach (var booking in Model)  
-                  {  
-                      <tr>  
-                          <td>@booking.WorkerName</td>  
-                          <td>@booking.ServiceType</td>  
-                          <td>@booking.Rating</td>  
-                          <td>@booking.ServiceName</td>  
-                          <td>@booking.Description</td>  
-                          <td>@booking.StartingPrice</td>  
-                          <td>@booking.ServiceCreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>  
-                      </tr>  
+    @if (Model != null && Model.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Worker Name</th>
+                    <th>Service Type</th>
+                    <th>Service Name</th>
+                    <th>Service Description</th>
+                    <th>Starting Price</th>
+                    <th>Service Created At</th>
+                    <th>Booking Date</th>
+                    <th>Booking Status</th>
+                    <th>Booking Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.BookingID</td>
+                        <td>@booking.WorkerName</td>
+                        <td>@booking.ServiceType</td>
+                        <td>@booking.ServiceName</td>
+                        <td>@booking.ServiceDescription</td>
+                        <td>@booking.StartingPrice</td>
+                        <td>@booking.ServiceCreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@booking.BookingDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@booking.BookingStatus</td>
+                        <td>@booking.BookingCreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
                 }
-              </tbody>  
-          </table>  
-      }  
-      else  
-      {  
-          <p class="no-data">No booking history found.</p>  
-      }  
-  </div>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-data">No booking history found.</p>
+    }
+</div>

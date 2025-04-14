@@ -31,6 +31,18 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult SubmitContact(ContactU contact)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.ContactUs.Add(contact);
+                _context.SaveChanges();
+                return RedirectToAction("ThankYou"); // Redirect to a "Thank You" page after submission
+            }
+
+            return View("Contact"); // Return to the form if validation fails
+        }
         public IActionResult Login()
         {
             return View();
@@ -156,6 +168,7 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+
         public IActionResult Logout() 
         {
             HttpContext.Session.Clear(); // Clears all session data

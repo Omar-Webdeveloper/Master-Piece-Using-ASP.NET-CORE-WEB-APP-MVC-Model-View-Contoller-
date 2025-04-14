@@ -33,5 +33,7 @@ public partial class User
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
+    public virtual ICollection<ContactU> ContactUs { get; set; } = new List<ContactU>();
+
     public virtual ServiceProvider? ServiceProvider { get; set; }
 }

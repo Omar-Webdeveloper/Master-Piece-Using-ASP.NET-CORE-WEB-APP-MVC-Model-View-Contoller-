@@ -1,4 +1,4 @@
-﻿
+﻿@model ContactU
 @{
     ViewData["Title"] = "Contact_US";
     // Layout = "~/Views/Shared/_Second_Layout.cshtml";
@@ -59,22 +59,22 @@
         <img src="~/master pictures/image_contact_us.jpg" alt="Working remotely - simple illustration" style="border-radius: 30px;width: 260px;height: 300px;margin-left: 50px;" asp-append-version="true">
     </div>
     <div class="form-container">
-        <form class="contact-form">
+        <form class="contact-form" asp-action="SubmitContact">
             <div class="form-group">
-                <label for="first-name" id="first-name-label">First Name</label>
-                <input type="text" id="first-name" class="input-field" value="omar">
+                <label asp-for="FirstName" id="first-name-label">First Name</label>
+                <input type="text" id="first-name" class="input-field" value="omar" asp-for="FirstName">
             </div>
             <div class="form-group">
-                <label for="last-name" id="last-name-label">Last Name</label>
-                <input type="text" id="last-name" class="input-field" value="Abo jolban">
+                <label asp-for="LastName" id="last-name-label">Last Name</label>
+                <input type="text" id="last-name" class="input-field" value="Abo jolban" asp-for="LastName">
             </div>
             <div class="form-group">
-                <label for="email" id="email-label">Email</label>
-                <input type="email" id="email" class="input-field" value="example@gmail.com">
+                <label asp-for="Email" id="email-label">Email</label>
+                <input type="email" id="email" class="input-field" value="example@gmail.com" asp-for="Email">
             </div>
             <div class="form-group">
-                <label for="message" id="message-label">Message</label>
-                <textarea id="message" class="textarea-field"></textarea>
+                <label asp-for="Message" id="message-label">Message</label>
+                <textarea id="message" class="textarea-field" asp-for="Message"></textarea>
             </div>
             <button type="submit" class="send-button" id="send-button">Send</button>
         </form>
