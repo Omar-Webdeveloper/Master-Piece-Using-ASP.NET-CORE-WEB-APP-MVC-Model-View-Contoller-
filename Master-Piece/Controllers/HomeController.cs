@@ -50,7 +50,7 @@ namespace Master_Piece.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 HttpContext.Session.SetString("Role", "Guest");
                 return View();
@@ -123,15 +123,15 @@ namespace Master_Piece.Controllers
             // If user not found or credentials are invalid
             HttpContext.Session.SetString("Role", "Guest");
             TempData["ErrorMessage"] = "Invalid email or password. Please try again.";
-            return View(); 
+            return View();
         }
         public IActionResult Register()
         {
             return View();
         }
-        
+
         [HttpPost]
-        public IActionResult Register(User user,string RepeatPassword)
+        public IActionResult Register(User user, string RepeatPassword)
         {
             if (!ModelState.IsValid)
             {
@@ -169,10 +169,10 @@ namespace Master_Piece.Controllers
             return View();
         }
 
-        public IActionResult Logout() 
+        public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Clears all session data
-            HttpContext.Session.Remove("Role"); 
+            HttpContext.Session.Remove("Role");
             Response.Cookies.Delete(".AspNetCore.Session");
             return RedirectToAction("Index", "Home");
         }

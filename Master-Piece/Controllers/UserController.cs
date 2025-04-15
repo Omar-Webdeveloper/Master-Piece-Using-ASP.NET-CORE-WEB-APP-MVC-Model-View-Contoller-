@@ -21,7 +21,7 @@ namespace Master_Piece.Controllers
             int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
-   
+
             return View(user); // Pass the User object to the view
         }
         [HttpGet]
@@ -38,19 +38,19 @@ namespace Master_Piece.Controllers
         [HttpPost]
         public IActionResult EditProfile(User updatedUser)
         {
-            
-                //var user = _context.Users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
-                if (updatedUser == null)
-                {
-                    return NotFound(); // Handle missing user
-                }
+
+            //var user = _context.Users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
+            if (updatedUser == null)
+            {
+                return NotFound(); // Handle missing user
+            }
 
             // Update user details
             updatedUser.UserId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
             var user = _context.Users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
 
             _context.Users.Update(updatedUser);
-                _context.SaveChanges(); // Save updates to the database
+            _context.SaveChanges(); // Save updates to the database
 
 
 
@@ -86,9 +86,9 @@ namespace Master_Piece.Controllers
                             .AsEnumerable() // Convert to IEnumerable for LINQ to Objects
                             .Select(x => (dynamic)x) // Map to dynamic
                             .ToList(); // Convert to List<dynamic>
-            
-                Console.WriteLine($"BookingID: {bookings}");
-     
+
+            Console.WriteLine($"BookingID: {bookings}");
+
             return View(bookings);
         }
         [HttpGet]
@@ -195,11 +195,11 @@ namespace Master_Piece.Controllers
             // Pass the retrieved providers to the view
             return View(providersForService);
         }
-   
+
         [HttpGet]
         public IActionResult Show_All_Services()
         {
-            var Our_Services=_context.Services.ToList();
+            var Our_Services = _context.Services.ToList();
             return View(Our_Services);
         }
     }
