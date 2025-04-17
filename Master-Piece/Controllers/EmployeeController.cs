@@ -15,34 +15,109 @@ namespace Master_Piece.Controllers
         public IActionResult Employee_Dashboard()
         {
             int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
-            //completed tasks
-            // Query to retrieve completed tasks
+
+            // Completed tasks
             var completedTasks = (from sp in _context.ServiceProviders
+                                  join t in _context.Tasks on sp.ProviderId equals t.ProviderId
                                   join swjt in _context.ServiceWorkersJunctionTables on sp.ProviderId equals swjt.ProviderId
                                   join s in _context.Services on swjt.ServiceId equals s.ServiceId
-                                  join b in _context.Bookings on s.ServiceId equals b.ServiceId
-                                  where b.UserId == userId && b.Status == "Completed"
+                                  where sp.ProviderId == userId && t.TaskStatus == "COMPLETED"
                                   select new
                                   {
                                       ProviderName = sp.WorkerName,
                                       ServiceType = sp.ServiceType,
                                       ServiceName = s.ServiceName,
-                                      BookingDate = b.BookingDate,
-                                      Status = b.Status
+                                      TaskName = t.TaskName,
+                                      StartDate = t.StartDate,
+                                      EndDate = t.EndDate,
+                                      Status = t.TaskStatus
                                   }).ToList();
+
             // Count the number of completed tasks
             var completedTaskCount = completedTasks.Count;
 
-            // Save the count in ViewBag
+            // Save the count of completed tasks in ViewBag the 
             ViewBag.CompletedTaskCount = completedTaskCount;
 
+            //customer Rating
+            // Get average rating for the provider's booked services
+            var averageRating = (from sp in _context.ServiceProviders
+                                 join swjt in _context.ServiceWorkersJunctionTables on sp.ProviderId equals swjt.ProviderId
+                                 join s in _context.Services on swjt.ServiceId equals s.ServiceId
+                                 join b in _context.Bookings on s.ServiceId equals b.ServiceId
+                                 join r in _context.Reviews on b.BookingId equals r.BookingId
+                                 where sp.ProviderId == userId && b.Status == "Completed"
+                                 select r.Rating).ToList();
+            var viewbagaverageRating = averageRating.DefaultIfEmpty(0).Average();
 
-            //the number task 
+            // Save the average rating in ViewBag
+            ViewBag.AverageRating = viewbagaverageRating;
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //the employee of the month 
+            // Get current year
+            int currentYear = DateTime.Now.Year;
+
+            // Query to fetch evaluations for the current year
+            var evaluationsForCurrentYear = (from e in _context.Evaluations
+                                             where e.ProviderId == userId &&
+                                                   e.EvaluationYear == currentYear
+                                             select new
+                                             {
+                                                 e.EvaluationId,
+                                                 e.Score,
+                                                 e.Comments,
+                                                 e.CreatedAt
+                                             }).ToList();
+
+            // Example: Output evaluation details
+            if (evaluationsForCurrentYear.Any())
+            {
+                foreach (var evaluation in evaluationsForCurrentYear)
+                {
+                    Console.WriteLine($"EvaluationID: {evaluation.EvaluationId}, Score: {evaluation.Score}, Comments: {evaluation.Comments}, CreatedAt: {evaluation.CreatedAt}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No evaluations found for the current year.");
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             //waiting tasks
             //
             return View();
         }
         public IActionResult Assgined_Task()
+        {
+            return View();
+        }
+        public IActionResult WorkHistory()
         {
             return View();
         }
@@ -55,11 +130,6 @@ namespace Master_Piece.Controllers
             return View();
         }
         public IActionResult EmployeeResetPassword()
-        {
-            return View();
-        }
-
-        public IActionResult WorkHistory()
         {
             return View();
         }

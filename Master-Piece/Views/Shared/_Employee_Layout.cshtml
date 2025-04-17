@@ -1,49 +1,123 @@
 ﻿<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet" />
     <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f8f9fc;
+            color: #343a40;
+        }
+
         /* Sidebar Styling */
         .sidebar {
-            margin: 0;
-            padding: 0;
-            width: 200px;
-            background-color: #4e73df;
+            width: 220px;
+            background-color: #2e3b55;
             position: fixed;
             height: 100%;
+            top: 0;
+            left: 0;
             overflow: auto;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
         }
 
             .sidebar a {
                 display: block;
-                color: black;
-                padding: 16px;
+                color: #e4e6eb;
+                padding: 14px 20px;
                 text-decoration: none;
+                font-size: 15px;
+                font-weight: 500;
+                transition: background 0.2s, color 0.2s;
             }
 
+                .sidebar a:hover,
+                .sidebar a:focus {
+                    background-color: #495e94;
+                    color: #ffffff;
+                }
+
                 .sidebar a.active {
-                    background-color: #04AA6D;
-                    color: white;
+                    background-color: #4e73df;
+                    color: #ffffff;
+                    font-weight: 600;
                 }
 
-                .sidebar a:hover:not(.active) {
-                    background-color: #555;
-                    color: white;
-                }
-
-        /* Page Content Styling */
-        div.content {
-            margin-left: 200px;
-            padding: 1px 16px;
-            height: auto;
+        /* Content Styling */
+        .content {
+            margin-left: 220px;
+            padding: 24px;
         }
-        </style>
+
+        /* Toggle Button */
+        .toggle-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            font-size: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+            .toggle-btn.sidebar-open {
+                left: 265px;
+            }
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 900;
+        }
+
+        /* Responsive Styling */
+        @@media screen and (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+            }
+
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+
+            .content {
+                margin-left: 0;
+                padding-top: 70px;
+            }
+
+            .toggle-btn {
+                display: block;
+            }
+
+            .overlay.show {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- The sidebar -->
-    <div class="sidebar">
+    <!-- Toggle button for mobile -->
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
         <a asp-controller="Employee" asp-action="Employee_Dashboard">Dashboard</a>
         <a asp-controller="Employee" asp-action="Assgined_Task">Assigned Tasks</a>
         <a asp-controller="Employee" asp-action="EmployeeProfile">Profile</a>
@@ -53,10 +127,24 @@
         <a asp-controller="Employee" asp-action="Logout">Logout</a>
     </div>
 
+    <!-- Blur overlay -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
     <!-- Page content -->
     <div class="content">
         @RenderBody()
     </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const toggleBtn = document.querySelector('.toggle-btn');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            toggleBtn.classList.toggle('sidebar-open');
+        }
+    </script>
 
 </body>
 </html>

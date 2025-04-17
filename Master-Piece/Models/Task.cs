@@ -21,5 +21,7 @@ public partial class Task
 
     public string? AfterPhoto { get; set; }
 
+    public string TasksDetails { get; set; } = null!;
+
     public virtual ServiceProvider? Provider { get; set; }
 }

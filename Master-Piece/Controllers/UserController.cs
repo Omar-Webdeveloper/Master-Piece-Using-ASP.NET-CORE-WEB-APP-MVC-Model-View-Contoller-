@@ -4,7 +4,6 @@ using Master_Piece.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Microsoft.IdentityModel.Tokens;
-
 namespace Master_Piece.Controllers
 {
     public class UserController : Controller
@@ -18,7 +17,7 @@ namespace Master_Piece.Controllers
         public IActionResult Profile()
         {
             // Retrieve user Id from the session
-            int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
 
@@ -28,7 +27,7 @@ namespace Master_Piece.Controllers
         public IActionResult EditProfile()
         {
             // Retrieve user Id from the session
-            int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
 
@@ -46,7 +45,7 @@ namespace Master_Piece.Controllers
             }
 
             // Update user details
-            updatedUser.UserId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+            updatedUser.UserId = HttpContext.Session.GetInt32("UserID") ?? 0;
             var user = _context.Users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
 
             _context.Users.Update(updatedUser);
@@ -59,7 +58,7 @@ namespace Master_Piece.Controllers
         public IActionResult BookedServicesHistory()
         {
             // Retrieve the UserID from the session
-            int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0 ;
 
             // Execute the query and map results to a List<dynamic>
             var bookings = (from booking in _context.Bookings
@@ -79,9 +78,8 @@ namespace Master_Piece.Controllers
                                 ServiceDescription = service.Description,
                                 StartingPrice = service.StartingPrices,
                                 ServiceCreatedAt = service.CreatedAt,
-                                BookingDate = booking.BookingDate,
                                 BookingStatus = booking.Status,
-                                BookingCreatedAt = booking.CreatedAt
+                                BookingDate = booking.BookingDate
                             })
                             .AsEnumerable() // Convert to IEnumerable for LINQ to Objects
                             .Select(x => (dynamic)x) // Map to dynamic
@@ -101,8 +99,8 @@ namespace Master_Piece.Controllers
         public IActionResult Reset_Password(string OldPassword, string NewPassword, string ConfirmNewPassword)
         {
             // 1. Get current user ID (assuming it's stored in session)
-            int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID") ?? "0"))
+            int userId = HttpContext.Session.GetInt32("UserID")?? 0 ;
+            if (HttpContext.Session.GetInt32("UserID") == null)
             {
                 TempData["Error"] = "You must be logged in to change your password.";
                 return RedirectToAction("Login", "Home");
@@ -169,22 +167,25 @@ namespace Master_Piece.Controllers
         //    }
         //    return View();
         //}
-        public IActionResult More_Details_About_ThatWorker(int id)
-        {
-            // Fetch the worker details from the database or data source
-            var worker = _context.ServiceProviders.FirstOrDefault(w => w.ProviderId == id);
+        //public IActionResult More_Details_About_ThatWorker(int id)
+        //{
+        //    HttpContext.Session.GetInt32("ServiceId");
+        //    HttpContext.Session.GetInt32("UserID");
+        //    // Fetch the worker details from the database or data source
+        //    var worker = _context.ServiceProviders.FirstOrDefault(w => w.ProviderId == id);
 
-            if (worker == null)
-            {
-                return NotFound(); // Handle case where worker doesn't exist
-            }
+        //    if (worker == null)
+        //    {
+        //        return NotFound(); // Handle case where worker doesn't exist
+        //    }
 
-            return View(worker); // Pass the worker object to the View
-        }
+        //    return View(worker); // Pass the worker object to the View
+        //}
 
         public IActionResult Show_Workers_for_Specfic_Service_(int id)
         //public IActionResult Show_Workers_for_Specfic_Service_()
         {
+            HttpContext.Session.SetInt32("ServiceId",id);
             //int id = 1;
             // Query to retrieve providers for the specific service
             var providersForService = _context.ServiceWorkersJunctionTables
@@ -192,8 +193,14 @@ namespace Master_Piece.Controllers
                 .Select(junction => junction.Provider)       // Select related Providers
                 .ToList();                                   // Convert to list
 
-            // Pass the retrieved providers to the view
-            return View(providersForService);
+            var viewModel = new ServiceProviderBookingViewModel
+            {
+                Providers = providersForService ,
+                Booking = new Booking() // Optional: prefill if needed
+            };
+
+            // Pass the view model to the view
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -202,5 +209,124 @@ namespace Master_Piece.Controllers
             var Our_Services = _context.Services.ToList();
             return View(Our_Services);
         }
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitBooking(Booking booking, IFormFile bookingImage)
+        {
+            // Check if user is logged in
+            if (HttpContext.Session.GetInt32("UserID") == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            // Get values from session
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            int? serviceId = HttpContext.Session.GetInt32("ServiceId");
+
+            // Set session values to booking
+            booking.UserId = userId;
+            booking.ServiceId = serviceId;
+            booking.BookingDate = DateTime.Now;
+            booking.Status = "Pending";
+
+            // Handle image upload if provided
+            if (bookingImage != null && bookingImage.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await bookingImage.CopyToAsync(memoryStream);
+                    booking.ImageWhereTheIssueLocated = memoryStream.ToArray();
+                }
+            }
+
+            // Save to database
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            // Redirect or show confirmation
+            return RedirectToAction("BookedServicesHistory", "User"); // or any success page
+        }
+
+
+
+
+
+
+        public IActionResult More_Details_About_ThatWorker(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            var serviceId = HttpContext.Session.GetInt32("ServiceId");
+
+            if (userId == null || serviceId == null)
+            {
+                return RedirectToAction("Login", "Account"); // or wherever your login is
+            }
+
+            var worker = _context.ServiceProviders.FirstOrDefault(w => w.ProviderId == id);
+            if (worker == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new WorkerDetailsAndPreBookingViewModel
+            {
+                Provider = worker,
+                Booking = new Booking
+                {
+                    UserId = userId.Value,
+                    ServiceId = serviceId.Value,
+                }
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public  async Task<IActionResult> SubmitPreBooking(Booking booking, IFormFile bookingImage)
+        {
+            // Check if user is logged in
+            if (HttpContext.Session.GetInt32("UserID") == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            // Get values from session
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            int? serviceId = HttpContext.Session.GetInt32("ServiceId");
+
+            // Set session values to booking
+            booking.UserId = userId;
+            booking.ServiceId = serviceId;
+            booking.Status = "Pending";
+
+            // Handle image upload if provided
+            if (bookingImage != null && bookingImage.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await bookingImage.CopyToAsync(memoryStream);
+                    booking.ImageWhereTheIssueLocated = memoryStream.ToArray();
+                }
+            }
+
+            // Save to database
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            // Redirect or show confirmation
+            return RedirectToAction("BookedServicesHistory", "User"); // or any success page
+        }
+
+
     }
 }

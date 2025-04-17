@@ -19,6 +19,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<ContactU> ContactUs { get; set; }
 
+    public virtual DbSet<Evaluation> Evaluations { get; set; }
+
     public virtual DbSet<Review> Reviews { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
@@ -32,21 +34,26 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=DESKTOP-T6EH1VU;Database=Home_Business_Services_Managment_Database;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACDF3FF3854");
+            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACD2DC98A2A");
 
             entity.Property(e => e.BookingId).HasColumnName("BookingID");
-            entity.Property(e => e.BookingDate).HasColumnType("datetime");
-            entity.Property(e => e.CreatedAt)
+            entity.Property(e => e.BookingDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Message)
+            entity.Property(e => e.BookingMessae)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.BookingNotes)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.BookingTittle)
                 .HasMaxLength(2000)
                 .IsUnicode(false);
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
@@ -57,11 +64,11 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.Service).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Bookings__Servic__45F365D3");
+                .HasConstraintName("FK__Bookings__Servic__0F624AF8");
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Bookings__UserID__44FF419A");
+                .HasConstraintName("FK__Bookings__UserID__0E6E26BF");
         });
 
         modelBuilder.Entity<ContactU>(entity =>
@@ -91,6 +98,29 @@ public partial class MyDbContext : DbContext
                 .HasConstraintName("FK__ContactUs__UserI__6B24EA82");
         });
 
+        modelBuilder.Entity<Evaluation>(entity =>
+        {
+            entity.HasKey(e => e.EvaluationId).HasName("PK__Evaluati__36AE68D3DF919A4E");
+
+            entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+            entity.Property(e => e.AdminId).HasColumnName("AdminID");
+            entity.Property(e => e.Comments)
+                .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.ProviderId).HasColumnName("ProviderID");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.Evaluations)
+                .HasForeignKey(d => d.AdminId)
+                .HasConstraintName("FK__Evaluatio__Admin__09A971A2");
+
+            entity.HasOne(d => d.Provider).WithMany(p => p.Evaluations)
+                .HasForeignKey(d => d.ProviderId)
+                .HasConstraintName("FK__Evaluatio__Provi__08B54D69");
+        });
+
         modelBuilder.Entity<Review>(entity =>
         {
             entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AE342CE205");
@@ -106,8 +136,7 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.Booking).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.BookingId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Reviews__Booking__49C3F6B7");
+                .HasConstraintName("FK__Reviews__Booking__123EB7A3");
         });
 
         modelBuilder.Entity<Service>(entity =>
@@ -204,6 +233,9 @@ public partial class MyDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasDefaultValue("TO DO");
+            entity.Property(e => e.TasksDetails)
+                .HasMaxLength(200)
+                .HasDefaultValue("waiting");
 
             entity.HasOne(d => d.Provider).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.ProviderId)

@@ -35,5 +35,7 @@ public partial class User
 
     public virtual ICollection<ContactU> ContactUs { get; set; } = new List<ContactU>();
 
+    public virtual ICollection<Evaluation> Evaluations { get; set; } = new List<Evaluation>();
+
     public virtual ServiceProvider? ServiceProvider { get; set; }
 }

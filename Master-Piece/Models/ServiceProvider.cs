@@ -21,6 +21,8 @@ public partial class ServiceProvider
 
     public string? Photos { get; set; }
 
+    public virtual ICollection<Evaluation> Evaluations { get; set; } = new List<Evaluation>();
+
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
     public virtual User? User { get; set; }

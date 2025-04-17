@@ -87,21 +87,21 @@ namespace Master_Piece.Controllers
                     // User found, redirect to the appropriate page based on role
                     if (existingUser.Role == "Manager")
                     {
-                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
                         HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
 
                         return RedirectToAction("Admin_Dashboard", "Admin");
                     }
                     else if (existingUser.Role == "ServiceProvider")
                     {
-                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
                         HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
 
                         return RedirectToAction("Employee_Dashboard", "Employee");
                     }
                     else if (existingUser.Role == "User")
                     {
-                        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
+                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
                         HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
 
                         return RedirectToAction("Index", "Home");
