@@ -14,6 +14,30 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Admin_Dashboard()
         {
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            // Make sure you're using your DbContext (e.g., _context)
+            var totalUsers = _context.Users
+                .Where(u => u.Role == "User")
+                .Count();
+
+            ViewBag.TotalUsers = totalUsers;
+
+             var serviceProviders = _context.Users
+            .Where(u => u.Role == "ServiceProvider")
+            .Count();
+            ViewBag.TotalServiceProviders = serviceProviders;
+
+            var totalServices = _context.Services
+                .Count();
+            ViewBag.TotalServices = totalServices;
+
+            var ManagerName = _context.Users
+                .Where(u => u.Role == "Manager")
+                .Select(u => u.FirstName)
+                .FirstOrDefault();
+            ViewBag.ManagerName = ManagerName;
+
             return View();
         }
         public IActionResult ManageUsers()

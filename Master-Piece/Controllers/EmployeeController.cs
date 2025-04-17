@@ -14,85 +14,208 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Employee_Dashboard()
         {
-            int userId = int.Parse(HttpContext.Session.GetString("UserID") ?? "0");
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
-            // Completed tasks
-            var completedTasks = (from sp in _context.ServiceProviders
-                                  join t in _context.Tasks on sp.ProviderId equals t.ProviderId
-                                  join swjt in _context.ServiceWorkersJunctionTables on sp.ProviderId equals swjt.ProviderId
-                                  join s in _context.Services on swjt.ServiceId equals s.ServiceId
-                                  where sp.ProviderId == userId && t.TaskStatus == "COMPLETED"
-                                  select new
-                                  {
-                                      ProviderName = sp.WorkerName,
-                                      ServiceType = sp.ServiceType,
-                                      ServiceName = s.ServiceName,
-                                      TaskName = t.TaskName,
-                                      StartDate = t.StartDate,
-                                      EndDate = t.EndDate,
-                                      Status = t.TaskStatus
-                                  }).ToList();
+            // Find the provider ID using the user ID
+            var provider = _context.ServiceProviders.FirstOrDefault(sp => sp.UserId == userId);
 
-            // Count the number of completed tasks
-            var completedTaskCount = completedTasks.Count;
-
-            // Save the count of completed tasks in ViewBag the 
-            ViewBag.CompletedTaskCount = completedTaskCount;
-
-            //customer Rating
-            // Get average rating for the provider's booked services
-            var averageRating = (from sp in _context.ServiceProviders
-                                 join swjt in _context.ServiceWorkersJunctionTables on sp.ProviderId equals swjt.ProviderId
-                                 join s in _context.Services on swjt.ServiceId equals s.ServiceId
-                                 join b in _context.Bookings on s.ServiceId equals b.ServiceId
-                                 join r in _context.Reviews on b.BookingId equals r.BookingId
-                                 where sp.ProviderId == userId && b.Status == "Completed"
-                                 select r.Rating).ToList();
-            var viewbagaverageRating = averageRating.DefaultIfEmpty(0).Average();
-
-            // Save the average rating in ViewBag
-            ViewBag.AverageRating = viewbagaverageRating;
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //the employee of the month 
-            // Get current year
-            int currentYear = DateTime.Now.Year;
-
-            // Query to fetch evaluations for the current year
-            var evaluationsForCurrentYear = (from e in _context.Evaluations
-                                             where e.ProviderId == userId &&
-                                                   e.EvaluationYear == currentYear
-                                             select new
-                                             {
-                                                 e.EvaluationId,
-                                                 e.Score,
-                                                 e.Comments,
-                                                 e.CreatedAt
-                                             }).ToList();
-
-            // Example: Output evaluation details
-            if (evaluationsForCurrentYear.Any())
+            if (provider != null)
             {
-                foreach (var evaluation in evaluationsForCurrentYear)
+                int providerId = provider.ProviderId;
+
+                // Get completed tasks for that provider
+                var completedTasks = _context.Tasks
+                    .Where(t => t.ProviderId == providerId && t.TaskStatus == "COMPLETED")
+                    .Select(t => new
+                    {
+                        TaskName = t.TaskName,
+                        StartDate = t.StartDate,
+                        EndDate = t.EndDate,
+                        Status = t.TaskStatus
+                    })
+                    .ToList();
+
+                ViewBag.CompletedTaskCount = completedTasks.Count;
+                ViewBag.CompletedTasks = completedTasks;
+
+
+
+
+
+
+
+
+
+
+
+                //customer Rating
+                // Get average rating for the provider's booked services
+                var averageRating = (from sp in _context.ServiceProviders
+                                     join swjt in _context.ServiceWorkersJunctionTables on sp.ProviderId equals swjt.ProviderId
+                                     join s in _context.Services on swjt.ServiceId equals s.ServiceId
+                                     join b in _context.Bookings on s.ServiceId equals b.ServiceId
+                                     join r in _context.Reviews on b.BookingId equals r.BookingId
+                                     where sp.ProviderId == providerId && b.Status == "Completed"
+                                     select r.Rating).ToList();
+                var viewbagaverageRating = averageRating.DefaultIfEmpty(0).Average();
+
+                // Save the average rating in ViewBag
+                ViewBag.AverageRating = viewbagaverageRating;
+
+
+
+
+                // First, check if the provider exists and has an evaluation score of 5 and no comments
+                var isTopEvaluated = _context.Evaluations
+                    .Any(e => e.ProviderId == providerId && e.Score == 5 && (e.Comments == null || e.Comments == ""));
+
+
+                // Check both conditions
+                bool isEmployeeOfMonth = isTopEvaluated && viewbagaverageRating > 3;
+
+                // Pass result to ViewBag
+                ViewBag.IsEmployeeOfMonth = isEmployeeOfMonth;
+
+
+                if (isEmployeeOfMonth)
                 {
-                    Console.WriteLine($"EvaluationID: {evaluation.EvaluationId}, Score: {evaluation.Score}, Comments: {evaluation.Comments}, CreatedAt: {evaluation.CreatedAt}");
+                    var workerName = _context.ServiceProviders
+                        .Where(sp => sp.ProviderId == providerId)
+                        .Select(sp => sp.WorkerName)
+                        .FirstOrDefault();
+
+                    ViewBag.WorkerName = workerName;
                 }
+
+
+
+
+
+
+
+                DateTime startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+
+                // التحويل إلى DateOnly للمقارنة
+                DateOnly startDateOnly = DateOnly.FromDateTime(startOfMonth);
+                DateOnly endDateOnly = DateOnly.FromDateTime(endOfMonth);
+
+                var allCompletedTasks = _context.Tasks
+              .Where(t => t.ProviderId == providerId &&
+                          t.TaskStatus == "COMPLETED" &&
+                          t.EndDate >= startDateOnly &&
+                          t.EndDate <= endDateOnly)
+              .ToList();
+
+                int totalTasks = allCompletedTasks.Count;
+
+                // تقسيم الشهر إلى 4 أسابيع (تقريبًا 7 أيام لكل أسبوع)
+                int daysInMonth = (endOfMonth - startOfMonth).Days + 1;
+                int weekLength = daysInMonth / 4;
+
+                var weeklyCumulative = new List<int>();
+                int cumulative = 0;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    var weekStart = startOfMonth.AddDays(i * weekLength);
+                    var weekEnd = (i == 3) ? endOfMonth : weekStart.AddDays(weekLength - 1);
+
+                    // تحويل لـ DateOnly للمقارنة
+                    DateOnly weekStartDateOnly = DateOnly.FromDateTime(weekStart);
+                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(weekEnd);
+
+                    int weekCount = allCompletedTasks
+                        .Count(t => t.EndDate.HasValue &&
+                                    t.EndDate.Value >= weekStartDateOnly &&
+                                    t.EndDate.Value <= weekEndDateOnly);
+
+                    cumulative += weekCount;
+                    weeklyCumulative.Add(cumulative);
+                }
+
+
+                ViewBag.WeeklyLabels = new List<string> { "1/4", "2/4", "3/4", "4/4" };
+                ViewBag.WeeklyCumulativeCounts = weeklyCumulative;
+                ViewBag.MaxCount = totalTasks;
+
+
+
+
+
+
+
+
+            }
+
+            var joinedDate = (from sp in _context.ServiceProviders
+                              where sp.UserId == userId
+                              select sp.RegisterAt).FirstOrDefault();
+
+            if (joinedDate != null)
+            {
+                int yearsWithUs = DateTime.Now.Year - joinedDate.Value.Year;
+
+                // Adjust if their anniversary hasn't occurred yet this year
+                if (DateTime.Now.Date < joinedDate.Value.AddYears(yearsWithUs))
+                {
+                    yearsWithUs--;
+                }
+
+                ViewBag.YearsWithUs = yearsWithUs;
             }
             else
             {
-                Console.WriteLine("No evaluations found for the current year.");
+                ViewBag.YearsWithUs = 0;
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,11 +246,19 @@ namespace Master_Piece.Controllers
         }
         public IActionResult EmployeeProfile()
         {
-            return View();
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+            var profile = _context.ServiceProviders
+                .Include(sp => sp.User)
+                .FirstOrDefault(sp => sp.UserId == userId);
+            return View(profile);
         }
         public IActionResult EmployeeEditProfile()
         {
-            return View();
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+            var profile = _context.ServiceProviders
+                .Include(sp => sp.User)
+                .FirstOrDefault(sp => sp.UserId == userId);
+            return View(profile);
         }
         public IActionResult EmployeeResetPassword()
         {

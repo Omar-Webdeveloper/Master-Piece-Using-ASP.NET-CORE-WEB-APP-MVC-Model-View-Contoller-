@@ -15,5 +15,7 @@ public partial class Review
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? ReviewStatus { get; set; }
+
     public virtual Booking? Booking { get; set; }
 }

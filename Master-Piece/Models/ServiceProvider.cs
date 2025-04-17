@@ -21,6 +21,18 @@ public partial class ServiceProvider
 
     public string? Photos { get; set; }
 
+    public DateTime? RegisterAt { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? PhoneNumber { get; set; }
+
+    public string? Gender { get; set; }
+
+    public DateOnly? BirthDate { get; set; }
+
+    public string? WorkerAddress { get; set; }
+
     public virtual ICollection<Evaluation> Evaluations { get; set; } = new List<Evaluation>();
 
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();

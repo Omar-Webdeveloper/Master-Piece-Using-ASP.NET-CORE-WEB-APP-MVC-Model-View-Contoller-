@@ -34,7 +34,7 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=DESKTOP-T6EH1VU;Database=Home_Business_Services_Managment_Database;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -133,6 +133,10 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.ReviewStatus)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("Review_Status");
 
             entity.HasOne(d => d.Booking).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.BookingId)
@@ -174,16 +178,33 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Achievements)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Gender)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.Intro)
                 .HasMaxLength(2000)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.Photos)
                 .HasMaxLength(2000)
                 .IsUnicode(false);
+            entity.Property(e => e.RegisterAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("Register_at");
             entity.Property(e => e.ServiceType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.WorkerAddress)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("Worker_Address");
             entity.Property(e => e.WorkerName)
                 .HasMaxLength(100)
                 .IsUnicode(false);
