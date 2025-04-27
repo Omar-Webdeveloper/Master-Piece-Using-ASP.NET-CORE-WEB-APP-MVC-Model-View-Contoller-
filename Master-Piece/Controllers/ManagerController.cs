@@ -12,34 +12,34 @@ namespace Master_Piece.Controllers
         {
             _context = context;
         }
-        //        public IActionResult Admin_Dashboard()
-        //        {
-        //            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+        public IActionResult Manager_Dashboard()
+        {
+            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
-        //            // Make sure you're using your DbContext (e.g., _context)
-        //            var totalUsers = _context.Users
-        //                .Where(u => u.Role == "User")
-        //                .Count();
+            //            // Make sure you're using your DbContext (e.g., _context)
+            //            var totalUsers = _context.Users
+            //                .Where(u => u.Role == "User")
+            //                .Count();
 
-        //            ViewBag.TotalUsers = totalUsers;
+            //            ViewBag.TotalUsers = totalUsers;
 
-        //             var serviceProviders = _context.Users
-        //            .Where(u => u.Role == "ServiceProvider")
-        //            .Count();
-        //            ViewBag.TotalServiceProviders = serviceProviders;
+            //             var serviceProviders = _context.Users
+            //            .Where(u => u.Role == "ServiceProvider")
+            //            .Count();
+            //            ViewBag.TotalServiceProviders = serviceProviders;
 
-        //            var totalServices = _context.Services
-        //                .Count();
-        //            ViewBag.TotalServices = totalServices;
+            //            var totalServices = _context.Services
+            //                .Count();
+            //            ViewBag.TotalServices = totalServices;
 
-        //            var ManagerName = _context.Users
-        //                .Where(u => u.Role == "Manager")
-        //                .Select(u => u.FirstName)
-        //                .FirstOrDefault();
-        //            ViewBag.ManagerName = ManagerName;
+            //            var ManagerName = _context.Users
+            //                .Where(u => u.Role == "Manager")
+            //                .Select(u => u.FirstName)
+            //                .FirstOrDefault();
+            //            ViewBag.ManagerName = ManagerName;
 
-        //            return View();
-        //        }
+            return View();
+        }
         //        public IActionResult ManageUsers()
         //        {
         //            return View();

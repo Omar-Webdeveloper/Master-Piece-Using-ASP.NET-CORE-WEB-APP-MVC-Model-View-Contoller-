@@ -95,7 +95,7 @@ namespace Master_Piece.Controllers
                 "Guest" => RedirectToAction("Login", "Home"),
                 "User" => RedirectToAction("Index", "Home"),
                 "Employee" => RedirectToAction("Employee_Dashboard", "Employee"),
-                "Manager" => RedirectToAction("Index", "Manager"),
+                "Manager" => RedirectToAction("Manager_Dashboard", "Manager"),
                 "Admin" => RedirectToAction("Index", "Admin"),
                 "SuperAdmin" => RedirectToAction("Index", "SuperAdmin"),
                 _ => RedirectToAction("Login", "Home")
