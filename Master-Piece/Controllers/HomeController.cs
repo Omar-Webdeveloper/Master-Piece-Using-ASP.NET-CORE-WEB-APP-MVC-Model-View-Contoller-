@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Master_Piece.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
@@ -48,112 +49,112 @@ namespace Master_Piece.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(User user)
+        public IActionResult Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                HttpContext.Session.SetString("Role", "Guest");
-                return View();
+                return View(model); // Return the same view with validation errors
             }
 
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.PasswordHash == user.PasswordHash);
-            //if (existingUser != null) {
-            //    // User found, redirect to the appropriate page based on role
-            //    if (existingUser.Role == "Manager")
-            //    {
-            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
+            // Step 1: Check email and password
+            var Loginned_user = _context.Users
+                .FirstOrDefault(u => u.Email == model.Email && u.PasswordHash == model.PasswordHash);
 
-            //        return RedirectToAction("Admin_Dashboard", "Admin");
-            //    }
-            //    else if (existingUser.Role == "ServiceProvider")
-            //    {
-            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-
-            //        return RedirectToAction("Employee_Dashboard", "Employee");
-            //    }
-            //    else if (existingUser.Role == "User")
-            //    {
-            //        HttpContext.Session.SetString("UserID", existingUser.UserId.ToString());
-            //        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-            //        return RedirectToAction("Index", "Home");
-            //    }
-            //}
-            try
+            if (Loginned_user == null)
             {
-                if (existingUser != null)
-                {
-                    // User found, redirect to the appropriate page based on role
-                    if (existingUser.Role == "Manager")
-                    {
-                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
-                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-
-                        return RedirectToAction("Admin_Dashboard", "Admin");
-                    }
-                    else if (existingUser.Role == "ServiceProvider")
-                    {
-                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
-                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-
-                        return RedirectToAction("Employee_Dashboard", "Employee");
-                    }
-                    else if (existingUser.Role == "User")
-                    {
-                        HttpContext.Session.SetInt32("UserID", existingUser.UserId);
-                        HttpContext.Session.SetString("Role", existingUser.Role ?? string.Empty);
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
+                ModelState.AddModelError("", "Invalid email or password.");
+                return View(model);
             }
-            catch (Exception ex)
+
+            // Step 2: Save UserID in session
+            HttpContext.Session.SetInt32("UserID", Loginned_user.UserId);
+
+
+            // Step 3: Retrieve UserRole and Role
+            var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == Loginned_user.UserId);
+            if (userRole == null)
             {
-                // Log the exception to the console
-                Console.WriteLine($"An error occurred: {ex.Message}");
-
-                // Optionally, log the stack trace for debugging
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-
-                // Handle the error gracefully
-                TempData["ErrorMessage"] = "An unexpected error occurred. Please try again later.";
-                return View("Error"); // Redirect to an error view
+                ModelState.AddModelError("", "User role not found.");
+                return View(model);
             }
-            // If user not found or credentials are invalid
-            HttpContext.Session.SetString("Role", "Guest");
-            TempData["ErrorMessage"] = "Invalid email or password. Please try again.";
-            return View();
+
+            HttpContext.Session.SetInt32("RoleID", (int)userRole.RoleId);
+
+            var role = _context.Roles.FirstOrDefault(r => r.RoleId == userRole.RoleId);
+            if (role == null)
+            {
+                ModelState.AddModelError("", "Role does not exist.");
+                return View(model);
+            }
+
+            HttpContext.Session.SetString("UserRole", role.RoleName);
+
+            // Step 4: Redirect based on Role
+            return role.RoleName switch
+            {
+                "Guest" => RedirectToAction("Login", "Home"),
+                "User" => RedirectToAction("Index", "Home"),
+                "Employee" => RedirectToAction("Employee_Dashboard", "Employee"),
+                "Manager" => RedirectToAction("Index", "Manager"),
+                "Admin" => RedirectToAction("Index", "Admin"),
+                "SuperAdmin" => RedirectToAction("Index", "SuperAdmin"),
+                _ => RedirectToAction("Login", "Home")
+            };
         }
+
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(User user, string RepeatPassword)
+        public IActionResult Register(Register_New_UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                HttpContext.Session.SetString("Role", "Guest");
-                return View(user);
+                return View(model);
             }
-            if (user.PasswordHash != RepeatPassword)
-            {
-                return View();
-            }
-            // Assign default role and created date
-            user.Role = "User";
-            user.Image = "Waiting";
-            user.CreatedAt = DateTime.Now;
 
-            // Add user to database using Entity Framework
+            if (model.PasswordHash != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
+                return View(model);
+            }
+
+            // Load default image from wwwroot
+            string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
+            byte[] defaultImageBytes = System.IO.File.ReadAllBytes(defaultImagePath);
+
+            // Create a new User entity and map from ViewModel
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PasswordHash = model.PasswordHash,
+                PersonalImage = defaultImageBytes
+            };
+
+            // Add user to database
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            return RedirectToAction("Login", "Home");
+            // Assign "User" role
+            var role = _context.Roles.FirstOrDefault(r => r.RoleName == "User");
+            if (role != null)
+            {
+                _context.UserRoles.Add(new UserRole
+                {
+                    UserId = user.UserId,
+                    RoleId = role.RoleId
+                });
 
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Login", "Home");
         }
+
 
         public IActionResult Forget_Password()
         {
@@ -163,6 +164,66 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Register_New_Employee(Register_New_EmployeeViewModel model, IFormFile PersonalImage)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Map ViewModel to User entity
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PasswordHash = model.PasswordHash,
+                PersonalAddress = model.PersonalAddress,
+                DateOfBirth = model.DateOfBirth,
+                PhoneNumber = model.PhoneNumber,
+                Gender = model.Gender,
+                WorkerServiceType = model.WorkerServiceType,
+            };
+
+            // Handle image upload
+            if (PersonalImage != null && PersonalImage.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await PersonalImage.CopyToAsync(ms);
+                    user.PersonalImage = ms.ToArray();
+                }
+            }
+            else
+            {
+                // Optionally set a default image here
+                string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
+                if (System.IO.File.Exists(defaultImagePath))
+                {
+                    user.PersonalImage = await System.IO.File.ReadAllBytesAsync(defaultImagePath);
+                }
+            }
+
+            // Save User
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Save Role
+            var role = _context.Roles.FirstOrDefault(r => r.RoleName == "Employee");
+            if (role != null)
+            {
+                _context.UserRoles.Add(new UserRole
+                {
+                    UserId = user.UserId,
+                    RoleId = role.RoleId
+                });
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Login", "Home");
+        }
+
 
         public IActionResult Testmonials()
         {

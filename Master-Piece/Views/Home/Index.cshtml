@@ -1,4 +1,4 @@
-﻿@model ContactU
+﻿  @model ContactU  
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -570,26 +570,26 @@
             height: 300px;
             margin-left: 50px;">
     </div>
-    <div class="form-container">
-        <form class="contact-form" asp-action="SubmitContact">
-            <div class="form-group">
-                <label asp-for="FirstName" id="first-name-label">First Name</label>
-                <input type="text" id="first-name" class="input-field" value="omar" asp-for="FirstName">
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" id="last-name-label">Last Name</label>
-                <input type="text" id="last-name" class="input-field" value="Abo jolban" asp-for="LastName">
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" id="email-label">Email</label>
-                <input type="email" id="email" class="input-field" value="example@gmail.com" asp-for="Email">
-            </div>
-            <div class="form-group">
-                <label asp-for="Message" id="message-label">Message</label>
-                <textarea id="message" class="textarea-field" asp-for="Message"></textarea>
-            </div>
-            <button type="submit" class="send-button" id="send-button">Send</button>
-        </form>
-    </div>
+    <div class="form-container"> 
+          <form class="contact-form" asp-action="SubmitContact">  
+              <div class="form-group">  
+                  <label asp-for="FirstName" id="first-name-label">First Name</label>  
+                  <input type="text" id="first-name" class="input-field" value="omar" asp-for="FirstName">  
+              </div>  
+              <div class="form-group">  
+                  <label asp-for="LastName" id="last-name-label">Last Name</label>  
+                  <input type="text" id="last-name" class="input-field" value="Abo jolban" asp-for="LastName">  
+              </div>  
+              <div class="form-group">  
+                  <label asp-for="Email" id="email-label">Email</label>  
+                  <input type="email" id="email" class="input-field" value="example@gmail.com" asp-for="Email">  
+              </div>  
+              <div class="form-group">  
+                  <label asp-for="ContactUsMessage" id="message-label">Message</label>
+                <textarea id="message" class="textarea-field" asp-for="ContactUsMessage"></textarea>
+            </div>  
+              <button type="submit" class="send-button" id="send-button">Send</button>  
+          </form>  
+      </div>
 
 </section>

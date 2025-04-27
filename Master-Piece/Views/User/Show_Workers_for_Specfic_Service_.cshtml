@@ -1,10 +1,13 @@
-﻿@model Master_Piece.Models.ServiceProviderBookingViewModel
+﻿@model ShowWorkersAndBookingViewModel
 
+@{
+    int? id = Context.Session.GetInt32("ServiceId");
+}
 <style>
 
     .second_section {
         background-image: url("./master pictures/bathroom-plumbing.jpg");
-        height: 555px;
+        height: 350px;
         position: relative;
         display: flex;
         justify-content: center;
@@ -205,21 +208,21 @@
 
 
 <div class="providers-container">
-    @foreach (var provider in Model.Providers)
+    @foreach (var provider in Model.Employees)
     {
         <section class="card">
             <!-- Provider Image -->
             <section class="card-image-section">
-                <img src="@provider.Photos" alt="Provider Image" class="card-image">
+                <img src="@provider.PersonalImage" alt="Provider Image" class="card-image">
             </section>
 
             <!-- Provider Content -->
             <section class="card-content">
-                <h3>@provider.WorkerName</h3>
+                <h3>@provider.FirstName @provider.LastName</h3>
                 <h3>
-                    @if (provider.Rating != null)
+                    @if (provider.WorkerRating != null)
                     {
-                        @:Very Good ⭐⭐⭐⭐⭐ (@provider.Rating)
+                        @:Very Good ⭐⭐⭐⭐⭐ (@provider.WorkerRating)
                     }
                     else
                     {
@@ -227,7 +230,7 @@
                     }
                 </h3>
                 <h3>Available Now</h3>
-                <p>@provider.Intro</p>
+                <p>@provider.WorkerIntro</p>
             </section>
 
             <!-- Extra Content -->
@@ -237,7 +240,7 @@
                 <h6>Feature projects:</h6>
                 <img src="./master pictures/nozzle-repair-before-after.jpg" alt="Additional Image" class="extra-image">
                 <button class="action-button">
-                    <a asp-controller="User" asp-action="More_Details_About_ThatWorker" asp-route-id="@provider.ProviderId">More Details</a>
+                    <a asp-controller="User" asp-action="More_Details_About_ThatWorker" asp-route-id="@provider.UserId" asp-route-serviceId="@Model.ServiceId">More Details</a>
                 </button>
                 <!-- Trigger Button -->
                 <button onclick="openPopup()">Booking Now</button>
@@ -248,9 +251,11 @@
                         <span class="close-btn" onclick="closePopup()">&times;</span>
                         <h2>Book a Service</h2>
                         <form asp-controller="User" asp-action="SubmitBooking" method="post" enctype="multipart/form-data">
-                            <input asp-for="@Model.Booking.BookingTittle" placeholder="Booking Title" required />
-                            <textarea asp-for="@Model.Booking.BookingMessae" placeholder="Booking Details" required></textarea>
-                            <textarea asp-for="@Model.Booking.BookingNotes" placeholder="Booking Notes (optional)"></textarea>
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="ServiceId" />
+                            <input asp-for="NewBooking.BookingTittle" placeholder="Booking Title" required />
+                            <textarea asp-for="NewBooking.BookingMessae" placeholder="Booking Details" required></textarea>
+                            <textarea asp-for="NewBooking.BookingNotes" placeholder="Booking Notes (optional)"></textarea>
                             <input type="file" name="bookingImage" accept="image/*" />
                             <button type="submit">Submit Booking</button>
                         </form>

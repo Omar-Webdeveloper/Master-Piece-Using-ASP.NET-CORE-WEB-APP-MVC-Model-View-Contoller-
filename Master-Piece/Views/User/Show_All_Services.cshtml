@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Service>
+﻿@model IEnumerable<MainService>
 @{
     ViewData["Title"] = "Services";
 }
@@ -6,7 +6,7 @@
 
     .second_section {
         background-image: url("./master pictures/bathroom-plumbing.jpg");
-        height: 555px;
+        height: 350px;
         position: relative;
         display: flex;
         justify-content: center;
@@ -126,7 +126,7 @@
                 <img src="@service.Image" alt="@service.ServiceName" href="">
                 <div class="service-name"><a asp-action="Show_Workers_for_Specfic_Service_" asp-route-id="@service.ServiceId">@service.ServiceName</a></div>
                 <p>@service.Description</p>
-                <p><strong>Price:</strong> $@service.StartingPrices</p>
+                <p><strong>Price:</strong> $@service.ServicePrice</p>
             </td>
 
             @if ((Model.ToList().IndexOf(service) + 1) % 4 == 0) // Display 4 items per row

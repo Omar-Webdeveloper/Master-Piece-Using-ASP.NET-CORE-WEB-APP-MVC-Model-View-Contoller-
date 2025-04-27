@@ -13,11 +13,7 @@ public partial class ContactU
 
     public string Email { get; set; } = null!;
 
-    public string Message { get; set; } = null!;
+    public string ContactUsMessage { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
-
-    public int? UserId { get; set; }
-
-    public virtual User? User { get; set; }
 }

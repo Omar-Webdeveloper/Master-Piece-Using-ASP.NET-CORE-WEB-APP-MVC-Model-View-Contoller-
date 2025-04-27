@@ -11,17 +11,15 @@ public partial class User
 
     public string? LastName { get; set; }
 
-    public string? PasswordHash { get; set; }
+    public string Email { get; set; } = null!;
 
-    public string? Role { get; set; }
+    public string? PasswordHash { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
-    public string? Image { get; set; }
+    public byte[]? PersonalImage { get; set; }
 
-    public string Email { get; set; } = null!;
-
-    public string? Address { get; set; }
+    public string? PersonalAddress { get; set; }
 
     public DateOnly? DateOfBirth { get; set; }
 
@@ -29,13 +27,25 @@ public partial class User
 
     public string? Gender { get; set; }
 
+    public int? LocationId { get; set; }
+
+    public string? WorkerServiceType { get; set; }
+
+    public double? WorkerRating { get; set; }
+
+    public string? WorkerIntro { get; set; }
+
     public bool? IsActive { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
-    public virtual ICollection<ContactU> ContactUs { get; set; } = new List<ContactU>();
-
     public virtual ICollection<Evaluation> Evaluations { get; set; } = new List<Evaluation>();
 
-    public virtual ServiceProvider? ServiceProvider { get; set; }
+    public virtual LocationArea? Location { get; set; }
+
+    public virtual LocationArea? LocationArea { get; set; }
+
+    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+
+    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

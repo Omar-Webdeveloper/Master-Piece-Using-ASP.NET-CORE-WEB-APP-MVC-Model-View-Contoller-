@@ -1,5 +1,5 @@
 ﻿@{
-    var role = Context.Session.GetString("Role");
+    var role = Context.Session.GetString("UserRole");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -205,10 +205,9 @@
         <a href="index.html">
             <img src="~/master pictures/logo.png" alt="Work Image" class="logo" />
         </a>
-        <label> Language:</label>
         <select class="language-select" id="language-select">
             <option value="ar">Arabic</option>
-            <option value="en">English</option>
+            <option value="en" selected>English</option>
         </select>
         <div class="nav">
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -222,10 +221,10 @@
 
                 if (role == "Manager")
                 {
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Manager Dashboard</a>
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
                 }
-                else if (role == "ServiceProvider")
+                else if (role == "Employee")
                 {
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Employee Dashboard</a>
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>

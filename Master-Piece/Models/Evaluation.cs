@@ -7,9 +7,7 @@ public partial class Evaluation
 {
     public int EvaluationId { get; set; }
 
-    public int? ProviderId { get; set; }
-
-    public int? AdminId { get; set; }
+    public int? WrokerId { get; set; }
 
     public int? EvaluationYear { get; set; }
 
@@ -19,7 +17,5 @@ public partial class Evaluation
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual User? Admin { get; set; }
-
-    public virtual ServiceProvider? Provider { get; set; }
+    public virtual User? Wroker { get; set; }
 }

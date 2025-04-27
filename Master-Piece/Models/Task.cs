@@ -7,7 +7,7 @@ public partial class Task
 {
     public int TaskId { get; set; }
 
-    public int? ProviderId { get; set; }
+    public int? WrokerId { get; set; }
 
     public string? TaskName { get; set; }
 
@@ -17,11 +17,11 @@ public partial class Task
 
     public string? TaskStatus { get; set; }
 
-    public string? BeforePhoto { get; set; }
+    public byte[]? BeforePhoto { get; set; }
 
-    public string? AfterPhoto { get; set; }
+    public byte[]? AfterPhoto { get; set; }
 
     public string TasksDetails { get; set; } = null!;
 
-    public virtual ServiceProvider? Provider { get; set; }
+    public virtual User? Wroker { get; set; }
 }
