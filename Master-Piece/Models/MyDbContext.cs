@@ -89,14 +89,20 @@ public partial class MyDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.WorkerId).HasColumnName("WorkerID");
 
             entity.HasOne(d => d.Service).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK__Bookings__Servic__5AEE82B9");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Bookings)
+            entity.HasOne(d => d.User).WithMany(p => p.BookingUsers)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Bookings__UserID__59FA5E80");
+
+            entity.HasOne(d => d.Worker).WithMany(p => p.BookingWorkers)
+                .HasForeignKey(d => d.WorkerId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Bookings_Worker");
         });
 
         modelBuilder.Entity<ContactU>(entity =>

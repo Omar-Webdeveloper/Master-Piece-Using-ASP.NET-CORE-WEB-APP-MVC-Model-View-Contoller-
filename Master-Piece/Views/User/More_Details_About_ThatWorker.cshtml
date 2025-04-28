@@ -556,6 +556,7 @@
                   <section class="card-bill">  
                       <form asp-controller="User" asp-action="SubmitPreBooking" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="ServiceId" />
+                        <input type="hidden" asp-for="@Model.Employee.UserId" />
                           <input asp-for="@Model.NewBooking.BookingStartDate" class="form-control" type="date" />
                         <input asp-for="@Model.NewBooking.BookingTittle" placeholder="Booking Title" required />
                         <textarea asp-for="@Model.NewBooking.BookingMessae" placeholder="Booking Details" required></textarea>

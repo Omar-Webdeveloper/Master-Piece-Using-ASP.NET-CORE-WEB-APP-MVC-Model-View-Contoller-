@@ -47,11 +47,21 @@
             gap: 10px;
         }
 
+        /* .logo-container { */
+        /*     display: flex; */
+        /*     align-items: center; */
+        /*     text-decoration: none; /* Removes the default underline from the link */ */
+        /*     color: #003366; */
+        /* } */
         .logo {
             width: 40px;
             height: 40px;
         }
 
+        /* .brand-text { */
+        /*     font-size: 24px; */
+        /*     font-weight: bold; */
+        /* } */
         .hello-user {
             font-weight: 600;
             color: #000;
@@ -203,7 +213,8 @@
 <body>
     <div class="header">
         <a href="index.html">
-            <img src="~/master pictures/logo.png" alt="Work Image" class="logo" />
+            <img class="logo" src="./master pictures/logo.png" alt="Work Image" style="width: 50px;height: 50px;" />
+            @* <span class="brand-text">Take Care Home Services</span>  <!-- Text next to the icon --> *@
         </a>
         <select class="language-select" id="language-select">
             <option value="ar">Arabic</option>

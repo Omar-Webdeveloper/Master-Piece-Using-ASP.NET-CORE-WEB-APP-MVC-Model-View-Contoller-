@@ -90,6 +90,102 @@
         height: auto;
     }
 
+    .main-ad {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .left-side, .right-side {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .My_promotion {
+        margin-bottom: 20px;
+    }
+
+        .My_promotion h2 {
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .My_promotion h1 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+    .images-grid {
+        display: flex;
+        gap: 20px;
+    }
+
+    .left-image img {
+        height: 350px;
+        width: 230px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .right-images {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        .right-images img {
+            height: 165px;
+            width: 230px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+    .right-side {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .promo-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .promo-desc {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .benefits {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .benefit-item h3 {
+        font-size: 20px;
+        color: #0056b3;
+        margin-bottom: 5px;
+    }
+
+    .benefit-item p {
+        margin-left: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -102,15 +198,53 @@
         background-color: #D9EAFD;
     }
 
+    /* Header section for title and button */
+    .services-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 0 20px;
+    }
+
+        .services-header h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .view-all-services {
+        font-size: 16px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .view-all-services:hover {
+            color: #0056b3;
+        }
+
+    /* Service cards container */
+    .service-cards {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        /* flex-wrap: wrap; */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Individual service card */
     .service-card {
-        display: inline-block;
         border: 1px solid #ddd;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 10px;
-        padding: 20px;
         max-width: 300px;
+        width: 100%;
         transition: transform 0.2s;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
         .service-card:hover {
@@ -118,8 +252,9 @@
         }
 
         .service-card img {
-            max-width: 100%;
-            border-radius: 8px;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
         }
 
         .service-card h3 {
@@ -130,14 +265,23 @@
         .service-card p {
             font-size: 16px;
             margin: 10px 0;
+            color: #555;
         }
 
-        .service-card .rating {
+    /* Footer section with stars and button */
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+    }
+
+        .card-footer .rating {
             font-size: 18px;
-            color: gold;
+            color: #FFD700;
         }
 
-        .service-card .button {
+        .card-footer .button {
             background-color: #DFB300;
             color: white;
             border: none;
@@ -148,67 +292,222 @@
             transition: background-color 0.2s;
         }
 
-            .service-card .button:hover {
+            .card-footer .button:hover {
                 background-color: gold;
             }
 
-    /* Fourth Section */
+    /* Services Section */
+    /* .services-section { */
+    /*     text-align: center; */
+    /*     padding: 20px; */
+    /*     background-color: #D9EAFD; */
+    /* } */
+
+    /* .service-card { */
+    /*     display: inline-block; */
+    /*     border: 1px solid #ddd; */
+    /*     border-radius: 8px; */
+    /*     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    /*     margin: 10px; */
+    /*     padding: 20px; */
+    /*     max-width: 300px; */
+    /*     transition: transform 0.2s; */
+    /* } */
+
+    /*     .service-card:hover { */
+    /*         transform: scale(1.05); */
+    /*     } */
+
+    /*     .service-card img { */
+    /*         max-width: 100%; */
+    /*         border-radius: 8px; */
+    /*     } */
+
+    /*     .service-card h3 { */
+    /*         font-size: 20px; */
+    /*         margin: 10px 0; */
+    /*     } */
+
+    /*     .service-card p { */
+    /*         font-size: 16px; */
+    /*         margin: 10px 0; */
+    /*     } */
+
+    /*     .service-card .rating { */
+    /*         font-size: 18px; */
+    /*         color: gold; */
+    /*     } */
+
+    /*     .service-card .button { */
+    /*         background-color: #DFB300; */
+    /*         color: white; */
+    /*         border: none; */
+    /*         padding: 10px 20px; */
+    /*         font-size: 16px; */
+    /*         border-radius: 4px; */
+    /*         cursor: pointer; */
+    /*         transition: background-color 0.2s; */
+    /*     } */
+
+    /*         .service-card .button:hover { */
+    /*             background-color: gold; */
+    /*         } */
+
     .fourth_section {
-        padding: 20px;
+        padding: 50px 20px;
+        background-color: #f5f7fa;
+        text-align: center;
+    }
+
+        .fourth_section h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+    .blogs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
     }
 
     .blog {
-        display: inline-block;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 10px;
-        padding: 20px;
-        max-width: 300px;
-        text-align: center;
-        transition: transform 0.2s;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 260px;
+        overflow: hidden; /* ✨ This is important! */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.3s;
     }
 
         .blog:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
         }
 
-        .blog img {
-            max-width: 100%;
-            border-radius: 8px;
+        .blog .img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease; /* ✨ Smooth zoom transition */
         }
 
-        .blog .author {
-            font-size: 18px;
-            margin: 5px 0;
+        .blog:hover .img {
+            transform: scale(1.05); /* ✨ Zoom in a little bit */
         }
 
-        .blog .date {
-            font-size: 14px;
-            color: #888;
-            margin: 5px 0;
-        }
 
-        .blog .review {
-            font-size: 16px;
-            margin: 10px 0;
-        }
 
-        .blog .rating {
-            font-size: 18px;
-            color: gold;
-        }
+    .blog .author {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10px 0 5px 0;
+        color: #555;
+    }
 
-        .blog .read-more {
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-size: large;
-            font-weight: bold;
-        }
+    .blog .date {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 10px;
+    }
 
-            .blog .read-more:hover {
-                text-decoration: underline;
-            }
+    .blog .review {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 20px;
+        padding: 0 10px;
+        text-align: center;
+    }
+
+    .blog .bottom-tab {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0 10px;
+        margin-top: auto;
+    }
+
+    .read-more {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .rating {
+        font-size: 18px;
+        color: #f5b50a;
+    }
+
+
+
+
+
+
+
+
+    /* Fourth Section */
+    /* .fourth_section { */
+    /*     padding: 20px; */
+    /* } */
+
+    /* .blog { */
+    /*     display: inline-block; */
+    /*     border: 1px solid #ddd; */
+    /*     border-radius: 8px; */
+    /*     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    /*     margin: 10px; */
+    /*     padding: 20px; */
+    /*     max-width: 300px; */
+    /*     text-align: center; */
+    /*     transition: transform 0.2s; */
+    /* } */
+
+    /*     .blog:hover { */
+    /*         transform: scale(1.05); */
+    /*     } */
+
+    /*     .blog img { */
+    /*         max-width: 100%; */
+    /*         border-radius: 8px; */
+    /*     } */
+
+    /*     .blog .author { */
+    /*         font-size: 18px; */
+    /*         margin: 5px 0; */
+    /*     } */
+
+    /*     .blog .date { */
+    /*         font-size: 14px; */
+    /*         color: #888; */
+    /*         margin: 5px 0; */
+    /*     } */
+
+    /*     .blog .review { */
+    /*         font-size: 16px; */
+    /*         margin: 10px 0; */
+    /*     } */
+
+    /*     .blog .rating { */
+    /*         font-size: 18px; */
+    /*         color: gold; */
+    /*     } */
+
+    /*     .blog .read-more { */
+    /*         color: rgb(0, 0, 0); */
+    /*         text-decoration: none; */
+    /*         font-size: large; */
+    /*         font-weight: bold; */
+    /*     } */
+
+    /*         .blog .read-more:hover { */
+    /*             text-decoration: underline; */
+    /*         } */
 
     .view-all-services {
         display: inline-block;
@@ -226,54 +525,60 @@
         }
 
 
-
     .fifth_section {
-        padding: 20px;
+        padding: 50px 20px; /* ✨ More breathing room */
         background-color: #D9EAFD;
     }
 
     .faq-container {
         max-width: 800px;
         margin: 0 auto;
-        text-align: center;
     }
 
     .faq-title {
-        font-size: 24px;
-        margin-bottom: 20px;
+        font-size: 32px; /* ✨ Bigger, more modern */
+        margin-bottom: 40px; /* ✨ More gap */
         font-weight: bold;
+        text-align: center;
+        color: #333; /* ✨ Darker color for better contrast */
     }
 
     .faq-item {
-        border: 1px solid #ddd;
+        border: 1px solid #ccc; /* ✨ Slightly lighter border */
         border-radius: 8px;
-        margin: 10px 0;
-        padding: 15px;
-        text-align: left;
-        transition: background-color 0.2s;
+        margin: 15px 0;
+        padding: 20px;
+        background: #fff; /* ✨ White background for cards */
+        transition: background-color 0.3s, box-shadow 0.3s; /* ✨ Smooth feel */
+        cursor: pointer; /* ✨ Clickable feel */
     }
 
         .faq-item:hover {
-            background-color: #f1f1f1;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* ✨ Soft shadow */
         }
 
     .faq-question {
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        margin: 0;
+        font-size: 20px; /* ✨ Slightly bigger */
+        font-weight: 600;
         display: flex;
         align-items: center;
+        color: #444; /* ✨ Darker for better read */
     }
 
     .faq-icon {
-        margin-right: 10px;
+        margin-right: 12px;
+        font-size: 24px; /* ✨ Bigger icon */
+        transition: transform 0.3s ease; /* ✨ Smooth rotation */
     }
 
     .faq-answer {
         display: none;
         font-size: 16px;
-        margin-top: 10px;
+        color: #555;
+        margin-top: 15px;
+        line-height: 1.6; /* ✨ More readable */
+        animation: fadeIn 0.5s ease; /* ✨ Smooth fade when opened */
     }
 
     .faq-item.active .faq-answer {
@@ -284,59 +589,206 @@
         transform: rotate(45deg);
     }
 
+    /* ✨ Smooth fade animation */
+    @@keyframes fadeIn {
+        from
 
+    {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
+    }
 
+    /* ✨ Responsive adjustments */
+    @@media (max-width: 600px) {
+        .faq-title
 
+    {
+        font-size: 26px;
+    }
 
+    .faq-question {
+        font-size: 18px;
+    }
+
+    }
+
+    /* General Styling for Contact Us Section */
     .contact-section {
         display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 20px;
-        background-color: #BCCCDC;
-    }
-
-    .form-container {
-        width: 50%;
-    }
-
-    .contact-form {
-        display: flex;
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+        padding: 40px 20px; /* Add spacing around the section */
+        background-color: #f4f7fc; /* Light background for a clean, professional look */
+        min-height: 80vh; /* Make sure the section takes up enough space */
         flex-direction: column;
     }
 
+    /* Container for the form and illustration */
+    .contact-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px; /* Maximum width of the section */
+        width: 100%;
+        gap: 40px; /* Space between the image and the form */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+
+    /* Contact Card that holds the image and form */
+    .contact-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 30px; /* Space between image and form */
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+        max-width: 1100px; /* Make the card take up a large width but still responsive */
+    }
+
+        /* Hover effect for the contact card */
+        .contact-card:hover {
+            transform: scale(1.05); /* Slight zoom-in effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+        }
+
+    /* Contact illustration styling */
+    .contact-illustration {
+        width: 50%; /* Image will take half of the card width */
+        height: 100%; /* Match the height of the form */
+    }
+
+        .contact-illustration img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the container */
+            border-radius: 15px;
+        }
+
+    /* Image hover effect */
+    .illustration {
+        width: 45%; /* Adjust the width to be a little less than the form width */
+        height: 100%; /* Ensure the height matches the form height */
+        overflow: hidden; /* Prevents overflow */
+        border-radius: 15px; /* Optional, for a rounded corner effect */
+        transition: transform 0.3s ease-in-out; /* Smooth scale transition */
+    }
+
+        .illustration img {
+            width: 100%; /* Make the image take up the full width of its container */
+            height: 100%; /* Set the height to 100% of the parent container */
+            object-fit: cover; /* Ensures the image covers the container without distortion */
+            transition: transform 0.3s ease-in-out; /* Smooth zoom effect on hover */
+        }
+
+        .illustration:hover img {
+            transform: scale(1.05); /* Slightly enlarge the image on hover */
+        }
+
+    /* Form container styling */
+    .form-container {
+        width: 50%; /* The form takes the other half of the card */
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Section title */
+    .section-title {
+        font-size: 30px;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* General form styling */
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Form group styling */
     .form-group {
-        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 
-    .label {
-        margin-bottom: 5px;
-        font-weight: bold;
+    /* Label styling */
+    .form-label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #555;
     }
 
+    /* Input and textarea fields */
     .input-field,
     .textarea-field {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        width: 95%;
     }
 
+    /* Textarea field styling */
+    .textarea-field {
+        min-height: 120px; /* Give some height for the message textarea */
+        resize: vertical; /* Allow user to resize the textarea vertically */
+    }
+
+    /* Send button styling */
     .send-button {
-        background-color: yellow;
+        background-color: #007bff; /* Primary button color */
+        color: white;
+        padding: 12px;
+        font-size: 16px;
         border: none;
-        color: black;
-        padding: 10px;
+        border-radius: 8px;
         cursor: pointer;
-        border-radius: 5px;
+        transition: background-color 0.3s;
     }
 
-    .illustration {
-        width: 40%;
+        /* Send button hover effect */
+        .send-button:hover {
+            background-color: #0056b3; /* Darker shade of the primary color */
+        }
+
+    /* Responsive styling */
+    @@media (max-width: 768px) {
+        .contact-container
+
+    {
+        flex-direction: column; /* Stack the image and form on top of each other */
+        text-align: center;
     }
 
+    .contact-card {
+        flex-direction: column; /* Stack the image and form vertically on small screens */
+    }
+
+    .contact-illustration img {
+        max-width: 280px; /* Adjust the image size on small screens */
+    }
+
+    .form-container {
+        width: 100%; /* Ensure form takes full width on small screens */
+    }
+
+    }
 </style>
 
 <div class="second_section">
@@ -352,148 +804,250 @@
 
 
 
-
-<div class="Third_section">
+<div class="Third_section" style="    padding: 50px 15px; ">
     <div class="container">
         <div class="ad-section">
-            <div class="My_promation">
-                <h2>24 Hours Available</h2>
-                <h1>Home & Business services</h1>
-            </div>
             <div class="main-ad">
 
-                <div class="table-container">
-                    <table style="  border-spacing: 20px;">
-                        <tr>
-                            <td rowspan="2">
-                                <img src="./master pictures/OIP (3).jpg" alt="First Image" class="Image-ad-section" style="height:350px ;width: 230px;">
-                            </td>
-                            <td>
-                                <img src="./master pictures/OIP (4).jpg" alt="Second Image" class="Image-ad-section" style="height:175PX ;width: 230px;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img src="./master pictures/OIP (5).jpg" alt="Third Image" class="Image-ad-section" style="height:175PX ;width: 230px;">
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <h1>New Year, New Home! Enjoy 20% Off on All Home Services</h1>
-                    <p>From Cleaning to Repairs, We've Got You Covered! Book Now and Experience the Best in Home Care</p>
-                    <div class="benefits">
-                        <div class="benefit-item">
-                            <h3 style="margin-bottom:15px ;margin-top: 15px;">1. Convenience:</h3>
-
-                            <p style="margin-bottom: 3px;">- Seamless Booking: Users can easily book services online at their preferred date and time.</p>
-                            <p style="margin-bottom: 3px;">- User-friendly Interface: Intuitive and easy-to-navigate website design.</p>
-                            <p style="margin-bottom: 3px;">- 24/7 Availability: Access to information and booking options anytime, anywhere.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <h3 style="margin-bottom:15px ;margin-top: 15px;">2. Reliability:</h3>
-
-                            <p style="margin-bottom: 3px;">- Certified Professionals: Ensure all service providers are vetted, certified, and experienced.</p>
-                            <p style="margin-bottom: 3px;">- Timely Service: Services are performed on time as scheduled.</p>
-                            <p style="margin-bottom: 3px;">- Customer Support: Reliable customer service to address any issues or queries promptly.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <h3 style="margin-bottom:15px ;margin-top: 15px;">3. Transparency:</h3>
-
-                            <p style="margin-bottom: 3px;">- Clear Pricing: Upfront pricing with no hidden fees.</p>
-                            <p style="margin-bottom: 3px;">- Service Details: Detailed descriptions of services offered, including what’s included and any additional costs.</p>
-                            <p style="margin-bottom: 3px;">- Customer Reviews: Display honest customer feedback and ratings for services.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <h3 style="margin-bottom:15px ;margin-top: 15px;">4. Quality Assurance:</h3>
-
-                            <p style="margin-bottom: 3px;">- High-Quality Standards: Commitment to delivering top-notch services.</p>
-                            <p style="margin-bottom: 3px;">- Satisfaction Guarantee: Policies in place to ensure customer satisfaction, such as redoing the service if the customer is not satisfied.</p>
-                            <p style="margin-bottom: 18px; ">- Continuous Improvement: Regularly update and improve services based on customer feedback.</p>
-                        </div>
+                <!-- Left side -->
+                <div class="left-side">
+                    <div class="My_promotion">
+                        <h2>24 Hours Available</h2>
+                        <h1>Home & Business Services</h1>
                     </div>
 
+                    <div class="images-grid">
+                        <div class="left-image">
+                            <img src="./master pictures/OIP (3).jpg" alt="First Image" />
+                        </div>
+                        <div class="right-images">
+                            <img src="./master pictures/OIP (4).jpg" alt="Second Image" />
+                            <img src="./master pictures/OIP (5).jpg" alt="Third Image" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side -->
+                <div class="right-side">
+                    <h1 class="promo-title">New Year, New Home! Enjoy 20% Off on All Home Services</h1>
+                    <p class="promo-desc">From Cleaning to Repairs, We've Got You Covered! Book Now and Experience the Best in Home Care</p>
+
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <h3>1. Convenience:</h3>
+                            <p>- Seamless Booking: Users can easily book services online at their preferred date and time.</p>
+                            <p>- User-friendly Interface: Intuitive and easy-to-navigate website design.</p>
+                            <p>- 24/7 Availability: Access to information and booking options anytime, anywhere.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h3>2. Reliability:</h3>
+                            <p>- Certified Professionals: Ensure all service providers are vetted, certified, and experienced.</p>
+                            <p>- Timely Service: Services are performed on time as scheduled.</p>
+                            <p>- Customer Support: Reliable customer service to address any issues or queries promptly.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h3>3. Transparency:</h3>
+                            <p>- Clear Pricing: Upfront pricing with no hidden fees.</p>
+                            <p>- Service Details: Detailed descriptions of services offered, including what’s included and any additional costs.</p>
+                            <p>- Customer Reviews: Display honest customer feedback and ratings for services.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h3>4. Quality Assurance:</h3>
+                            <p>- High-Quality Standards: Commitment to delivering top-notch services.</p>
+                            <p>- Satisfaction Guarantee: Policies in place to ensure customer satisfaction, such as redoing the service if the customer is not satisfied.</p>
+                            <p>- Continuous Improvement: Regularly update and improve services based on customer feedback.</p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+@* <div class="services-section"> *@
+@*     <h2>Most Wanted Services</h2> *@
+@*     <div class="service-card"> *@
+@*         <img src="./master pictures/OIP.jpg" alt="Plumbing" style="height:220px ;width: 220px;"> *@
+@*         <h3>Plumbing</h3> *@
+@*         <p> *@
+@*             Expert plumbing services for all your needs, from fixing leaks and unclogging drains to installing new fixtures and systems. Our licensed plumbers use the latest techniques and tools to ensure your plumbing works flawlessly, providing peace of mind and convenience. *@
+@*         </p> *@
+@*         <div class="rating"> *@
+@*             <span>★★★★★</span> *@
+@*         </div> *@
+@*         <button class="button">Book Now</button> *@
+@*     </div> *@
+@*     <div class="service-card"> *@
+@*         <img src="./master pictures/download.jpg" alt="Electrician" style="height:220px ;width: 220px;"> *@
+@*         <h3>Electrician</h3> *@
+@*         <p> *@
+@*             Certified electricians providing safe and reliable electrical services, including installation, repair, and maintenance. Whether you need new wiring, lighting fixtures, or troubleshooting electrical issues, our experts ensure the electrical system operates efficiently and safely. *@
+@*         </p> *@
+@*         <div class="rating"> *@
+@*             <span>★★★★★</span> *@
+@*         </div> *@
+@*         <button class="button">Book Now</button> *@
+@*     </div> *@
+@*     <div class="service-card"> *@
+@*         <img src="./master pictures/OIP (1).jpg" alt="Furniture Assembly & Installation" style="height:220px ;width: 220px;"> *@
+@*         <h3>Furniture Assembly & Installation</h3> *@
+@*         <p> *@
+@*             Professional furniture assembly and installation services to help you set up your new furniture quickly and correctly. Our skilled team ensures that all pieces are assembled securely and according to manufacturer instructions, saving you time and avoiding frustration. *@
+@*         </p> *@
+@*         <div class="rating"> *@
+@*             <span>★★★★★</span> *@
+@*         </div> *@
+@*         <button class="button">Book Now</button> *@
+@*     </div> *@
+@*     <a href="all-services.html" class="view-all-services">View all Services</a> *@
+@* </div> *@
+
+
+
 
 
 
 <div class="services-section">
-    <h2>Most Wanted Services</h2>
-    <div class="service-card">
-        <img src="./master pictures/OIP.jpg" alt="Plumbing" style="height:220px ;width: 220px;">
-        <h3>Plumbing</h3>
-        <p>
-            Expert plumbing services for all your needs, from fixing leaks and unclogging drains to installing new fixtures and systems. Our licensed plumbers use the latest techniques and tools to ensure your plumbing works flawlessly, providing peace of mind and convenience.
-        </p>
-        <div class="rating">
-            <span>★★★★★</span>
-        </div>
-        <button class="button">Book Now</button>
+    <div class="services-header">
+        <h2>Most Wanted Services</h2>
+        <a href="all-services.html" class="view-all-services">View All Services</a>
     </div>
-    <div class="service-card">
-        <img src="./master pictures/download.jpg" alt="Electrician" style="height:220px ;width: 220px;">
-        <h3>Electrician</h3>
-        <p>
-            Certified electricians providing safe and reliable electrical services, including installation, repair, and maintenance. Whether you need new wiring, lighting fixtures, or troubleshooting electrical issues, our experts ensure the electrical system operates efficiently and safely.
-        </p>
-        <div class="rating">
-            <span>★★★★★</span>
+
+    <div class="service-cards">
+        <div class="service-card">
+            <img src="./master pictures/OIP.jpg" alt="Plumbing">
+            <h3>Plumbing</h3>
+            <p>
+                Expert plumbing services for all your needs, from fixing leaks and unclogging drains to installing new fixtures and systems. Our licensed plumbers use the latest techniques and tools to ensure your plumbing works flawlessly, providing peace of mind and convenience.
+            </p>
+            <div class="card-footer">
+                <div class="rating">
+                    <span>★★★★★</span>
+                </div>
+                <button class="button">Book Now</button>
+            </div>
         </div>
-        <button class="button">Book Now</button>
-    </div>
-    <div class="service-card">
-        <img src="./master pictures/OIP (1).jpg" alt="Furniture Assembly & Installation" style="height:220px ;width: 220px;">
-        <h3>Furniture Assembly & Installation</h3>
-        <p>
-            Professional furniture assembly and installation services to help you set up your new furniture quickly and correctly. Our skilled team ensures that all pieces are assembled securely and according to manufacturer instructions, saving you time and avoiding frustration.
-        </p>
-        <div class="rating">
-            <span>★★★★★</span>
+
+        <div class="service-card">
+            <img src="./master pictures/download.jpg" alt="Electrician">
+            <h3>Electrician</h3>
+            <p>
+                Certified electricians providing safe and reliable electrical services, including installation, repair, and maintenance. Whether you need new wiring, lighting fixtures, or troubleshooting electrical issues, our experts ensure the electrical system operates efficiently and safely.
+            </p>
+            <div class="card-footer">
+                <div class="rating">
+                    <span>★★★★★</span>
+                </div>
+                <button class="button">Book Now</button>
+            </div>
         </div>
-        <button class="button">Book Now</button>
+
+        <div class="service-card">
+            <img src="./master pictures/OIP (1).jpg" alt="Furniture Assembly & Installation">
+            <h3>Furniture Assembly & Installation</h3>
+            <p>
+                Professional furniture assembly and installation services to help you set up your new furniture quickly and correctly. Our skilled team ensures that all pieces are assembled securely and according to manufacturer instructions, saving you time and avoiding frustration.
+            </p>
+            <div class="card-footer">
+                <div class="rating">
+                    <span>★★★★★</span>
+                </div>
+                <button class="button">Book Now</button>
+            </div>
+        </div>
+
+        <div class="service-card">
+            <img src="./master pictures/OIP (1).jpg" alt="Security Services">
+            <h3>Security Services</h3>
+            <p>
+                Ensure the safety of your home or business with state-of-the-art CCTV installation services. Our expert team will design and install high-definition surveillance systems tailored to your needs, providing round-the-clock monitoring and peace of mind.
+            </p>
+            <div class="card-footer">
+                <div class="rating">
+                    <span>★★★★★</span>
+                </div>
+                <button class="button">Book Now</button>
+            </div>
+        </div>
     </div>
-    <a href="all-services.html" class="view-all-services">View all Services</a>
 </div>
 
+
+
+
+
+
+
+
+
 <div class="fourth_section">
+    <h2>See the Difference </h2>
     <div class="blogs">
         <div class="blog">
-            <img src="./master pictures/nozzle-repair-before-after.jpg" alt="Before and after fixing pipes" style="height:280px ;width: 230px;">
-            <h3 class="author">Amy King</h3>
-            <p class="date">2024-12-13</p>
-            <p class="review">
-                "Great at fixing pipes. Always reliable and efficient, you'll be back up and running in no time."
-            </p>
-            <a href="#" class="read-more">Read More</a>
-            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <img class="img" src="./master pictures/nozzle-repair-before-after.jpg" alt="Before and after fixing pipes">
+      
+                <h3 class="author">Amy King</h3>
+                <p class="date">2024-12-13</p>
+                <p class="review">
+                    "Great at fixing pipes. Always reliable and efficient, you'll be back up and running in no time."
+                </p>
+                <div class="bottom-tab">
+                    <a href="#" class="read-more">Read More</a>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
         </div>
+
         <div class="blog">
-            <img src="./master pictures/OIP (6).jpg" alt="Before and after kitchen remodeling" style="height:280px ;width: 230px;">
-            <h3 class="author">Amy King</h3>
-            <p class="date">2024-12-13</p>
-            <p class="review">
-                "Really impressed with their kitchen remodeling! They turned my outdated space into a modern, beautiful kitchen I love."
-            </p>
-            <a href="#" class="read-more">Read More</a>
-            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <img class="img" src="./master pictures/OIP (6).jpg" alt="Before and after kitchen remodeling">
+   
+                <h3 class="author">Amy King</h3>
+                <p class="date">2024-12-13</p>
+                <p class="review">
+                    "Really impressed with their kitchen remodeling! They turned my outdated space into a modern, beautiful kitchen I love."
+                </p>
+                <div class="bottom-tab">
+                    <a href="#" class="read-more">Read More</a>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
         </div>
+
         <div class="blog">
-            <img src="./master pictures/before-after-800x800.jpg" alt="Before and after fixing wiring" style="height:280px ;width: 230px;">
-            <h3 class="author">Amy King</h3>
-            <p class="date">2024-12-13</p>
-            <p class="review">
-                "Fixed the wiring perfectly! Quick, efficient, and now everything works flawlessly."
-            </p>
-            <a href="#" class="read-more">Read More</a>
-            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <img class="img" src="./master pictures/before-after-800x800.jpg" alt="Before and after fixing wiring">
+       
+                <h3 class="author">Amy King</h3>
+                <p class="date">2024-12-13</p>
+                <p class="review">
+                    "Fixed the wiring perfectly! Quick, efficient, and now everything works flawlessly."
+                </p>
+                <div class="bottom-tab">
+                    <a href="#" class="read-more">Read More</a>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+        </div>
+
+        <div class="blog">
+
+            <img class="img" src="./master pictures/before-after-800x800.jpg" alt="Before and after fixing wiring">
+      
+                <h3 class="author">Amy King</h3>
+                <p class="date">2024-12-13</p>
+                <p class="review">
+                    "Fixed the wiring perfectly! Quick, efficient, and now everything works flawlessly."
+                </p>
+                <div class="bottom-tab">
+                    <a href="#" class="read-more">Read More</a>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
         </div>
     </div>
+
 </div>
 
 
@@ -531,65 +1085,46 @@
     </div>
 </div>
 <script>
+    // ✨ SIMPLIFIED version (only toggles active)
     document.querySelectorAll('.faq-question').forEach(item => {
       item.addEventListener('click', () => {
         const faqItem = item.parentElement;
-        const faqAnswer = faqItem.querySelector('.faq-answer');
-        faqItem.classList.toggle('active');
-
-        if (faqItem.classList.contains('active')) {
-          let i = 0;
-          const text = faqAnswer.textContent;
-          faqAnswer.textContent = '';
-          const interval = setInterval(() => {
-            if (i < text.length) {
-              faqAnswer.textContent += text.charAt(i);
-              i++;
-            } else {
-              clearInterval(interval);
-            }
-          }, 50); // Adjust the speed by changing the interval value
-        } else {
-          faqAnswer.textContent = faqAnswer.getAttribute('data-text');
-        }
+        faqItem.classList.toggle('active'); // ✅ Only toggle the class
       });
-    });
-
-    document.querySelectorAll('.faq-answer').forEach(answer => {
-      answer.setAttribute('data-text', answer.textContent);
     });
 
 </script>
 
-
-
 <section class="contact-section">
-    <div class="illustration">
-        <img src="./master pictures/image_contact_us.jpg" alt="Working remotely - simple illustration" style="border-radius: 30px;
-            width: 260px;
-            height: 300px;
-            margin-left: 50px;">
+    <div class="contact-container">
+        <div class="contact-card">
+            <div class="contact-illustration">
+                <img src="https://images.pexels.com/photos/4484071/pexels-photo-4484071.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Working remotely - simple illustration" style="    height: 630px;">
+            </div>
+            <div class="form-container">
+                <h2 class="section-title">We’d Love to Hear From You!</h2>
+                <form class="contact-form" asp-action="SubmitContact">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label">First Name</label>
+                        <input type="text" id="first-name" class="input-field" placeholder="Your First Name " asp-for="FirstName">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label">Last Name</label>
+                        <input type="text" id="last-name" class="input-field" placeholder="Your Last Name " asp-for="LastName">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input type="email" id="email" class="input-field" placeholder="Your Email" asp-for="Email">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ContactUsMessage" class="form-label">Message</label>
+                        <textarea id="message" placeholder="Enter your massage , thank you for every comment that have been written" class="textarea-field" asp-for="ContactUsMessage"></textarea>
+                    </div>
+                    <button type="submit" class="send-button" id="send-button">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-container"> 
-          <form class="contact-form" asp-action="SubmitContact">  
-              <div class="form-group">  
-                  <label asp-for="FirstName" id="first-name-label">First Name</label>  
-                  <input type="text" id="first-name" class="input-field" value="omar" asp-for="FirstName">  
-              </div>  
-              <div class="form-group">  
-                  <label asp-for="LastName" id="last-name-label">Last Name</label>  
-                  <input type="text" id="last-name" class="input-field" value="Abo jolban" asp-for="LastName">  
-              </div>  
-              <div class="form-group">  
-                  <label asp-for="Email" id="email-label">Email</label>  
-                  <input type="email" id="email" class="input-field" value="example@gmail.com" asp-for="Email">  
-              </div>  
-              <div class="form-group">  
-                  <label asp-for="ContactUsMessage" id="message-label">Message</label>
-                <textarea id="message" class="textarea-field" asp-for="ContactUsMessage"></textarea>
-            </div>  
-              <button type="submit" class="send-button" id="send-button">Send</button>  
-          </form>  
-      </div>
-
 </section>
+
+

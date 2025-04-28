@@ -12,5 +12,10 @@
         public byte[] IssueImage { get; set; }
         public decimal? ServicePrice { get; set; }
 
+        public Payment NewPayment { get; set; } = new Payment();
+
+        public Review NewReview { get; set; } = new Review();
+
+
     }
 }

@@ -2,8 +2,117 @@
 @{
     ViewData["Title"] = "Services";
 }
-<style>
+@* <style> *@
 
+@*     .second_section { *@
+@*         background-image: url("./master pictures/bathroom-plumbing.jpg"); *@
+@*         height: 350px; *@
+@*         position: relative; *@
+@*         display: flex; *@
+@*         justify-content: center; *@
+@*         align-items: center; *@
+@*         overflow: hidden; *@
+@*         background-size: cover; *@
+@*         background-position: center; *@
+@*         filter: brightness(0.8); *@
+@*         transition: filter 0.3s ease-in-out; *@
+@*     } *@
+
+@*         .second_section:hover { *@
+@*             filter: brightness(1); *@
+@*         } *@
+
+@*     .search-container { *@
+@*         display: flex; *@
+@*         justify-content: center; *@
+@*         background-color: rgba(255, 255, 255, 0.8); *@
+@*         padding: 20px; *@
+@*         border-radius: 10px; *@
+@*         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); *@
+@*         transition: box-shadow 0.3s ease-in-out; *@
+@*     } *@
+
+@*         .search-container:hover { *@
+@*             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); *@
+@*         } *@
+
+@*     .search-box { *@
+@*         width: 300px; *@
+@*         padding: 10px; *@
+@*         border: 1px solid #ccc; *@
+@*         border-radius: 5px; *@
+@*         font-size: 16px; *@
+@*         transition: border-color 0.3s ease-in-out; *@
+@*     } *@
+
+@*         .search-box:focus { *@
+@*             border-color: #007BFF; *@
+@*         } *@
+
+@*     .search-button { *@
+@*         padding: 10px 20px; *@
+@*         border: none; *@
+@*         background-color: #007BFF; *@
+@*         color: white; *@
+@*         border-radius: 5px; *@
+@*         cursor: pointer; *@
+@*         font-size: 16px; *@
+@*         margin-left: 10px; *@
+@*         transition: background-color 0.3s ease, transform 0.3s ease; *@
+@*     } *@
+
+@*         .search-button:hover { *@
+@*             background-color: #0056b3; *@
+@*             transform: scale(1.05); *@
+@*         } *@
+
+@*     .services-table { *@
+@*         width: 100%; *@
+@*         border-collapse: collapse; *@
+@*         margin-top: 30px; *@
+@*     } *@
+
+@*     .service-card { *@
+@*         width: 25%; *@
+@*         padding: 20px; *@
+@*         text-align: center; *@
+@*         box-sizing: border-box; *@
+@*         transition: transform 0.3s ease, box-shadow 0.3s ease; *@
+@*     } *@
+
+@*         .service-card img { *@
+@*             width: 100%; *@
+@*             height: 150px; *@
+@*             display: block; *@
+@*             border-radius: 10px; *@
+@*             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); *@
+@*             object-fit: cover; *@
+@*             transition: transform 0.3s ease-in-out; *@
+@*         } *@
+
+@*         .service-card:hover img { *@
+@*             transform: scale(1.05); *@
+@*         } *@
+
+@*         .service-card:hover { *@
+@*             transform: translateY(-10px); *@
+@*             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); *@
+@*         } *@
+
+@*     .service-name { *@
+@*         margin-top: 10px; *@
+@*         font-size: 20px; *@
+@*         font-weight: bold; *@
+@*         color: #333; *@
+@*         transition: color 0.3s ease-in-out; *@
+@*     } *@
+
+@*     .service-card:hover .service-name { *@
+@*         color: #007BFF; *@
+@*     } *@
+
+@* </style> *@
+<style>
     .second_section {
         background-image: url("./master pictures/bathroom-plumbing.jpg");
         height: 350px;
@@ -15,7 +124,7 @@
         background-size: cover;
         background-position: center;
         filter: brightness(0.8);
-        transition: filter 0.3s ease-in-out;
+        transition: filter 0.4s ease-in-out;
     }
 
         .second_section:hover {
@@ -25,39 +134,42 @@
     .search-container {
         display: flex;
         justify-content: center;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease-in-out;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.4s ease;
     }
 
         .search-container:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         }
 
     .search-box {
         width: 300px;
-        padding: 10px;
+        padding: 12px 15px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 16px;
-        transition: border-color 0.3s ease-in-out;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
         .search-box:focus {
             border-color: #007BFF;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
         }
 
     .search-button {
-        padding: 10px 20px;
+        padding: 12px 24px;
         border: none;
         background-color: #007BFF;
         color: white;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
-        margin-left: 10px;
+        margin-left: 12px;
         transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
@@ -68,24 +180,29 @@
 
     .services-table {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 30px;
+        border-collapse: separate;
+        border-spacing: 20px 20px;
+        margin-top: 40px;
+        padding: 0 20px;
     }
 
     .service-card {
         width: 25%;
         padding: 20px;
         text-align: center;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         box-sizing: border-box;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
         .service-card img {
             width: 100%;
-            height: 150px;
+            height: 180px;
             display: block;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
             object-fit: cover;
             transition: transform 0.3s ease-in-out;
         }
@@ -96,12 +213,12 @@
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
 
     .service-name {
-        margin-top: 10px;
-        font-size: 20px;
+        margin-top: 15px;
+        font-size: 22px;
         font-weight: bold;
         color: #333;
         transition: color 0.3s ease-in-out;
@@ -123,7 +240,17 @@
         @foreach (var service in Model)
         {
             <td class="service-card">
-                <img src="@service.Image" alt="@service.ServiceName" href="">
+                @if (@service.Image != null)
+                {
+                    var base64Image = Convert.ToBase64String(@service.Image);
+                    var imgSrc = $"data:image/jpeg;base64,{base64Image}";
+                    <img src="@imgSrc" alt="@service.ServiceName" class="profile-image" />
+                }
+                else
+                {
+                    <img src="" alt="@service.ServiceName" class="profile-image" />
+                }
+
                 <div class="service-name"><a asp-action="Show_Workers_for_Specfic_Service_" asp-route-id="@service.ServiceId">@service.ServiceName</a></div>
                 <p>@service.Description</p>
                 <p><strong>Price:</strong> $@service.ServicePrice</p>

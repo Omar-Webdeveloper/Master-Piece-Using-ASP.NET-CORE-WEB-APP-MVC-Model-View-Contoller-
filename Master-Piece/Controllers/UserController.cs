@@ -330,5 +330,49 @@ namespace Master_Piece.Controllers
         }
 
 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitPayment(int bookingId, decimal amountPaid, string paymentNotes)
+        {
+            // Save payment to database linked to bookingId
+            // Example pseudo-code
+            /*
+            var payment = new Payment
+            {
+                BookingId = bookingId,
+                AmountPaid = amountPaid,
+                PaymentNotes = paymentNotes,
+                PaymentDate = DateTime.Now
+            };
+            _context.Payments.Add(payment);
+            _context.SaveChanges();
+            */
+
+            return RedirectToAction("BookingHistory"); // or wherever you want
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitReview(int bookingId, int rating, string reviewText)
+        {
+            // Save review to database linked to bookingId
+            // Example pseudo-code
+            /*
+            var review = new Review
+            {
+                BookingId = bookingId,
+                Rating = rating,
+                ReviewText = reviewText,
+                ReviewDate = DateTime.Now
+            };
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
+            */
+
+            return RedirectToAction("BookingHistory");
+        }
+
     }
 }

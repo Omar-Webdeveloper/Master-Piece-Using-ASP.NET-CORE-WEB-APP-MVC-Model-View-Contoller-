@@ -253,6 +253,7 @@
                         <form asp-controller="User" asp-action="SubmitBooking" method="post" enctype="multipart/form-data">
                             @Html.AntiForgeryToken()
                             <input type="hidden" asp-for="ServiceId" />
+                            <input type="hidden" asp-for="@provider.UserId" />
                             <input asp-for="NewBooking.BookingTittle" placeholder="Booking Title" required />
                             <textarea asp-for="NewBooking.BookingMessae" placeholder="Booking Details" required></textarea>
                             <textarea asp-for="NewBooking.BookingNotes" placeholder="Booking Notes (optional)"></textarea>

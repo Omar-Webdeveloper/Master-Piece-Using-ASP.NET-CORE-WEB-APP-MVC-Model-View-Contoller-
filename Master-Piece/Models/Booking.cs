@@ -25,6 +25,8 @@ public partial class Booking
 
     public byte[]? ImageWhereTheIssueLocated { get; set; }
 
+    public int? WorkerId { get; set; }
+
     public virtual Payment? Payment { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
@@ -32,4 +34,6 @@ public partial class Booking
     public virtual MainService? Service { get; set; }
 
     public virtual User? User { get; set; }
+
+    public virtual User? Worker { get; set; }
 }
