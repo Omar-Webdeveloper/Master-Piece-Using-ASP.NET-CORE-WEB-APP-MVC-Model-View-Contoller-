@@ -743,10 +743,6 @@
     </div>
 </div>
 
-
-
-
-
 <div class="Third_section" style="    padding: 50px 15px; ">
     <div class="container">
         <div class="ad-section">
@@ -807,51 +803,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-@* <div class="services-section"> *@
-@*     <h2>Most Wanted Services</h2> *@
-@*     <div class="service-card"> *@
-@*         <img src="./master pictures/OIP.jpg" alt="Plumbing" style="height:220px ;width: 220px;"> *@
-@*         <h3>Plumbing</h3> *@
-@*         <p> *@
-@*             Expert plumbing services for all your needs, from fixing leaks and unclogging drains to installing new fixtures and systems. Our licensed plumbers use the latest techniques and tools to ensure your plumbing works flawlessly, providing peace of mind and convenience. *@
-@*         </p> *@
-@*         <div class="rating"> *@
-@*             <span>★★★★★</span> *@
-@*         </div> *@
-@*         <button class="button">Book Now</button> *@
-@*     </div> *@
-@*     <div class="service-card"> *@
-@*         <img src="./master pictures/download.jpg" alt="Electrician" style="height:220px ;width: 220px;"> *@
-@*         <h3>Electrician</h3> *@
-@*         <p> *@
-@*             Certified electricians providing safe and reliable electrical services, including installation, repair, and maintenance. Whether you need new wiring, lighting fixtures, or troubleshooting electrical issues, our experts ensure the electrical system operates efficiently and safely. *@
-@*         </p> *@
-@*         <div class="rating"> *@
-@*             <span>★★★★★</span> *@
-@*         </div> *@
-@*         <button class="button">Book Now</button> *@
-@*     </div> *@
-@*     <div class="service-card"> *@
-@*         <img src="./master pictures/OIP (1).jpg" alt="Furniture Assembly & Installation" style="height:220px ;width: 220px;"> *@
-@*         <h3>Furniture Assembly & Installation</h3> *@
-@*         <p> *@
-@*             Professional furniture assembly and installation services to help you set up your new furniture quickly and correctly. Our skilled team ensures that all pieces are assembled securely and according to manufacturer instructions, saving you time and avoiding frustration. *@
-@*         </p> *@
-@*         <div class="rating"> *@
-@*             <span>★★★★★</span> *@
-@*         </div> *@
-@*         <button class="button">Book Now</button> *@
-@*     </div> *@
-@*     <a href="all-services.html" class="view-all-services">View all Services</a> *@
-@* </div> *@
-
-
-
-
 
 
 <div class="services-section">
@@ -1050,18 +1001,26 @@
                     <div class="form-group">
                         <label asp-for="@Model.ContactUsForm.FirstName" class="form-label">First Name</label>
                         <input type="text" id="first-name" class="input-field" placeholder="Your First Name " asp-for="@Model.ContactUsForm.FirstName">
+                        <span asp-validation-for="@Model.ContactUsForm.FirstName" class="text-danger"></span> <!-- Validation message -->
+
                     </div>
                     <div class="form-group">
                         <label asp-for="@Model.ContactUsForm.LastName" class="form-label">Last Name</label>
                         <input type="text" id="last-name" class="input-field" placeholder="Your Last Name " asp-for="@Model.ContactUsForm.LastName">
+                        <span asp-validation-for="@Model.ContactUsForm.LastName" class="text-danger"></span> <!-- Validation message -->
+
                     </div>
                     <div class="form-group">
                         <label asp-for="@Model.ContactUsForm.Email" class="form-label">Email</label>
                         <input type="email" id="email" class="input-field" placeholder="Your Email" asp-for="@Model.ContactUsForm.Email">
+                        <span asp-validation-for="@Model.ContactUsForm.Email" class="text-danger"></span> <!-- Validation message -->
+
                     </div>
                     <div class="form-group">
                         <label asp-for="@Model.ContactUsForm.ContactUsMessage" class="form-label">Message</label>
                         <textarea id="message" placeholder="Enter your massage , thank you for every comment that have been written" class="textarea-field" asp-for="@Model.ContactUsForm.ContactUsMessage"></textarea>
+                        <span asp-validation-for="@Model.ContactUsForm.ContactUsMessage" class="text-danger"></span> <!-- Validation message -->
+
                     </div>
                     <button type="submit" class="send-button" id="send-button">Send</button>
                 </form>
@@ -1071,3 +1030,28 @@
 </section>
 
 
+@section Scripts {
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '@TempData["SuccessMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@TempData["ErrorMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+}

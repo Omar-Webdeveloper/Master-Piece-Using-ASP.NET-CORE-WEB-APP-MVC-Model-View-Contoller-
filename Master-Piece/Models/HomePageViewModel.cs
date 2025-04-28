@@ -1,4 +1,6 @@
-﻿namespace Master_Piece.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Master_Piece.Models
 {
     public class HomePageViewModel
     {
@@ -29,9 +31,19 @@
     }
     public class ContactUs
     {
+        [Required(ErrorMessage = "First Name is required.")]
+
         public string FirstName { get; set; }
+        [Required(ErrorMessage = "Last Name is required.")]
+
         public string LastName { get; set; }
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
+
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Message is required.")]
+        [StringLength(2000, ErrorMessage = "Message cannot be longer than 2000 characters.")]
         public string ContactUsMessage { get; set; }
     }
 

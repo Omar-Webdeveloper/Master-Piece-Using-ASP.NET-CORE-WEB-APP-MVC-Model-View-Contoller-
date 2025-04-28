@@ -61,19 +61,27 @@
           <form class="contact-form" asp-action="SubmitContact">  
               <div class="form-group">  
                   <label asp-for="FirstName" id="first-name-label">First Name</label>  
-                  <input type="text" id="first-name" class="input-field" placeholder="name" asp-for="FirstName">  
+                  <input type="text" id="first-name" class="input-field" placeholder="name" asp-for="FirstName">
+                <span asp-validation-for="FirstName" class="text-danger"></span> <!-- Validation message -->
+
               </div>  
               <div class="form-group">  
                   <label asp-for="LastName" id="last-name-label">Last Name</label>
                 <input type="text" id="last-name" class="input-field" placeholder="family name" asp-for="LastName">
+                <span asp-validation-for="LastName" class="text-danger"></span> <!-- Validation message -->
+
             </div>  
               <div class="form-group">  
                   <label asp-for="Email" id="email-label">Email</label>
                 <input type="email" id="email" class="input-field" placeholder="example@gmail.com" asp-for="Email">
+                <span asp-validation-for="Email" class="text-danger"></span> <!-- Validation message -->
+
             </div>  
               <div class="form-group">  
                   <label asp-for="ContactUsMessage" id="message-label">Message</label>
                 <textarea id="message" class="textarea-field" asp-for="ContactUsMessage"></textarea>
+                <span asp-validation-for="ContactUsMessage" class="text-danger"></span> <!-- Validation message -->
+
             </div>  
               <button type="submit" class="send-button" id="send-button">Send</button>  
           </form>  

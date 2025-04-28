@@ -94,10 +94,15 @@ namespace Master_Piece.Controllers
                 };
                 _context.ContactUs.Add(contactUsEntry);
                 _context.SaveChanges();
-                return RedirectToAction("ThankYou"); // Redirect to a "Thank You" page after submission
-            }
 
-            return View(model); // Return to the form if validation fails
+                // Add success message to TempData
+                TempData["SuccessMessage"] = "Thank you for contacting us! We will get back to you shortly.";
+
+                return RedirectToAction("Index"); // Redirect to the home page or any page
+            }
+            TempData["ErrorMessage"] = "Something went wrong!Please Try Again";
+
+            return RedirectToAction("Index"); // Return to the form if validation fails
         }
         [HttpPost]
         public IActionResult SubmitContact(ContactU contact)
