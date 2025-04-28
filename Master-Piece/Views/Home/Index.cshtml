@@ -1,4 +1,4 @@
-﻿  @model ContactU  
+﻿@model HomePageViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -295,63 +295,6 @@
             .card-footer .button:hover {
                 background-color: gold;
             }
-
-    /* Services Section */
-    /* .services-section { */
-    /*     text-align: center; */
-    /*     padding: 20px; */
-    /*     background-color: #D9EAFD; */
-    /* } */
-
-    /* .service-card { */
-    /*     display: inline-block; */
-    /*     border: 1px solid #ddd; */
-    /*     border-radius: 8px; */
-    /*     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-    /*     margin: 10px; */
-    /*     padding: 20px; */
-    /*     max-width: 300px; */
-    /*     transition: transform 0.2s; */
-    /* } */
-
-    /*     .service-card:hover { */
-    /*         transform: scale(1.05); */
-    /*     } */
-
-    /*     .service-card img { */
-    /*         max-width: 100%; */
-    /*         border-radius: 8px; */
-    /*     } */
-
-    /*     .service-card h3 { */
-    /*         font-size: 20px; */
-    /*         margin: 10px 0; */
-    /*     } */
-
-    /*     .service-card p { */
-    /*         font-size: 16px; */
-    /*         margin: 10px 0; */
-    /*     } */
-
-    /*     .service-card .rating { */
-    /*         font-size: 18px; */
-    /*         color: gold; */
-    /*     } */
-
-    /*     .service-card .button { */
-    /*         background-color: #DFB300; */
-    /*         color: white; */
-    /*         border: none; */
-    /*         padding: 10px 20px; */
-    /*         font-size: 16px; */
-    /*         border-radius: 4px; */
-    /*         cursor: pointer; */
-    /*         transition: background-color 0.2s; */
-    /*     } */
-
-    /*         .service-card .button:hover { */
-    /*             background-color: gold; */
-    /*         } */
 
     .fourth_section {
         padding: 50px 20px;
@@ -1103,22 +1046,22 @@
             </div>
             <div class="form-container">
                 <h2 class="section-title">We’d Love to Hear From You!</h2>
-                <form class="contact-form" asp-action="SubmitContact">
+                <form class="contact-form" asp-action="SubmitContactfromhomepage">
                     <div class="form-group">
-                        <label asp-for="FirstName" class="form-label">First Name</label>
-                        <input type="text" id="first-name" class="input-field" placeholder="Your First Name " asp-for="FirstName">
+                        <label asp-for="@Model.ContactUsForm.FirstName" class="form-label">First Name</label>
+                        <input type="text" id="first-name" class="input-field" placeholder="Your First Name " asp-for="@Model.ContactUsForm.FirstName">
                     </div>
                     <div class="form-group">
-                        <label asp-for="LastName" class="form-label">Last Name</label>
-                        <input type="text" id="last-name" class="input-field" placeholder="Your Last Name " asp-for="LastName">
+                        <label asp-for="@Model.ContactUsForm.LastName" class="form-label">Last Name</label>
+                        <input type="text" id="last-name" class="input-field" placeholder="Your Last Name " asp-for="@Model.ContactUsForm.LastName">
                     </div>
                     <div class="form-group">
-                        <label asp-for="Email" class="form-label">Email</label>
-                        <input type="email" id="email" class="input-field" placeholder="Your Email" asp-for="Email">
+                        <label asp-for="@Model.ContactUsForm.Email" class="form-label">Email</label>
+                        <input type="email" id="email" class="input-field" placeholder="Your Email" asp-for="@Model.ContactUsForm.Email">
                     </div>
                     <div class="form-group">
-                        <label asp-for="ContactUsMessage" class="form-label">Message</label>
-                        <textarea id="message" placeholder="Enter your massage , thank you for every comment that have been written" class="textarea-field" asp-for="ContactUsMessage"></textarea>
+                        <label asp-for="@Model.ContactUsForm.ContactUsMessage" class="form-label">Message</label>
+                        <textarea id="message" placeholder="Enter your massage , thank you for every comment that have been written" class="textarea-field" asp-for="@Model.ContactUsForm.ContactUsMessage"></textarea>
                     </div>
                     <button type="submit" class="send-button" id="send-button">Send</button>
                 </form>

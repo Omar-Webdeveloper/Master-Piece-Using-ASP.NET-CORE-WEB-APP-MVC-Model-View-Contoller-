@@ -27,6 +27,8 @@ public partial class Booking
 
     public int? WorkerId { get; set; }
 
+    public byte[]? ImageAfterFixing { get; set; }
+
     public virtual Payment? Payment { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();

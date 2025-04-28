@@ -21,7 +21,50 @@ namespace Master_Piece.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var Show_My_Services = _context.MainServices.OrderBy(r => Guid.NewGuid()) // Randomize the order
+                                              .Take(4) // Limit to 4 services
+                                              .Select(s => new MainService
+                                              {
+                                                  ServiceId = s.ServiceId,
+                                                  ServiceName = s.ServiceName,
+                                                  Description = s.Description,
+                                                  Image = s.Image
+                                              }).ToList();
+
+
+            var randomReviews = (from r in _context.Reviews
+                                 where r.ReviewStatus == "Accepted_To_Show_All"
+                                 join b in _context.Bookings on r.BookingId equals b.BookingId
+                                 join u in _context.Users on b.UserId equals u.UserId
+                                 orderby Guid.NewGuid() // Randomize the order
+                                 select new ReviewViewModel
+                                 {
+                                     Rating = (int)r.Rating,
+                                     Comment = r.Comment,
+                                     ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
+                                     ImageAfterFixing = b.ImageAfterFixing,
+                                     UserFirstName = u.FirstName
+                                 }).Take(4).ToList();
+
+
+
+            var model = new HomePageViewModel
+            {
+                MainServices = Show_My_Services.Select(s => new MainServiceViewModel
+                {
+                    ServiceId = s.ServiceId,
+                    ServiceName = s.ServiceName,
+                    Description = s.Description,
+                    Image = s.Image
+                }).ToList(),
+
+                RandomReviews = randomReviews,
+
+                // Initialize the ContactUs form as an empty object
+                ContactUsForm = new ContactUs()
+            };
+
+            return View(model);
         }
 
         public IActionResult About_US()
@@ -31,6 +74,30 @@ namespace Master_Piece.Controllers
         public IActionResult Contact_US()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult SubmitContactfromhomepage(HomePageViewModel  model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Extract the ContactUsForm from the model
+                var contactUs = model.ContactUsForm;
+
+                // Save the ContactUsForm data to the database
+                // For example, insert into the ContactUs table (adjust based on your DB context and model)
+                var contactUsEntry = new ContactU
+                {
+                    FirstName = contactUs.FirstName,
+                    LastName = contactUs.LastName,
+                    Email = contactUs.Email,
+                    ContactUsMessage = contactUs.ContactUsMessage,
+                };
+                _context.ContactUs.Add(contactUsEntry);
+                _context.SaveChanges();
+                return RedirectToAction("ThankYou"); // Redirect to a "Thank You" page after submission
+            }
+
+            return View(model); // Return to the form if validation fails
         }
         [HttpPost]
         public IActionResult SubmitContact(ContactU contact)
