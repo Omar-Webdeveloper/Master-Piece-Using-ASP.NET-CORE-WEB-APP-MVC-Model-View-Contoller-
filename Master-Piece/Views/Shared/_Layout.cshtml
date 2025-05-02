@@ -216,7 +216,7 @@
 <body>
     <div class="header">
         <a href="index.html">
-            <img class="logo" src="./master pictures/logo.png" alt="Work Image" style="width: 50px;height: 50px;" />
+            <img class="logo" src="~/master pictures/logo.png" alt="Work Image" style="width: 50px;height: 50px;" />
             @* <span class="brand-text">Take Care Home Services</span>  <!-- Text next to the icon --> *@
         </a>
         <select class="language-select" id="language-select">
@@ -224,6 +224,7 @@
             <option value="en" selected>English</option>
         </select>
         <div class="nav">
+            <a asp-controller="Home" asp-action="test">test</a></a>
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
             <a class="nav-link" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a>
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>

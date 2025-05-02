@@ -152,7 +152,7 @@
 
         <!-- Card 2 -->
         <div class="stat-card">
-            <h1>@ViewBag.AverageRating</h1>
+            <h1>@ViewBag.c</h1>
             <p>Customer Ratings</p>
         </div>
 
@@ -186,49 +186,56 @@
 
 
 
+    <div class="chart-container" style="margin-top: 30px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+        <h3 style="text-align: center;">Job Completions This Month</h3>
+        <canvas id="dailyJobChart"></canvas>
+    </div>
 
-<div class="chart-container">
-    <h3>Weekly Task Progress</h3>
-    <canvas id="weeklyProgressChart"></canvas>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('dailyJobChart').getContext('2d');
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Wait until DOM is fully loaded
-    document.addEventListener("DOMContentLoaded", function () {
-        const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+            const labels = @Html.Raw(Json.Serialize(ViewBag.ChartLabels));
+            const data = @Html.Raw(Json.Serialize(ViewBag.ChartData));
 
-        const weeklyProgressChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['1/4', '2/4', '3/4', '4/4'],
-                datasets: [{
-                    label: 'Completed Jobs',
-                    data: [4, 7, 5, 9], // replace with your actual data
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Jobs Completed'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Weeks of the Month'
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Completed Jobs per Day',
+                        data: data,
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#4CAF50'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jobs Completed'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date of the Month'
+                            },
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 45
+                            }
                         }
                     }
                 }
-            }
+            });
         });
-    });
-</script>
-</div>
+    </script>

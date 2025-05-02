@@ -3,85 +3,206 @@
     ViewData["Title"] = "Rigster";
 }
 <style>
-
     .registration-container {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #e0e0e0 0%, #f0f8ff 50%, #e0e0e0 100%);
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh; /* Ensure it takes full height of viewport */
-        padding-top: 70px; /* Push it below the fixed header */
-        background: url("https://stripesexb.com/wp-content/uploads/2023/07/service06.jpg");
+        min-height: 100vh;
+        padding-top: 70px;
     }
 
-    /* no-repeat center center/cover */
     .registration-form {
-        background: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background: #fdfdfd; /* White with slight gray */
+        padding: 35px 40px;
+        border-radius: 16px;
+        position: relative;
+        width: 380px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        z-index: 1;
+        transition: transform 0.3s ease;
     }
+
+        .registration-form::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #cde9f9, #a5c8f0);
+            border-radius: 20px;
+            z-index: -1;
+            transition: transform 1s ease;
+        }
+
+        .registration-form:hover {
+            transform: scale(1.02);
+        }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
     }
 
     .form-control {
-        width: 90%;
-        padding: 10px;
-        margin-bottom: 10px;
+        width: 100%;
+        padding: 12px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: #f7f7f7;
+        transition: border-color 0.3s, background-color 0.3s;
     }
+
+        .form-control:focus {
+            border-color: #0072ff;
+            background-color: #ffffff;
+            outline: none;
+        }
+
+    .create-account-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #0072ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .create-account-btn:hover {
+            background-color: #0056cc;
+        }
 
     .text-danger {
         color: red;
         font-size: 14px;
     }
-    .create-account-btn {
-        width: 100%;
-        padding: 10px;
-        background-color: #ff0;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-        .create-account-btn:hover {
-            background-color: #e6e600;
-        }
-
 </style>
+
+<!-- HTML PART -->
 <div class="registration-container">
     <form class="registration-form" asp-action="Register" method="post">
         <div class="form-group">
+            <label asp-for="FirstName">First Name</label>
             <input asp-for="FirstName" type="text" class="form-control" placeholder="First name" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName">Last Name</label>
             <input asp-for="LastName" type="text" class="form-control" placeholder="Last name" />
             <span asp-validation-for="LastName" class="text-danger"></span>
-
         </div>
+
         <div class="form-group">
-            <input asp-for="Email" type="email" class="form-control" placeholder="Email or phone number" />
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="Email " />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
+
         <div class="form-group">
+            <label asp-for="PasswordHash">Password</label>
             <input asp-for="PasswordHash" type="password" class="form-control" placeholder="Password" />
             <span asp-validation-for="PasswordHash" class="text-danger"></span>
         </div>
+
         <div class="form-group">
+            <label asp-for="ConfirmPassword">Repeat Password</label>
             <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Repeat Password" />
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
+        <!-- ✅ Additional Fields -->
+
         <div class="form-group">
-            <p>If you have an account <a asp-area="" asp-controller="Home" asp-action="Login">click here to login</a></p>
+            <label asp-for="PersonalImage">Upload Personal Image</label>
+            <input asp-for="PersonalImage" type="file" class="form-control" accept="image/*" />
+            <span asp-validation-for="PersonalImage" class="text-danger"></span>
         </div>
+
+        <div class="form-group">
+            <label asp-for="PersonalAddress">Personal Address</label>
+            <input asp-for="PersonalAddress" type="text" class="form-control" placeholder="Enter your address" />
+            <span asp-validation-for="PersonalAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateOfBirth">Date of Birth</label>
+            <input asp-for="DateOfBirth" type="date" class="form-control" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="00962xxxxxxxxx" value="00962"/>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gender">Gender</label>
+            <select asp-for="Gender" class="form-control">
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <!-- Final Buttons -->
+        <div class="form-group">
+            <p>Already have an account? <a asp-area="" asp-controller="Home" asp-action="Login">Click here to login</a></p>
+        </div>
+
         <div class="form-group">
             <button type="submit" class="create-account-btn">Create Account</button>
         </div>
     </form>
 </div>
+
+
+
 @section Scripts {
+    @* SweetAlert messages *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '@TempData["SuccessMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@TempData["ErrorMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+
+    @* Validation Scripts *@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

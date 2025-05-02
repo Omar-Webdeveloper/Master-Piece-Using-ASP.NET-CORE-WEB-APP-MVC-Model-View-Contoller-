@@ -15,18 +15,14 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Employee_Dashboard()
         {
-            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+            int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
-            // Find the provider ID using the user ID
-            var Worker = _context.Users.FirstOrDefault(sp => sp.UserId == userId);
-
-            if (Worker != null)
+            if (workerId != null)
             {
-                int providerId = Worker.UserId;
 
                 // Count only the completed bookings related to the logged-in worker
                 int completedBookingsCount = _context.Bookings
-                    .Where(b => b.UserId == providerId && b.Status == "Completed")
+                    .Where(b => b.WorkerId == workerId && b.Status == "Completed")
                     .Count();
 
                 ViewBag.CompletedBookings = completedBookingsCount;
@@ -41,7 +37,7 @@ namespace Master_Piece.Controllers
 
                 // Get the IDs of completed bookings for the logged-in provider
                 var completedBookingIdsList = _context.Bookings
-                    .Where(b => b.UserId == providerId && b.Status == "Completed")
+                    .Where(b => b.WorkerId == workerId && b.Status == "Completed")
                     .Select(b => b.BookingId)
                     .ToList(); // <-- ToList() so we can use .Contains later
 
@@ -61,186 +57,182 @@ namespace Master_Piece.Controllers
 
 
 
+                var joinedDate = (from sp in _context.Users
+                                  where sp.UserId == workerId
+                                  select sp.CreatedAt).FirstOrDefault();
 
-                //                // First, check if the provider exists and has an evaluation score of 5 and no comments
-                //                var isTopEvaluated = _context.Evaluations
-                //                    .Any(e => e.ProviderId == providerId && e.Score == 5 && (e.Comments == null || e.Comments == ""));
+                if (joinedDate != null)
+                {
+                    int yearsWithUs = DateTime.Now.Year - joinedDate.Value.Year;
 
+                    // Adjust if their anniversary hasn't occurred yet this year
+                    if (DateTime.Now.Date < joinedDate.Value.AddYears(yearsWithUs))
+                    {
+                        yearsWithUs--;
+                    }
 
-                //                // Check both conditions
-                //                bool isEmployeeOfMonth = isTopEvaluated && viewbagaverageRating > 3;
-
-                //                // Pass result to ViewBag
-                //                ViewBag.IsEmployeeOfMonth = isEmployeeOfMonth;
-
-
-                //                if (isEmployeeOfMonth)
-                //                {
-                //                    var workerName = _context.ServiceProviders
-                //                        .Where(sp => sp.ProviderId == providerId)
-                //                        .Select(sp => sp.WorkerName)
-                //                        .FirstOrDefault();
-
-                //                    ViewBag.WorkerName = workerName;
-                //                }
+                    ViewBag.YearsWithUs = yearsWithUs;
+                }
+                else
+                {
+                    ViewBag.YearsWithUs = 0;
+                }
 
 
 
 
+                // First, check if the provider exists and has an evaluation score of 5 and no comments
+                var isTopEvaluated = _context.Evaluations
+                    .Any(e => e.WrokerId == workerId && e.Score == 5 && (e.Comments == null || e.Comments == ""));
 
 
+                // Check both conditions
+                bool isEmployeeOfMonth = isTopEvaluated && averageRating > 3;
 
-                //                DateTime startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                //                DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
-
-                //                // التحويل إلى DateOnly للمقارنة
-                //                DateOnly startDateOnly = DateOnly.FromDateTime(startOfMonth);
-                //                DateOnly endDateOnly = DateOnly.FromDateTime(endOfMonth);
-
-                //                var allCompletedTasks = _context.Tasks
-                //              .Where(t => t.ProviderId == providerId &&
-                //                          t.TaskStatus == "COMPLETED" &&
-                //                          t.EndDate >= startDateOnly &&
-                //                          t.EndDate <= endDateOnly)
-                //              .ToList();
-
-                //                int totalTasks = allCompletedTasks.Count;
-
-                //                // تقسيم الشهر إلى 4 أسابيع (تقريبًا 7 أيام لكل أسبوع)
-                //                int daysInMonth = (endOfMonth - startOfMonth).Days + 1;
-                //                int weekLength = daysInMonth / 4;
-
-                //                var weeklyCumulative = new List<int>();
-                //                int cumulative = 0;
-
-                //                for (int i = 0; i < 4; i++)
-                //                {
-                //                    var weekStart = startOfMonth.AddDays(i * weekLength);
-                //                    var weekEnd = (i == 3) ? endOfMonth : weekStart.AddDays(weekLength - 1);
-
-                //                    // تحويل لـ DateOnly للمقارنة
-                //                    DateOnly weekStartDateOnly = DateOnly.FromDateTime(weekStart);
-                //                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(weekEnd);
-
-                //                    int weekCount = allCompletedTasks
-                //                        .Count(t => t.EndDate.HasValue &&
-                //                                    t.EndDate.Value >= weekStartDateOnly &&
-                //                                    t.EndDate.Value <= weekEndDateOnly);
-
-                //                    cumulative += weekCount;
-                //                    weeklyCumulative.Add(cumulative);
-                //                }
+                // Pass result to ViewBag
+                ViewBag.IsEmployeeOfMonth = isEmployeeOfMonth;
 
 
-                //                ViewBag.WeeklyLabels = new List<string> { "1/4", "2/4", "3/4", "4/4" };
-                //                ViewBag.WeeklyCumulativeCounts = weeklyCumulative;
-                //                ViewBag.MaxCount = totalTasks;
+                if (isEmployeeOfMonth)
+                {
+                    var workerName = (from sp in _context.Users
+                                      where sp.UserId == workerId
+                                      select new { sp.FirstName, sp.LastName }).FirstOrDefault();
+
+                    string fullName = workerName != null ? $"{workerName.FirstName} {workerName.LastName}" : "Orange Coding Academy";
+
+
+                    ViewBag.WorkerName = fullName;
+                }
 
 
 
 
+                // Get the current month and year
+                var today = DateTime.Today;
+                var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
+                // Get completed jobs grouped by BookingEndDate
+                var completedJobsByDay = _context.Bookings
+                    .Where(b => b.WorkerId == workerId
+                             && b.Status == "Completed"
+                             && b.BookingEndDate >= firstDayOfMonth
+                             && b.BookingEndDate <= lastDayOfMonth)
+                    .GroupBy(b => b.BookingEndDate.Value.Date)
+                    .Select(g => new
+                    {
+                        Date = g.Key,
+                        Count = g.Count()
+                    })
+                    .ToList();
 
+                // Fill days with 0 if no job completed that day
+                var chartLabels = new List<string>();
+                var chartData = new List<int>();
 
+                for (var date = firstDayOfMonth; date <= lastDayOfMonth; date = date.AddDays(1))
+                {
+                    chartLabels.Add(date.ToString("MMM d")); // e.g., Apr 2
+                    var dayRecord = completedJobsByDay.FirstOrDefault(d => d.Date == date);
+                    chartData.Add(dayRecord?.Count ?? 0);
+                }
+
+                // Pass to view
+                ViewBag.ChartLabels = chartLabels;
+                ViewBag.ChartData = chartData;
+                return View();
 
             }
 
-            //            var joinedDate = (from sp in _context.ServiceProviders
-            //                              where sp.UserId == userId
-            //                              select sp.RegisterAt).FirstOrDefault();
-
-            //            if (joinedDate != null)
-            //            {
-            //                int yearsWithUs = DateTime.Now.Year - joinedDate.Value.Year;
-
-            //                // Adjust if their anniversary hasn't occurred yet this year
-            //                if (DateTime.Now.Date < joinedDate.Value.AddYears(yearsWithUs))
-            //                {
-            //                    yearsWithUs--;
-            //                }
-
-            //                ViewBag.YearsWithUs = yearsWithUs;
-            //            }
-            //            else
-            //            {
-            //                ViewBag.YearsWithUs = 0;
-            //            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //waiting tasks
-            //
-            return View();
+            else {
+                return RedirectToAction("Login", "Home");
+            }
         }
-        //        public IActionResult Assgined_Task()
-        //        {
-        //            return View();
-        //        }
-        //        public IActionResult WorkHistory()
-        //        {
-        //            return View();
-        //        }
+        public IActionResult Assgined_Task()
+        {
+            int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            // 2. Query bookings assigned to this employee
+            var assignedBookings = (from b in _context.Bookings
+                                    join u in _context.Users on b.UserId equals u.UserId
+                                    join s in _context.MainServices on b.ServiceId equals s.ServiceId
+                                    where  b.WorkerId == workerId
+                                    select new AssignedBookingViewModel
+                                    {
+                                        FirstName = u.FirstName,
+                                        Email = u.Email,
+                                        Personal_Address = u.PersonalAddress,
+                                        PhoneNumber = u.PhoneNumber,
+                                        ServiceName = s.ServiceName,
+                                        BookingId = b.BookingId,
+                                        Booking_Start_Date = (DateTime)b.BookingStartDate,
+                                        BookingTittle = b.BookingTittle,
+                                        BookingMessae = b.BookingMessae,
+                                        BookingNotes = b.BookingNotes,
+                                        ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
+                                        ImageAfterFixing = b.ImageAfterFixing,
+                                        Status = b.Status,
+                                        WorkerID = b.WorkerId
+                                    }).ToList();
+            return View(assignedBookings);
+        }
+        public IActionResult ConfirmBooking(int id)
+        {
+            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == id);
+            if (booking != null)
+            {
+                booking.Status = "Confirmed";
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Assgined_Task");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CompleteBooking(int BookingId, IFormFile FixedImage)
+        {
+            var booking = await _context.Bookings.FindAsync(BookingId);
+
+            if (booking != null)
+            {
+                if (FixedImage != null && FixedImage.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await FixedImage.CopyToAsync(ms);
+                        booking.ImageAfterFixing = ms.ToArray(); // Ensure your model has this property
+                    }
+                }
+
+                booking.Status = "Completed"; // Mark as completed
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Assgined_Task");
+        }
+
+        public IActionResult WorkHistory()
+        {
+            int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+            
+            var Work_history = (from b in _context.Bookings
+                                join u in _context.Users on b.UserId equals u.UserId
+                                join s in _context.MainServices on b.ServiceId equals s.ServiceId
+                                where b.WorkerId == workerId && b.Status == "Completed"
+                                select new AssignedBookingViewModel
+                                {
+                                    FirstName = u.FirstName,
+                                    ServiceName = s.ServiceName,
+                                    Booking_Start_Date = (DateTime)b.BookingStartDate,
+                                    BookingTittle = b.BookingTittle,
+                                    BookingMessae = b.BookingMessae,
+                                    BookingNotes = b.BookingNotes,
+                                    ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
+                                    ImageAfterFixing = b.ImageAfterFixing,
+                                    Status = b.Status,
+                                }).ToList();
+            return View(Work_history);
+        }
         public IActionResult EmployeeProfile()
         {
             // Retrieve user Id from the session
@@ -255,12 +247,10 @@ namespace Master_Piece.Controllers
         {
             int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-
-            return View(user);
+            return View(user); // View shows current info
         }
-
         [HttpPost]
-        public IActionResult EmployeeEditProfile(User updatedUser, IFormFile PersonalImage)
+        public async Task<IActionResult> EmployeeEditProfile(User updatedUser, IFormFile PersonalImage)
         {
             int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
             var existingUser = _context.Users.FirstOrDefault(u => u.UserId == userId);
@@ -270,36 +260,35 @@ namespace Master_Piece.Controllers
                 return NotFound();
             }
 
-            // Update fields manually
+            // Optional validation check
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(updatedUser);
+            //}
+
+            // Update user info
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.PhoneNumber = updatedUser.PhoneNumber;
             existingUser.PersonalAddress = updatedUser.PersonalAddress;
             existingUser.DateOfBirth = updatedUser.DateOfBirth;
             existingUser.Gender = updatedUser.Gender;
-            // (You can update more fields if you want)
+
             // Handle image upload
             if (PersonalImage != null && PersonalImage.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
-                    PersonalImage.CopyToAsync(ms);
+                    await PersonalImage.CopyToAsync(ms);
                     existingUser.PersonalImage = ms.ToArray();
                 }
             }
-            else
-            {
-                // Optionally set a default image here
-                string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
-                if (System.IO.File.Exists(defaultImagePath))
-                {
-                    existingUser.PersonalImage = System.IO.File.ReadAllBytes(defaultImagePath);
-                }
-            }
-            _context.SaveChanges();
 
-            return RedirectToAction("EmployeeProfile");
+            await _context.SaveChangesAsync(); // Save the updated user
+
+            return RedirectToAction("EmployeeProfile"); // Redirect to profile view
         }
+
         public IActionResult EmployeeResetPassword()
         {
 
@@ -317,7 +306,7 @@ namespace Master_Piece.Controllers
                     LoggedInUser.PasswordHash = NewPassword;
                     _context.Users.Update(LoggedInUser);
                     _context.SaveChanges();
-                    return RedirectToAction("Profile");
+                    return RedirectToAction("EmployeeProfile");
                 }
 
             }

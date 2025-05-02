@@ -140,29 +140,30 @@
 <div class="dashboard-container">
     <!-- Statistics Cards Section -->
     <div class="stats-container">
-        <!-- Card 1 -->
+        <!-- Card 1 - Total Employees -->
         <div class="stat-card">
-            <h1>@ViewBag.TotalUsers</h1>
-            <p>Total Users</p>
+            <h1>@ViewBag.EmployeeCount</h1>
+            <p>Total Employees</p>
         </div>
 
-        <!-- Card 2 -->
+        <!-- Card 2 - Manager Full Name -->
         <div class="stat-card">
-            <h1>@ViewBag.TotalServiceProviders</h1>
-            <p>Total Service Providers</p>
+            <h1>@ViewBag.ManagerFullName</h1>
+            <p>Manager Name</p>
         </div>
 
-        <!-- Card 3 -->
+        <!-- Card 3 - Covered Area Count -->
         <div class="stat-card">
-            <h1>@ViewBag.TotalServices</h1>
-            <p>Total Services</p>
+            <h1>@ViewBag.CoveredAreaCount</h1>
+            <p>Covered Areas Count</p>
         </div>
 
-        <!-- Card 4 -->
+        <!-- Card 4 - Covered Area Names (Joined into single line) -->
         <div class="stat-card">
-            <h1>@ViewBag.ManagerName</h1>
-			<p>Manager Name</p>
+            <h1 style="font-size: 1rem;">@string.Join(", ", (string[])ViewBag.CoveredAreas)</h1>
+            <p>Covered Areas</p>
         </div>
+
     </div>
 
 
@@ -175,17 +176,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Wait until DOM is fully loaded
         document.addEventListener("DOMContentLoaded", function () {
             const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
 
             const weeklyProgressChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['1/4', '2/4', '3/4', '4/4'],
+                    labels: @Html.Raw(Json.Serialize(ViewBag.ChartLabels)), // e.g., ["1", "2", "3"]
                     datasets: [{
                         label: 'Completed Jobs',
-                        data: [4, 7, 5, 9], // replace with your actual data
+                        data: @Html.Raw(Json.Serialize(ViewBag.ChartData)), // e.g., [3, 5, 7]
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         tension: 0.4,
@@ -204,7 +204,7 @@
                         x: {
                             title: {
                                 display: true,
-                                text: 'Weeks of the Month'
+                                text: 'Days of the Month'
                             }
                         }
                     }
@@ -212,4 +212,5 @@
             });
         });
     </script>
+
 </div>

@@ -4,86 +4,237 @@
   }  
   <style>  
 
-      .contact-section {  
-          display: flex;  
-          justify-content: space-around;  
-          align-items: center;  
-          padding: 20px;  
-          background-color: #BCCCDC;  
-      }  
+    /* General Styling for Contact Us Section */
+    .contact-section {
+        display: flex;
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+        padding: 40px 20px; /* Add spacing around the section */
+        background-color: #f4f7fc; /* Light background for a clean, professional look */
+        min-height: 80vh; /* Make sure the section takes up enough space */
+        flex-direction: column;
+    }
 
-      .form-container {  
-          width: 50%;  
-      }  
+    /* Container for the form and illustration */
+    .contact-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px; /* Maximum width of the section */
+        width: 100%;
+        gap: 40px; /* Space between the image and the form */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
 
-      .contact-form {  
-          display: flex;  
-          flex-direction: column;  
-      }  
+    /* Contact Card that holds the image and form */
+    .contact-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 30px; /* Space between image and form */
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+        max-width: 1100px; /* Make the card take up a large width but still responsive */
+    }
 
-      .form-group {  
-          margin-bottom: 15px;  
-      }  
+        /* Hover effect for the contact card */
+        .contact-card:hover {
+            transform: scale(1.05); /* Slight zoom-in effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+        }
 
-      .label {  
-          margin-bottom: 5px;  
-          font-weight: bold;  
-      }  
+    /* Contact illustration styling */
+    .contact-illustration {
+        width: 50%; /* Image will take half of the card width */
+        height: 100%; /* Match the height of the form */
+    }
 
-      .input-field,  
-      .textarea-field {  
-          width: 100%;  
-          padding: 10px;  
-          border: 1px solid #ccc;  
-          border-radius: 5px;  
-      }  
+        .contact-illustration img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the container */
+            border-radius: 15px;
+        }
 
-      .send-button {  
-          background-color: yellow;  
-          border: none;  
-          color: black;  
-          padding: 10px;  
-          cursor: pointer;  
-          border-radius: 5px;  
-      }  
+    /* Image hover effect */
+    .illustration {
+        width: 45%; /* Adjust the width to be a little less than the form width */
+        height: 100%; /* Ensure the height matches the form height */
+        overflow: hidden; /* Prevents overflow */
+        border-radius: 15px; /* Optional, for a rounded corner effect */
+        transition: transform 0.3s ease-in-out; /* Smooth scale transition */
+    }
 
-      .illustration {  
-          width: 40%;  
-      }  
+        .illustration img {
+            width: 100%; /* Make the image take up the full width of its container */
+            height: 100%; /* Set the height to 100% of the parent container */
+            object-fit: cover; /* Ensures the image covers the container without distortion */
+            transition: transform 0.3s ease-in-out; /* Smooth zoom effect on hover */
+        }
 
+        .illustration:hover img {
+            transform: scale(1.05); /* Slightly enlarge the image on hover */
+        }
+
+    /* Form container styling */
+    .form-container {
+        width: 50%; /* The form takes the other half of the card */
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Section title */
+    .section-title {
+        font-size: 30px;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* General form styling */
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Form group styling */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    /* Label styling */
+    .form-label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #555;
+    }
+
+    /* Input and textarea fields */
+    .input-field,
+    .textarea-field {
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        width: 95%;
+    }
+
+    /* Textarea field styling */
+    .textarea-field {
+        min-height: 120px; /* Give some height for the message textarea */
+        resize: vertical; /* Allow user to resize the textarea vertically */
+    }
+
+    /* Send button styling */
+    .send-button {
+        background-color: #007bff; /* Primary button color */
+        color: white;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        /* Send button hover effect */
+        .send-button:hover {
+            background-color: #0056b3; /* Darker shade of the primary color */
+        }
+
+    @@media (max-width: 768px) {
+        .contact-container {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .contact-card {
+            flex-direction: column;
+        }
+
+        .contact-illustration img {
+            max-width: 280px;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+    }
   </style>  
-  <!-- Contact Section -->  
-  <section class="contact-section">  
-      <div class="illustration">  
-          <img src="~/master pictures/image_contact_us.jpg" alt="Working remotely - simple illustration" style="border-radius: 30px;width: 260px;height: 300px;margin-left: 50px;" asp-append-version="true">  
-      </div>  
-      <div class="form-container">  
-          <form class="contact-form" asp-action="SubmitContact">  
-              <div class="form-group">  
-                  <label asp-for="FirstName" id="first-name-label">First Name</label>  
-                  <input type="text" id="first-name" class="input-field" placeholder="name" asp-for="FirstName">
-                <span asp-validation-for="FirstName" class="text-danger"></span> <!-- Validation message -->
 
-              </div>  
-              <div class="form-group">  
-                  <label asp-for="LastName" id="last-name-label">Last Name</label>
-                <input type="text" id="last-name" class="input-field" placeholder="family name" asp-for="LastName">
-                <span asp-validation-for="LastName" class="text-danger"></span> <!-- Validation message -->
+<section class="contact-section">
+    <div class="contact-container">
+        <div class="contact-card">
+            <div class="contact-illustration">
+                <img src="https://images.pexels.com/photos/4484071/pexels-photo-4484071.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Working remotely - simple illustration" style="    height: 630px;">
+            </div>
+            <div class="form-container">
+                <h2 class="section-title">We’d Love to Hear From You!</h2>
+                <form class="contact-form" asp-action="SubmitContact">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label">First Name</label>
+                        <input type="text" id="first-name" class="input-field" placeholder="Your First Name " asp-for="FirstName">
+                        <span asp-validation-for="FirstName" class="text-danger"></span> <!-- Validation message -->
 
-            </div>  
-              <div class="form-group">  
-                  <label asp-for="Email" id="email-label">Email</label>
-                <input type="email" id="email" class="input-field" placeholder="example@gmail.com" asp-for="Email">
-                <span asp-validation-for="Email" class="text-danger"></span> <!-- Validation message -->
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label">Last Name</label>
+                        <input type="text" id="last-name" class="input-field" placeholder="Your Last Name " asp-for="LastName">
+                        <span asp-validation-for="LastName" class="text-danger"></span> <!-- Validation message -->
 
-            </div>  
-              <div class="form-group">  
-                  <label asp-for="ContactUsMessage" id="message-label">Message</label>
-                <textarea id="message" class="textarea-field" asp-for="ContactUsMessage"></textarea>
-                <span asp-validation-for="ContactUsMessage" class="text-danger"></span> <!-- Validation message -->
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input type="email" id="email" class="input-field" placeholder="Your Email" asp-for="Email">
+                        <span asp-validation-for="Email" class="text-danger"></span> <!-- Validation message -->
 
-            </div>  
-              <button type="submit" class="send-button" id="send-button">Send</button>  
-          </form>  
-      </div>  
-  </section>  
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ContactUsMessage" class="form-label">Message</label>
+                        <textarea id="message" placeholder="Enter your massage , thank you for every comment that have been written" class="textarea-field" asp-for="ContactUsMessage"></textarea>
+                        <span asp-validation-for="ContactUsMessage" class="text-danger"></span> <!-- Validation message -->
+
+                    </div>
+                    <button type="submit" class="send-button" id="send-button">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '@TempData["SuccessMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@TempData["ErrorMessage"]',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+}

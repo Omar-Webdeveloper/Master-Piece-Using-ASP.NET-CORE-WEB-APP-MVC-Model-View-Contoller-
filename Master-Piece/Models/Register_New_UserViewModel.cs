@@ -20,5 +20,21 @@ namespace Master_Piece.Models
         [Required(ErrorMessage = "Confirm Password is required")]
         [Compare("PasswordHash", ErrorMessage = "The password and confirmation password do not match.")]
         public string? ConfirmPassword { get; set; }
+
+
+        public byte[]? PersonalImage { get; set; }
+        [Required(ErrorMessage = "Personal Address is required")]
+        public string? PersonalAddress { get; set; }
+
+        [Required(ErrorMessage = "Date of Birth is required")]
+        public DateOnly? DateOfBirth { get; set; }
+
+        [Required(ErrorMessage = "Phone Number is required")]
+        [RegularExpression(@"^00962\d{9}$", ErrorMessage = "Phone number must start with 00962 followed by 9 digits")]
+        public string? PhoneNumber { get; set; }
+
+
+        [Required(ErrorMessage = "Gender is required")]
+        public string? Gender { get; set; }
     }
 }

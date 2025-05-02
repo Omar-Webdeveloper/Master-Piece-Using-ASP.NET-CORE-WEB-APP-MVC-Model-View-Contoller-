@@ -41,6 +41,7 @@ namespace Master_Piece.Controllers
                                  {
                                      Rating = (int)r.Rating,
                                      Comment = r.Comment,
+                                     CreatedAt = r.CreatedAt,
                                      ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
                                      ImageAfterFixing = b.ImageAfterFixing,
                                      UserFirstName = u.FirstName
@@ -69,7 +70,14 @@ namespace Master_Piece.Controllers
 
         public IActionResult About_US()
         {
-            return View();
+            var Show_My_Services = _context.MainServices.OrderBy(r => Guid.NewGuid()) // Randomize the order
+                                              .Select(s => new MainService
+                                              {
+                                                  ServiceName = s.ServiceName,
+                                                  Image = s.Image,
+                                                  ServiceId = s.ServiceId
+                                              }).ToList();
+            return View(Show_My_Services);
         }
         public IActionResult Contact_US()
         {
@@ -111,10 +119,13 @@ namespace Master_Piece.Controllers
             {
                 _context.ContactUs.Add(contact);
                 _context.SaveChanges();
-                return RedirectToAction("ThankYou"); // Redirect to a "Thank You" page after submission
+                // Add success message to TempData
+                TempData["SuccessMessage"] = "Thank you for contacting us! We will get back to you shortly.";
+                return RedirectToAction("Index"); // Redirect to a "Thank You" page after submission
             }
+            TempData["ErrorMessage"] = "Something went wrong!Please Try Again";
 
-            return View("Contact"); // Return to the form if validation fails
+            return RedirectToAction("Contact_US"); // Return to the form if validation fails
         }
         public IActionResult Login()
         {
@@ -125,6 +136,7 @@ namespace Master_Piece.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["ErrorMessage"] = "Invalid email or password."; // ?? Set error for SweetAlert
                 return View(model); // Return the same view with validation errors
             }
 
@@ -135,6 +147,8 @@ namespace Master_Piece.Controllers
             if (Loginned_user == null)
             {
                 ModelState.AddModelError("", "Invalid email or password.");
+                TempData["ErrorMessage"] = "Invalid email or password."; // ?? Set error for SweetAlert
+
                 return View(model);
             }
 
@@ -158,7 +172,8 @@ namespace Master_Piece.Controllers
                 ModelState.AddModelError("", "Role does not exist.");
                 return View(model);
             }
-
+            // Step 4: Set TempData success message
+            TempData["SuccessMessage"] = "You have logged in successfully!"; // ?? SUCCESS here
             HttpContext.Session.SetString("UserRole", role.RoleName);
 
             // Step 4: Redirect based on Role
@@ -182,19 +197,23 @@ namespace Master_Piece.Controllers
         [HttpPost]
         public IActionResult Register(Register_New_UserViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Please correct the form errors and try again."; // ?? Set error for SweetAlert
                 return View(model);
             }
 
             if (model.PasswordHash != model.ConfirmPassword)
             {
                 ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
+                TempData["ErrorMessage"] = "ConfirmPassword and Passwords do not match."; // ?? Set error for SweetAlert
                 return View(model);
             }
 
-            // Load default image from wwwroot
-            string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
+                // Load default image from wwwroot
+                string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
             byte[] defaultImageBytes = System.IO.File.ReadAllBytes(defaultImagePath);
 
             // Create a new User entity and map from ViewModel
@@ -211,6 +230,7 @@ namespace Master_Piece.Controllers
             _context.Users.Add(user);
             _context.SaveChanges();
 
+
             // Assign "User" role
             var role = _context.Roles.FirstOrDefault(r => r.RoleName == "User");
             if (role != null)
@@ -223,8 +243,16 @@ namespace Master_Piece.Controllers
 
                 _context.SaveChanges();
             }
-
+            // ? Set success TempData
+            TempData["SuccessMessage"] = "Registration successful! You can now log in.";
             return RedirectToAction("Login", "Home");
+            }
+            catch (Exception ex)
+            {
+                // Optional: log the exception using ILogger or to a file/db
+                TempData["ErrorMessage"] = "An unexpected error occurred. Please try again later.";
+                return View(model);
+            }
         }
 
 
@@ -313,6 +341,39 @@ namespace Master_Piece.Controllers
         {
             return View();
         }
+
+
+        public IActionResult test()
+        {
+            var teting=_context.MainServices.ToList();
+            return View(teting);
+        }
+        [HttpPost]
+        public IActionResult submittest(int serviceId, IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    file.CopyTo(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+
+                    var service = _context.MainServices.FirstOrDefault(s => s.ServiceId == serviceId);
+                    if (service != null)
+                    {
+                        service.Image = fileBytes; // <-- Save the file as byte array
+                        _context.SaveChanges();
+                    }
+                }
+            }
+
+            return RedirectToAction("test");
+        }
+
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

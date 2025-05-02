@@ -1,7 +1,165 @@
-﻿
+﻿@model List<Master_Piece.Models.AssignedBookingViewModel>
 @{
     ViewData["Title"] = "Assgined_Task";
+    Layout = "~/Views/Shared/_Employee_Layout.cshtml";
+
 }
 
-<h1>Assgined_Task</h1>
+<h2>Assigned Tasks</h2>
+<h3>To Do</h3>
+<table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <thead style="background-color: #2e3b55; color: white;">
+        <tr>
+            <th style="padding: 12px;">Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Service</th>
+            <th>Start Date</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Notes</th>
+            <th>Issue Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Where(t => t.Status == "Pending"))
+        {
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">@task.FirstName</td>
+                <td>@task.Email</td>
+                <td>@task.Personal_Address</td>
+                <td>@task.PhoneNumber</td>
+                <td>@task.ServiceName</td>
+                <td>@task.Booking_Start_Date.ToShortDateString()</td>
+                <td>@task.BookingTittle</td>
+                <td>@task.BookingMessae</td>
+                <td>@task.BookingNotes</td>
+                <td>
+                    @if (task.ImageWhereTheIssueLocated != null)
+                    {
+                        var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated);
+                        <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Doing</h3>
+<table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <thead style="background-color: #2e3b55; color: white;">
+        <tr>
+            <th style="padding: 12px;">Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Service</th>
+            <th>Start Date</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Notes</th>
+            <th>Issue Image</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Where(t => t.Status == "Pending")) // or "Doing", depending on your logic
+        {
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">@task.FirstName</td>
+                <td>@task.Email</td>
+                <td>@task.Personal_Address</td>
+                <td>@task.PhoneNumber</td>
+                <td>@task.ServiceName</td>
+                <td>@task.Booking_Start_Date.ToShortDateString()</td>
+                <td>@task.BookingTittle</td>
+                <td>@task.BookingMessae</td>
+                <td>@task.BookingNotes</td>
+                <td>
+                    @if (task.ImageWhereTheIssueLocated != null)
+                    {
+                        var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated);
+                        <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Employee"
+                       asp-action="ConfirmBooking"
+                       asp-route-id="@task.BookingId"
+                       style="background-color:#28a745; color:white; padding:6px 10px; border-radius:4px; text-decoration:none;">
+                        Confirm
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<h3>Done</h3>
+<table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <thead style="background-color: #2e3b55; color: white;">
+        <tr>
+            <th style="padding: 12px;">Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Service</th>
+            <th>Start Date</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Notes</th>
+            <th>Issue Image</th>
+            <th>Fixed Image & Complete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Where(t => t.Status == "Confirmed"))
+        {
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">@task.FirstName</td>
+                <td>@task.Email</td>
+                <td>@task.Personal_Address</td>
+                <td>@task.PhoneNumber</td>
+                <td>@task.ServiceName</td>
+                <td>@task.Booking_Start_Date.ToShortDateString()</td>
+                <td>@task.BookingTittle</td>
+                <td>@task.BookingMessae</td>
+                <td>@task.BookingNotes</td>
+                <td>
+                    @if (task.ImageWhereTheIssueLocated != null)
+                    {
+                        var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated);
+                        <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    <form asp-controller="Employee" asp-action="CompleteBooking" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 5px;">
+                        <input type="hidden" name="BookingId" value="@task.BookingId" />
+                        <input type="file" name="FixedImage" accept="image/*" required />
+                        <button type="submit" style="background-color:#28a745; color:white; padding:6px 10px; border-radius:4px; border:none;">
+                            Complete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 

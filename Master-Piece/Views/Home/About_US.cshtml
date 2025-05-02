@@ -1,34 +1,334 @@
-﻿
+﻿@model List<MainService>
 @{
     ViewData["Title"] = "About";
 }
+
+@* <div> *@
+@*     <img src="~/master pictures/services-min.webp" alt="Service Image" style="height: 500px; width: 100%;" asp-append-version="true" /> *@
+@*     <p id="welcome-text">Welcome to Complete Property Care, Your Trusted Partner for Home Services</p> *@
+@*     <br> *@
+@*     <p id="our-story">Our Story At Complete Property Care, our journey began with a simple vision: to bring top-notch home services to every doorstep, making homes more comfortable and stress-free. The Founder OMAR aBO JOLBAN, a passionate homeowner who recognized the need for reliable, high-quality home services, our company has grown from a small local business to a trusted name in the community.</p> *@
+@*     <br> *@
+@*     <p id="mission">What started as a one-person operation quickly expanded as word spread about our exceptional service and commitment to customer satisfaction. Today, we have a team of dedicated professionals who share our founder's vision and passion for excellence. Our mission is to make your life easier by taking care of all your home service needs, so you can focus on what truly matters.</p> *@
+@*     <br> *@
+@*     <p id="services-title">Our Services At Complete Property Care, we offer a comprehensive range of home services designed to meet your unique needs:</p> *@
+@*     <br> *@
+@*     <ol type="1"> *@
+@*         <li id="handyman">Handyman Services: From minor repairs to major renovations, our skilled handymen are equipped to handle it all with precision and care.</li> *@
+@*         <li id="cleaning">Cleaning Services: Our meticulous cleaners ensure your home is spotless, providing regular cleaning, deep cleaning, and specialized services such as carpet and window cleaning.</li> *@
+@*         <li id="plumbing">Plumbing Services: Our experienced plumbers can address any plumbing issue, from leaky faucets to complete system installations.</li> *@
+@*         <li id="electrical">Electrical Services: Our certified electricians handle everything from minor electrical repairs to complex installations, ensuring your home is safe and efficient.</li> *@
+@*         <li id="landscaping">Landscaping Services: Our creative landscapers transform your outdoor spaces into beautiful, functional areas for you to enjoy.</li> *@
+@*         <li id="painting">Painting Services: Our professional painters bring a fresh, vibrant look to your home with interior and exterior painting services.</li> *@
+@*     </ol> *@
+@*     <p id="quality-text">At Complete Property Care, we take pride in our work and are dedicated to providing the highest quality services to our customers. Your satisfaction is our top priority, and we are committed to going above and beyond to exceed your expectations.</p> *@
+@*     <p id="thank-you">Thank you for choosing Complete Property Care – where exceptional service meets peace of mind.</p> *@
+@*     <p id="priority">Your satisfaction is our priority. Let us take care of your home so you can focus on what matters most.</p> *@
+@*     <button style="margin-top: 50px; margin-left: 40px; margin-bottom: 30px; width: 275px; height: 75px; font-size: 20px; font-weight: bold; background-color: #FFE700; border: thin; border-radius: 30px;">Book an Appointment Now!</button> *@
+@* </div> *@
 <style>
-    ol li {
-        margin-bottom: 20px; /* Adjust the value as needed for desired spacing */
-        margin-left: 40px;
+    *{
+        font-family: 'Nunito Sans', sans-serif;
+    }
+    .about-us-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .about-us-image {
+        height: 500px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .appointment-button {
+        position: absolute;
+        top: 50%;
+        right: 50px;
+        transform: translateY(-50%);
+        width: 275px;
+        height: 75px;
+        font-size: 20px;
+        font-weight: bold;
+        background-color: #FFE700;
+        border: thin solid #ccc;
+        border-radius: 30px;
+        cursor: pointer;
+        display: flex; /* ✨ NEW: make the anchor behave like button */
+        align-items: center; /* ✨ center text vertically */
+        justify-content: center; /* ✨ center text horizontally */
+        text-decoration: none; /* ✨ remove underline */
+        color: black; /* ✨ button text color */
+        transition: background-color 0.3s, transform 0.3s; /* ✨ smooth hover */
+    }
+
+        .appointment-button:hover {
+            background-color: #ffd700; /* ✨ slightly darker on hover */
+            transform: translateY(-50%) scale(1.05); /* ✨ small zoom effect */
+        }
+    /* ✨ New style for the Welcome text */
+    .welcome-text {
+        margin-top: 30px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        transition: transform 0.3s ease, text-shadow 0.3s ease;
+        text-align: center;
+    }
+
+    .about-us-section {
+        max-width: 1000px; /* Limit width for better readability */
+        margin: 0 auto; /* Centering the entire section */
+        padding: 50px 20px; /* Add some padding around the section */
+        text-align: center; /* Center align the text */
+    }
+
+    .section-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px; /* Space below the title */
+        letter-spacing: 1px;
+        text-transform: uppercase; /* Add uppercase for distinction */
+        font-family: 'Nunito Sans', sans-serif;
+        transition: color 0.3s ease;
+    }
+
+        .section-title:hover {
+            color: #f5b50a; /* Highlight color on hover */
+        }
+
+    .our-story, .mission {
+        font-size: 18px;
+        line-height: 1.6; /* Add spacing between lines for readability */
+        color: #666;
+        margin-bottom: 30px; /* Add margin at the bottom */
+        font-family: 'Nunito Sans', sans-serif;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .our-story {
+        font-style: italic; /* Optional: You can make it italic to differentiate it */
+    }
+
+    .mission {
+        font-weight: normal;
+    }
+
+
+    /* Styling for the services grid */
+    .services-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 30px;
+        padding: 20px;
+    }
+
+    .service-card {
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+    .service-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .service-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        padding: 10px;
+        transition: color 0.3s ease;
+    }
+
+        .service-name:hover {
+            color: #f5b50a; /* Highlight color on hover */
+            cursor: pointer;
+        }
+
+    @@media (max-width: 768px) {
+        .section-title
+
+    {
+        font-size: 24px; /* Adjust size for smaller screens */
+    }
+
+    .our-story, .mission {
+        font-size: 16px; /* Adjust size for smaller screens */
+    }
+
+    }
+
+
+    /* Guarantee Section */
+    .guarantee-section {
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .guarantee-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 40px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .guarantee-cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .guarantee-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .guarantee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .guarantee-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+    .guarantee-card-text {
+        max-width: 500px;
+        margin-left: 20px;
+    }
+
+        .guarantee-card-text h4 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .guarantee-card-text p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+    @@media (max-width: 768px) {
+        .guarantee-cards-container
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .guarantee-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .guarantee-card img {
+            margin-bottom: 20px;
+        }
+
     }
 </style>
 
-<div>
-    <img src="~/master pictures/services-min.webp" alt="Service Image" style="height: 500px; width: 100%;" asp-append-version="true" />
-    <p id="welcome-text">Welcome to Complete Property Care, Your Trusted Partner for Home Services</p>
-    <br>
-    <p id="our-story">Our Story At Complete Property Care, our journey began with a simple vision: to bring top-notch home services to every doorstep, making homes more comfortable and stress-free. The Founder OMAR aBO JOLBAN, a passionate homeowner who recognized the need for reliable, high-quality home services, our company has grown from a small local business to a trusted name in the community.</p>
-    <br>
-    <p id="mission">What started as a one-person operation quickly expanded as word spread about our exceptional service and commitment to customer satisfaction. Today, we have a team of dedicated professionals who share our founder's vision and passion for excellence. Our mission is to make your life easier by taking care of all your home service needs, so you can focus on what truly matters.</p>
-    <br>
-    <p id="services-title">Our Services At Complete Property Care, we offer a comprehensive range of home services designed to meet your unique needs:</p>
-    <br>
-    <ol type="1">
-        <li id="handyman">Handyman Services: From minor repairs to major renovations, our skilled handymen are equipped to handle it all with precision and care.</li>
-        <li id="cleaning">Cleaning Services: Our meticulous cleaners ensure your home is spotless, providing regular cleaning, deep cleaning, and specialized services such as carpet and window cleaning.</li>
-        <li id="plumbing">Plumbing Services: Our experienced plumbers can address any plumbing issue, from leaky faucets to complete system installations.</li>
-        <li id="electrical">Electrical Services: Our certified electricians handle everything from minor electrical repairs to complex installations, ensuring your home is safe and efficient.</li>
-        <li id="landscaping">Landscaping Services: Our creative landscapers transform your outdoor spaces into beautiful, functional areas for you to enjoy.</li>
-        <li id="painting">Painting Services: Our professional painters bring a fresh, vibrant look to your home with interior and exterior painting services.</li>
-    </ol>
-    <p id="quality-text">At Complete Property Care, we take pride in our work and are dedicated to providing the highest quality services to our customers. Your satisfaction is our top priority, and we are committed to going above and beyond to exceed your expectations.</p>
-    <p id="thank-you">Thank you for choosing Complete Property Care – where exceptional service meets peace of mind.</p>
-    <p id="priority">Your satisfaction is our priority. Let us take care of your home so you can focus on what matters most.</p>
-    <button style="margin-top: 50px; margin-left: 40px; margin-bottom: 30px; width: 275px; height: 75px; font-size: 20px; font-weight: bold; background-color: #FFE700; border: thin; border-radius: 30px;">Book an Appointment Now!</button>
+<div class="about-us-container">
+    <img src="~/master pictures/services-min.webp" alt="Service Image" class="about-us-image" asp-append-version="true" />
+    <a asp-controller="User" asp-action="Show_All_Services" class="appointment-button">Book an Appointment Now!</a>
+</div>
+<p class="welcome-text">Welcome to Complete Property Care, Your Trusted Partner for Home Services.</p>
+
+<div class="about-us-section">
+    <div class="story-section">
+        <p class="section-title">Our Story</p>
+        <p class="our-story">Our Story At Complete Property Care, our journey began with a simple vision: to bring top-notch home services to every doorstep, making homes more comfortable and stress-free. The Founder Omar Abo Jolban, a passionate homeowner who recognized the need for reliable, high-quality home services, our company has grown from a small local business to a trusted name in the community.</p>
+    </div>
+
+    <div class="mission-section">
+        <p class="section-title">Our Mission</p>
+        <p class="mission">What started as a one-person operation quickly expanded as word spread about our exceptional service and commitment to customer satisfaction. Today, we have a team of dedicated professionals who share our founder's vision and passion for excellence. Our mission is to make your life easier by taking care of all your home service needs, so you can focus on what truly matters.</p>
+    </div>
+</div>
+<!-- Services Grid -->
+<div class="services-container">
+    @foreach (var service in Model)
+    {
+        <div class="service-card">
+            <a asp-controller="User" asp-action="Show_Workers_for_Specfic_Service_" asp-route-id="@service.ServiceId">
+                <img src="@(service.Image != null
+              ? $"data:image/jpeg;base64,{Convert.ToBase64String(service.Image)}"
+              : Url.Content("~/images/default-service.png"))"
+                     alt="@service.ServiceName"
+                     class="service-image" />
+                <div class="service-name">@service.ServiceName</div>
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Our Guarantee Section -->
+<div class="guarantee-section">
+    <p class="guarantee-title">Our Guarantee</p>
+
+    <div class="guarantee-cards-container">
+        <!-- Convenience Card -->
+        <div class="guarantee-card">
+            <div class="guarantee-card-text">
+                <h4>Convenience</h4>
+                <p>We make home services easy for you. Our goal is to provide hassle-free solutions with flexible scheduling to fit your needs.</p>
+            </div>
+            <img src="https://media.istockphoto.com/id/1901021875/photo/people-use-magnifying-glasses-to-search-for-information-on-the-internet-with-search-box-icons.jpg?s=1024x1024&w=is&k=20&c=QCVUXFK3L-stYq5ZojMgurvllw_lk-HycPeaB_37tKg=" alt="Convenience">
+        </div>
+
+        <!-- Reliability Card -->
+        <div class="guarantee-card">
+            <img src="https://images.pexels.com/photos/7363099/pexels-photo-7363099.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Reliability">
+            <div class="guarantee-card-text">
+                <h4>Reliability</h4>
+                <p>With a team of skilled professionals, we deliver reliable services on time, every time, so you can count on us for all your home service needs.</p>
+            </div>
+        </div>
+
+        <!-- Transparency Card -->
+        <div class="guarantee-card">
+            <div class="guarantee-card-text">
+                <h4>Transparency</h4>
+                <p>We believe in clear communication and transparency in every aspect of our services, ensuring no hidden fees or surprises.</p>
+            </div>
+            <img src="https://images.pexels.com/photos/1071249/pexels-photo-1071249.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Transparency">
+        </div>
+
+        <!-- Quality Assurance Card -->
+        <div class="guarantee-card">
+            <img src="https://media.istockphoto.com/id/1924832739/photo/ensuring-quality-businessmans-hand-examining-products-for-precision.jpg?s=1024x1024&w=is&k=20&c=fn07LJ5e_nLV5mhECK0ttDZnJKdt8cFQ5ABsDMwkVEM=" alt="Quality Assurance">
+            <div class="guarantee-card-text">
+                <h4>Quality Assurance</h4>
+                <p>We take pride in delivering the highest quality services with guaranteed satisfaction to give you peace of mind.</p>
+            </div>
+        </div>
+    </div>
 </div>

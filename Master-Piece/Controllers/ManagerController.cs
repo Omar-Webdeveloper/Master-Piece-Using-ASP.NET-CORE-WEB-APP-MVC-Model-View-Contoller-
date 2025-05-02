@@ -14,29 +14,110 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Manager_Dashboard()
         {
-            int userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+            int ManagerId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
-            //            // Make sure you're using your DbContext (e.g., _context)
-            //            var totalUsers = _context.Users
-            //                .Where(u => u.Role == "User")
-            //                .Count();
+            // Step 1: Get the Location_Id for the current manager
+            var managerLocationId = _context.Users
+                .Where(u => u.UserId == ManagerId)
+                .Select(u => u.LocationId)
+                .FirstOrDefault();
 
-            //            ViewBag.TotalUsers = totalUsers;
+            // Step 2: Get RoleID for 'Employee'
+            var employeeRoleId = _context.Roles
+                .Where(r => r.RoleName == "Employee")
+                .Select(r => r.RoleId)
+                .FirstOrDefault();
 
-            //             var serviceProviders = _context.Users
-            //            .Where(u => u.Role == "ServiceProvider")
-            //            .Count();
-            //            ViewBag.TotalServiceProviders = serviceProviders;
+            // Step 3: Get all users with that role and matching location
+            var employees = (from u in _context.Users
+                             join ur in _context.UserRoles on u.UserId equals ur.UserId
+                             where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
+                             select u).Count();
 
-            //            var totalServices = _context.Services
-            //                .Count();
-            //            ViewBag.TotalServices = totalServices;
+            // Store in ViewBag
+            ViewBag.EmployeeCount = employees;
 
-            //            var ManagerName = _context.Users
-            //                .Where(u => u.Role == "Manager")
-            //                .Select(u => u.FirstName)
-            //                .FirstOrDefault();
-            //            ViewBag.ManagerName = ManagerName;
+
+
+
+
+
+
+            // Get the raw comma-separated area strings for this manager
+            var rawAreas = _context.LocationAreas
+                .Where(l => l.ManagerId == ManagerId)
+                .Select(l => l.AreasCovered)
+                .ToList();  // List of strings
+
+            // Split by comma and trim whitespace, then flatten into a single list
+            var coveredAreas = rawAreas
+                .SelectMany(a => a.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                .Select(a => a.Trim())
+                .ToArray();  // Final cleaned array of individual area names
+
+            // Store in ViewBag
+            ViewBag.CoveredAreas = coveredAreas;
+            ViewBag.CoveredAreaCount = coveredAreas.Length;
+
+
+
+
+
+
+
+
+            var manager = _context.Users
+                .Where(u => u.UserId == ManagerId)
+                .Select(u => new { u.FirstName, u.LastName })
+                .FirstOrDefault();
+
+            if (manager != null)
+            {
+                ViewBag.ManagerFullName = $"{manager.FirstName} {manager.LastName}";
+            }
+            else
+            {
+                ViewBag.ManagerFullName = "Unknown Manager";
+            }
+
+
+
+
+            int managerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+
+
+
+
+            // Step 3: Get all employee IDs under the same location
+            var employeeIds = (from u in _context.Users
+                               join ur in _context.UserRoles on u.UserId equals ur.UserId
+                               where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
+                               select u.UserId).ToList();
+
+            // Step 4: Get completed bookings by those employees, grouped by date
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+
+            var completedJobsByDate = _context.Bookings
+                .Where(b => employeeIds.Contains(b.WorkerId ?? 0)
+                            && b.Status == "Completed"
+                            && b.BookingEndDate.HasValue
+                            && b.BookingEndDate.Value.Month == currentMonth
+                            && b.BookingEndDate.Value.Year == currentYear)
+                .GroupBy(b => b.BookingEndDate.Value.Date)
+                .Select(g => new
+                {
+                    Day = g.Key.Day,
+                    Count = g.Count()
+                })
+                .OrderBy(x => x.Day)
+                .ToList();
+
+            // Step 5: Prepare arrays for chart
+            ViewBag.ChartLabels = completedJobsByDate.Select(x => x.Day.ToString()).ToArray();
+            ViewBag.ChartData = completedJobsByDate.Select(x => x.Count).ToArray();
+
 
             return View();
         }

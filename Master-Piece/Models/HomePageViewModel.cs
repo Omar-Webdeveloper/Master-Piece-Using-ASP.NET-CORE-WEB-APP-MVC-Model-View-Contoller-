@@ -28,6 +28,8 @@ namespace Master_Piece.Models
         public byte[] ImageWhereTheIssueLocated { get; set; }
         public byte[] ImageAfterFixing { get; set; }
         public string UserFirstName { get; set; }
+        public DateTime? CreatedAt { get; set; }
+
     }
     public class ContactUs
     {

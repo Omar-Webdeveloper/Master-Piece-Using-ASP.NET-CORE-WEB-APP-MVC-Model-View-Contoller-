@@ -1,0 +1,58 @@
+﻿@model List<Master_Piece.Models.AssignedBookingViewModel>
+
+@{
+    ViewData["Title"] = "Work History";
+    Layout = "~/Views/Shared/_Employee_Layout.cshtml";
+}
+
+<h2>Work History</h2>
+
+<table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 20px;">
+    <thead style="background-color: #2e3b55; color: white;">
+        <tr>
+            <th style="padding: 12px;">Customer Name</th>
+            <th>Service</th>
+            <th>Start Date</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Notes</th>
+            <th>Issue Image</th>
+            <th>Fixed Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">@task.FirstName</td>
+                <td>@task.ServiceName</td>
+                <td>@task.Booking_Start_Date.ToShortDateString()</td>
+                <td>@task.BookingTittle</td>
+                <td>@task.BookingMessae</td>
+                <td>@task.BookingNotes</td>
+                <td>
+                    @if (task.ImageWhereTheIssueLocated != null)
+                    {
+                        var base64Issue = Convert.ToBase64String(task.ImageWhereTheIssueLocated);
+                        <img src="data:image/jpeg;base64,@base64Issue" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    @if (task.ImageAfterFixing != null)
+                    {
+                        var base64Fixed = Convert.ToBase64String(task.ImageAfterFixing);
+                        <img src="data:image/jpeg;base64,@base64Fixed" alt="Fixed Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Fixed Image</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
