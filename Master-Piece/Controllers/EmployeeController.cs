@@ -17,7 +17,7 @@ namespace Master_Piece.Controllers
         {
             int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
-            if (workerId != null)
+            if (workerId != 0)
             {
 
                 // Count only the completed bookings related to the logged-in worker

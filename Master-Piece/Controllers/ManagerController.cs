@@ -121,14 +121,34 @@ namespace Master_Piece.Controllers
 
             return View();
         }
-        //        public IActionResult ManageUsers()
-        //        {
-        //            return View();
-        //        }
-        //        public IActionResult ManageServiceProviders()
-        //        {
-        //            return View();
-        //        }
+        public IActionResult Manage_New_ServiceProviders()
+        {
+            return View();
+        }
+        public IActionResult ManageServiceProviders()
+        {
+            int ManagerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            // Step 1: Get the Location_Id for the current manager
+            var managerLocationId = _context.Users
+                .Where(u => u.UserId == ManagerId)
+                .Select(u => u.LocationId)
+                .FirstOrDefault();
+
+            // Step 2: Get RoleID for 'Employee'
+            var employeeRoleId = _context.Roles
+                .Where(r => r.RoleName == "Employee")
+                .Select(r => r.RoleId)
+                .FirstOrDefault();
+
+            // Step 3: Get all users with that role and matching location
+            var employees = (from u in _context.Users
+                             join ur in _context.UserRoles on u.UserId equals ur.UserId
+                             where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
+                             select u);
+
+            return View(employees);
+        }
         //        public IActionResult ManageServices()
         //        {
         //            return View();

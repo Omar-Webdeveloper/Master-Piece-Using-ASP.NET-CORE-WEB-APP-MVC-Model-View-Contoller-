@@ -1,7 +1,53 @@
-﻿
-@{
-    ViewData["Title"] = "ManageServiceProviders";
-}
+﻿@* @model List<User>; *@
+@* @{ *@
+@*     ViewData["Title"] = "ManageServiceProviders"; *@
+@*     Layout = "~/Views/Shared/_Manager_Layout.cshtml"; *@
 
-<h1>ManageServiceProviders</h1>
+@* } *@
 
+@* <h1>ManageServiceProviders</h1> *@
+
+
+@* <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"> *@
+@*     <thead style="background-color: #2e3b55; color: white;"> *@
+@*         <tr> *@
+@*             <th style="padding: 12px;">Person Name</th> *@
+@*             <th>Email</th> *@
+@*             <th>Address</th> *@
+@*             <th>Phone</th> *@
+@*             <th>Service</th> *@
+@*             <th>Start Date</th> *@
+@*             <th>Title</th> *@
+@*             <th>Message</th> *@
+@*             <th>Notes</th> *@
+@*             <th>Issue Image</th> *@
+@*         </tr> *@
+@*     </thead> *@
+@*     <tbody> *@
+@*         @foreach (var employee in Model) *@
+@*         { *@
+@*             <tr style="border-bottom: 1px solid #dee2e6;"> *@
+@*                 <td style="padding: 10px;">@employee.FirstName @employee.LastName</td> *@
+@*                 <td>@employee.Email</td> *@
+@*                 <td>@employee.PersonalAddress</td> *@
+@*                 <td>@employee.PhoneNumber</td> *@
+@*                  <td>@employee.ServiceName</td>  *@
+@*                  <td>@task.Booking_Start_Date.ToShortDateString()</td>  *@
+@*                  <td>@task.BookingTittle</td>  *@
+@*                  <td>@task.BookingMessae</td>  *@
+@*                  <td>@task.BookingNotes</td>  *@
+@*                  <td>  *@
+@*                      @if (task.ImageWhereTheIssueLocated != null)  *@
+@*                      {  *@
+@*                          var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated);  *@
+@*                          <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />  *@
+@*                      }  *@
+@*                      else  *@
+@*                      {  *@
+@*                          <span>No Image</span>  *@
+@*                      }  *@
+@*                  </td>  *@
+@*              </tr>  *@
+@*          }  *@
+@*      </tbody>  *@
+@* </table> *@
