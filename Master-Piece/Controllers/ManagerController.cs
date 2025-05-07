@@ -141,22 +141,86 @@ namespace Master_Piece.Controllers
                 .Select(r => r.RoleId)
                 .FirstOrDefault();
 
-            // Step 3: Get all users with that role and matching location
-            var employees = (from u in _context.Users
-                             join ur in _context.UserRoles on u.UserId equals ur.UserId
-                             where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
-                             select u);
+            var employeesWithServices = (from u in _context.Users
+                                         join ur in _context.UserRoles on u.UserId equals ur.UserId
+                                         join sw in _context.ServiceWorkersJunctionTables on u.UserId equals sw.WrokerId into swj
+                                         from sw in swj.DefaultIfEmpty()
+                                         join s in _context.MainServices on sw.ServiceId equals s.ServiceId into sj
+                                         from s in sj.DefaultIfEmpty()
+                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
+                                         select new EmployeeWithServiceViewModel
+                                         {
+                                             UserId = u.UserId,
+                                             FirstName = u.FirstName,
+                                             LastName = u.LastName,
+                                             Email = u.Email,
+                                             CreatedAt = u.CreatedAt,
+                                             PersonalImage = u.PersonalImage,
+                                             PersonalAddress = u.PersonalAddress,
+                                             DateOfBirth = u.DateOfBirth,
+                                             PhoneNumber = u.PhoneNumber,
+                                             Gender = u.Gender,
+                                             LocationId = u.LocationId,
+                                             WorkerServiceType = u.WorkerServiceType,
+                                             WorkerRating = u.WorkerRating,
+                                             WorkerIntro = u.WorkerIntro,
+                                             IsActive = u.IsActive,
+                                             ServiceName = s.ServiceName
+                                         }).ToList();
 
-            return View(employees);
+            return View(employeesWithServices);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddNewEmployee(IFormCollection form, IFormFile? PersonalImage)
+        {
+            int managerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            var newUser = new User
+            {
+                FirstName = form["FirstName"],
+                LastName = form["LastName"],
+                Email = form["Email"],
+                PasswordHash = form["Password"], // You should hash it securely
+                PhoneNumber = form["PhoneNumber"],
+                Gender = form["Gender"],
+                PersonalAddress = form["PersonalAddress"],
+                WorkerIntro = form["WorkerIntro"],
+                DateOfBirth = string.IsNullOrWhiteSpace(form["DateOfBirth"]) ? null : DateOnly.Parse(form["DateOfBirth"]),
+                CreatedAt = DateTime.Now,
+                IsActive = true,
+                LocationId = _context.Users.FirstOrDefault(u => u.UserId == managerId)?.LocationId
+            };
+
+            if (PersonalImage != null && PersonalImage.Length > 0)
+            {
+                using var ms = new MemoryStream();
+                await PersonalImage.CopyToAsync(ms);
+                newUser.PersonalImage = ms.ToArray();
+            }
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            // Assign "Employee" role
+            var employeeRoleId = _context.Roles.FirstOrDefault(r => r.RoleName == "Employee")?.RoleId ?? 0;
+            _context.UserRoles.Add(new UserRole { UserId = newUser.UserId, RoleId = employeeRoleId });
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageServiceProviders");
+        }
+
+        public IActionResult Edit_Employee_Info()
+        {
+            return RedirectToAction("ManageServiceProviders");
         }
         //        public IActionResult ManageServices()
         //        {
         //            return View();
         //        }
-        //        public IActionResult AssginTask()
-        //        {
-        //            return View();
-        //        }
+        public IActionResult AssginTask()
+        {
+            return View();
+        }
         public IActionResult ManagerProfile()
         {
             // Retrieve user Id from the session

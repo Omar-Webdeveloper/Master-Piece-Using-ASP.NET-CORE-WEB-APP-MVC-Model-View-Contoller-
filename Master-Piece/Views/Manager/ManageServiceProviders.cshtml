@@ -1,53 +1,264 @@
-﻿@* @model List<User>; *@
-@* @{ *@
-@*     ViewData["Title"] = "ManageServiceProviders"; *@
-@*     Layout = "~/Views/Shared/_Manager_Layout.cshtml"; *@
+﻿@model List<EmployeeWithServiceViewModel>
 
-@* } *@
+@{
+    ViewData["Title"] = "Manage Employees and Services";
+    Layout = "~/Views/Shared/_Manager_Layout.cshtml";
+}
+<style>
 
-@* <h1>ManageServiceProviders</h1> *@
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        width: 450px;
+        max-width: 90%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+        color: #333;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    form input[type="text"],
+    form textarea,
+    form input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    form textarea {
+        resize: vertical;
+        height: 80px;
+    }
+
+    form button[type="submit"] {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #28a745;
+    }</style>
+<h2>Manage Employees</h2>
+<a asp-controller="Manager" asp-action="Adding_New_Employee">Add New Employee</a>
+<!-- Popup Modal -->
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2>Book a Service</h2>
+        <form asp-action="AddNewEmployee" asp-controller="Manager" method="post" enctype="multipart/form-data">
+            <div>
+                <h5>Add New Employee</h5>
+                <button type="button"></button>
+            </div>
+
+            <div>
+                <div>
+                    <label class="form-label">First Name</label>
+                    <input name="FirstName" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Last Name</label>
+                    <input name="LastName" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input name="Email" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="Password" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="PhoneNumber" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Gender</label>
+                    <select name="Gender" class="form-select">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="DateOfBirth" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="PersonalAddress" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Intro</label>
+                    <textarea name="WorkerIntro" class="form-control"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Image</label>
+                    <input type="file" name="PersonalImage" class="form-control" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Save Employee</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openPopup() {
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+</script>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Image</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>DOB</th>
+            <th>Service</th>
+            <th>Service Type</th>
+            <th>Rating</th>
+            <th>Intro</th>
+            <th>Active</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model)
+        {
+            <tr>
+                <td>
+                    @if (emp.PersonalImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(emp.PersonalImage);
+                        <img src="data:image/jpeg;base64,@base64" width="50" height="50" style="border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@emp.FullName</td>
+                <td>@emp.Email</td>
+                <td>@emp.PersonalAddress</td>
+                <td>@emp.PhoneNumber</td>
+                <td>@emp.Gender</td>
+                <td>@emp.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                <td>@emp.ServiceName ?? "Not Assigned"</td>
+                <td>@emp.WorkerServiceType</td>
+                <td>@emp.WorkerRating</td>
+                <td>@emp.WorkerIntro</td>
+                <td>@(emp.IsActive == true ? "Yes" : "No")</td>
+                <td>@emp.CreatedAt?.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 
-@* <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"> *@
-@*     <thead style="background-color: #2e3b55; color: white;"> *@
-@*         <tr> *@
-@*             <th style="padding: 12px;">Person Name</th> *@
-@*             <th>Email</th> *@
-@*             <th>Address</th> *@
-@*             <th>Phone</th> *@
-@*             <th>Service</th> *@
-@*             <th>Start Date</th> *@
-@*             <th>Title</th> *@
-@*             <th>Message</th> *@
-@*             <th>Notes</th> *@
-@*             <th>Issue Image</th> *@
-@*         </tr> *@
-@*     </thead> *@
-@*     <tbody> *@
-@*         @foreach (var employee in Model) *@
-@*         { *@
-@*             <tr style="border-bottom: 1px solid #dee2e6;"> *@
-@*                 <td style="padding: 10px;">@employee.FirstName @employee.LastName</td> *@
-@*                 <td>@employee.Email</td> *@
-@*                 <td>@employee.PersonalAddress</td> *@
-@*                 <td>@employee.PhoneNumber</td> *@
-@*                  <td>@employee.ServiceName</td>  *@
-@*                  <td>@task.Booking_Start_Date.ToShortDateString()</td>  *@
-@*                  <td>@task.BookingTittle</td>  *@
-@*                  <td>@task.BookingMessae</td>  *@
-@*                  <td>@task.BookingNotes</td>  *@
-@*                  <td>  *@
-@*                      @if (task.ImageWhereTheIssueLocated != null)  *@
-@*                      {  *@
-@*                          var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated);  *@
-@*                          <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />  *@
-@*                      }  *@
-@*                      else  *@
-@*                      {  *@
-@*                          <span>No Image</span>  *@
-@*                      }  *@
-@*                  </td>  *@
-@*              </tr>  *@
-@*          }  *@
-@*      </tbody>  *@
-@* </table> *@
+<div >
+    <div >
+        <div class="modal-content">
+            <form asp-action="AddNewEmployee" asp-controller="Manager" method="post" enctype="multipart/form-data">
+                <div >
+                    <h5 >Add New Employee</h5>
+                    <button type="button" ></button>
+                </div>
+
+                <div >
+                    <div >
+                        <label  class="form-label">First Name</label>
+                        <input  name="FirstName" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Last Name</label>
+                        <input  name="LastName" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Email</label>
+                        <input  name="Email" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Password</label>
+                        <input type="password" name="Password" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        <input  type="text" name="PhoneNumber" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Gender</label>
+                        <select  name="Gender" class="form-select">
+                            <option value="">Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Date of Birth</label>
+                        <input  type="date" name="DateOfBirth" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Address</label>
+                        <input  type="text" name="PersonalAddress" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label  class="form-label">Intro</label>
+                        <textarea name="WorkerIntro" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Image</label>
+                        <input type="file" name="PersonalImage" class="form-control" accept="image/*" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save Employee</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
