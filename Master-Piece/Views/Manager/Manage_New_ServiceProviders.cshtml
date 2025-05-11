@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Master_Piece.Models.EmployeeWithServiceViewModel>
+@{
     ViewData["Title"] = "Manage_New_ServiceProviders";
     Layout = "~/Views/Shared/_Manager_Layout.cshtml";
 
@@ -9,40 +10,64 @@
 <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
     <thead style="background-color: #2e3b55; color: white;">
         <tr>
-            <th style="padding: 12px;">Person Name</th>
+            <th>Image</th>
+            <th style="padding: 12px;">Full Name</th>
             <th>Email</th>
             <th>Address</th>
             <th>Phone</th>
-
-            <th>Issue Image</th>
+            <th>Date of Birth</th>
+            <th>Gender</th>
+            <th>Service Name</th>
+            <th>Rating</th>
+            <th>Intro</th>
+            <th>Created At</th>
+            <th>Status</th>
         </tr>
     </thead>
-    @* <tbody> *@
-    @*     @foreach (var task in Model.Where(t => t.Status == "Pending")) *@
-    @*     { *@
-    @*         <tr style="border-bottom: 1px solid #dee2e6;"> *@
-    @*             <td style="padding: 10px;">@task.FirstName</td> *@
-    @*             <td>@task.Email</td> *@
-    @*             <td>@task.Personal_Address</td> *@
-    @*             <td>@task.PhoneNumber</td> *@
-    @*             <td>@task.ServiceName</td> *@
-    @*             <td>@task.Booking_Start_Date.ToShortDateString()</td> *@
-    @*             <td>@task.BookingTittle</td> *@
-    @*             <td>@task.BookingMessae</td> *@
-    @*             <td>@task.BookingNotes</td> *@
-    @*             <td> *@
-    @*                 @if (task.ImageWhereTheIssueLocated != null) *@
-    @*                 { *@
-    @*                     var base64 = Convert.ToBase64String(task.ImageWhereTheIssueLocated); *@
-    @*                     <img src="data:image/jpeg;base64,@base64" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" /> *@
-    @*                 } *@
-    @*                 else *@
-    @*                 { *@
-    @*                     <span>No Image</span> *@
-    @*                 } *@
-    @*             </td> *@
-    @*         </tr> *@
-    @*     } *@
-    @* </tbody> *@
+    <tbody>
+        @foreach (var emp in Model)
+        {
+            <tr>
+                <td>
+                    @if (emp.PersonalImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(emp.PersonalImage);
+                        var imgSrc = $"data:image/png;base64,{base64}";
+                        <img src="@imgSrc" alt="Profile Image" style="width: 60px; height: 60px; border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td style="padding: 12px;">@emp.FirstName @emp.LastName</td>
+                <td>@emp.Email</td>
+                <td>@emp.PersonalAddress</td>
+                <td>@emp.PhoneNumber</td>
+                <td>@emp.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                <td>@emp.Gender</td>
+                <td>@emp.ServiceName</td>
+                <td>@emp.WorkerRating</td>
+                <td>@emp.WorkerIntro</td>
+                <td>@emp.CreatedAt?.ToString("yyyy-MM-dd")</td>
+                <td>@emp.Status</td>
+                <td>
+                    <form asp-action="ApproveServiceProvider" method="post" style="display:inline;">
+                        <input type="hidden" name="userId" value="@emp.UserId" />
+                        <input type="hidden" name="serviceId" value="@emp.ServiceId" />
+                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                    </form>
+
+                    <form asp-action="RejectServiceProvider" method="post" style="display:inline;">
+                        <input type="hidden" name="userId" value="@emp.UserId" />
+                        <input type="hidden" name="serviceId" value="@emp.ServiceId" />
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
 </table>
 

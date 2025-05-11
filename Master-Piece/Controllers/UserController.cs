@@ -192,8 +192,8 @@ namespace Master_Piece.Controllers
                              join ur in _context.UserRoles on u.UserId equals ur.UserId
                              join r in _context.Roles on ur.RoleId equals r.RoleId
                              join sw in _context.ServiceWorkersJunctionTables on u.UserId equals sw.WrokerId
-                             where r.RoleName == "Employee" && sw.ServiceId == serviceId
-                             select u).ToList();
+                             where r.RoleName == "Employee" && sw.ServiceId == serviceId && sw.Status == "Accepted"
+                                         select u).ToList();
 
             var viewModel = new ShowWorkersAndBookingViewModel
             {

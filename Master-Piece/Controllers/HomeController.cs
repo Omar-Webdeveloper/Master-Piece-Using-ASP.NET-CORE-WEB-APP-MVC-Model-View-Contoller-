@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Master_Piece.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
@@ -183,8 +184,8 @@ namespace Master_Piece.Controllers
                 "User" => RedirectToAction("Index", "Home"),
                 "Employee" => RedirectToAction("Employee_Dashboard", "Employee"),
                 "Manager" => RedirectToAction("Manager_Dashboard", "Manager"),
-                "Admin" => RedirectToAction("Index", "Admin"),
-                "SuperAdmin" => RedirectToAction("Index", "SuperAdmin"),
+                "Admin" => RedirectToAction("Admin_Dashboard", "Admin"),
+                "SuperAdmin" => RedirectToAction("SuperAdmin_Dashboard", "SuperAdmin"),
                 _ => RedirectToAction("Login", "Home")
             };
         }
@@ -262,14 +263,29 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Register_New_Employee()
         {
-            return View();
+            var viewModel = new Register_New_EmployeeViewModel
+            {
+                ServicesList = _context.MainServices.Select(s => new SelectListItem
+                {
+                    Value = s.ServiceId.ToString(),
+                    Text = s.ServiceName
+                }).ToList(),
+
+                LocationsList = _context.LocationAreas.Select(l => new SelectListItem
+                {
+                    Value = l.LocationId.ToString(),
+                    Text = l.AreasCovered
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
         [HttpPost]
         public async Task<IActionResult> Register_New_Employee(Register_New_EmployeeViewModel model, IFormFile PersonalImage)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("Register_New_Employee", "Home");
             }
 
             // Map ViewModel to User entity
@@ -284,6 +300,7 @@ namespace Master_Piece.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Gender = model.Gender,
                 WorkerServiceType = model.WorkerServiceType,
+                LocationId = model.SelectedLocationId
             };
 
             // Handle image upload
@@ -320,7 +337,17 @@ namespace Master_Piece.Controllers
                 });
                 await _context.SaveChangesAsync();
             }
+            // ? Save to ServiceWorkersJunctionTable
+            if (model.SelectedServiceId.HasValue)
+            {
+                _context.ServiceWorkersJunctionTables.Add(new ServiceWorkersJunctionTable
+                {
+                    WrokerId = user.UserId,
+                    ServiceId = model.SelectedServiceId.Value
+                });
+            }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction("Login", "Home");
         }
 

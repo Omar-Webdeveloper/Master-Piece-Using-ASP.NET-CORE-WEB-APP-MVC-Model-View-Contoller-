@@ -2,6 +2,7 @@
 {
     public class EmployeeWithServiceViewModel
     {
+        public List<User> Employees { get; set; }
         public int UserId { get; set; }
         public string? FirstName { get; set; }
 
@@ -20,5 +21,9 @@
         public string? WorkerIntro { get; set; }
         public bool? IsActive { get; set; }
         public string? ServiceName { get; set; }
+        public string? Status { get; set; }
+        public int ServiceId { get; set; }
+
+
     }
 }

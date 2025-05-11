@@ -1,9 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Master_Piece.Models
 {
     public class Register_New_EmployeeViewModel
     {
+        [Required(ErrorMessage = "Service Type is required")]
+        public int? SelectedServiceId { get; set; }  // Chosen service from dropdown
+
+        public List<SelectListItem>? ServicesList { get; set; }  // Dropdown source
+
+        [Required(ErrorMessage = "Location is required")]
+        public int? SelectedLocationId { get; set; }
+
+        public List<SelectListItem>? LocationsList { get; set; }
+
+
+
+
+
         [Required(ErrorMessage = "Your First Name is required")]
         public string? FirstName { get; set; }
         [Required(ErrorMessage = "Your Last Name is required")]

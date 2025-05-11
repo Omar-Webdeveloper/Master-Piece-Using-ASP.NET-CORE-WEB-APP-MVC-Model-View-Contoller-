@@ -9,6 +9,10 @@ public partial class ServiceWorkersJunctionTable
 
     public int? ServiceId { get; set; }
 
+    public int Id { get; set; }
+
+    public string? Status { get; set; }
+
     public virtual MainService? Service { get; set; }
 
     public virtual User? Wroker { get; set; }

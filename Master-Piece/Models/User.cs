@@ -47,6 +47,8 @@ public partial class User
 
     public virtual LocationArea? LocationArea { get; set; }
 
+    public virtual ICollection<ServiceWorkersJunctionTable> ServiceWorkersJunctionTables { get; set; } = new List<ServiceWorkersJunctionTable>();
+
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();

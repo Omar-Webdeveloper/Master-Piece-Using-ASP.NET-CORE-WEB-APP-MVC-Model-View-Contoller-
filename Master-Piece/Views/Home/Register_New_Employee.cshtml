@@ -122,6 +122,17 @@
             <input asp-for="WorkerServiceType" type="text" placeholder="Service Type" />
 			<span asp-validation-for="WorkerServiceType" class="text-danger"></span>
 
+            <select asp-for="SelectedServiceId" asp-items="Model.ServicesList">
+                <option value="">-- Select Service --</option>
+            </select>
+            <span asp-validation-for="SelectedServiceId" class="text-danger"></span>
+
+            <select asp-for="SelectedLocationId" asp-items="Model.LocationsList">
+                <option value="">-- Select Location --</option>
+            </select>
+            <span asp-validation-for="SelectedLocationId" class="text-danger"></span>
+
+
             <button type="submit" class="submit-button">Let's Get Started</button>
         </form>
         <p class="status-link">Already applied? <a href="#">Check your application status here.</a></p>

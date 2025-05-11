@@ -123,7 +123,78 @@ namespace Master_Piece.Controllers
         }
         public IActionResult Manage_New_ServiceProviders()
         {
-            return View();
+            int ManagerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            // Step 1: Get the Location_Id for the current manager
+            var managerLocationId = _context.Users
+                .Where(u => u.UserId == ManagerId)
+                .Select(u => u.LocationId)
+                .FirstOrDefault();
+
+            // Step 2: Get RoleID for 'Employee'
+            var employeeRoleId = _context.Roles
+                .Where(r => r.RoleName == "Employee")
+                .Select(r => r.RoleId)
+                .FirstOrDefault();
+
+            var employeesWithServices = (from u in _context.Users
+                                         join ur in _context.UserRoles on u.UserId equals ur.UserId
+                                         join sw in _context.ServiceWorkersJunctionTables on u.UserId equals sw.WrokerId into swj
+                                         from sw in swj.DefaultIfEmpty()
+                                         join s in _context.MainServices on sw.ServiceId equals s.ServiceId into sj
+                                         from s in sj.DefaultIfEmpty()
+                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId && sw.Status == "Pending"
+                                         select new EmployeeWithServiceViewModel
+                                         {
+                                             UserId = u.UserId,
+                                             FirstName = u.FirstName,
+                                             LastName = u.LastName,
+                                             Email = u.Email,
+                                             CreatedAt = u.CreatedAt,
+                                             PersonalImage = u.PersonalImage,
+                                             PersonalAddress = u.PersonalAddress,
+                                             DateOfBirth = u.DateOfBirth,
+                                             PhoneNumber = u.PhoneNumber,
+                                             Gender = u.Gender,
+                                             LocationId = u.LocationId,
+                                             WorkerServiceType = u.WorkerServiceType,
+                                             WorkerRating = u.WorkerRating,
+                                             WorkerIntro = u.WorkerIntro,
+                                             IsActive = u.IsActive,
+                                             ServiceName = s.ServiceName,
+                                             Status = sw.Status,
+                                             ServiceId = (int)sw.ServiceId
+                                         }).ToList();
+
+            return View(employeesWithServices);
+        }
+        [HttpPost]
+        public IActionResult ApproveServiceProvider(int userId, int serviceId)
+        {
+            // Find the ServiceWorkersJunctionTable entry
+            var serviceWorker = _context.ServiceWorkersJunctionTables
+                .FirstOrDefault(sw => sw.WrokerId == userId && sw.ServiceId == serviceId);
+            if (serviceWorker != null)
+            {
+                // Update the status to "Approved"
+                serviceWorker.Status = "Accepted";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ManageServiceProviders");
+        }
+        [HttpPost]
+        public IActionResult RejectServiceProvider(int userId, int serviceId)
+        {
+            // Find the ServiceWorkersJunctionTable entry
+            var serviceWorker = _context.ServiceWorkersJunctionTables
+                .FirstOrDefault(sw => sw.WrokerId == userId && sw.ServiceId == serviceId);
+            if (serviceWorker != null)
+            {
+                // Update the status to "Rejected"
+                serviceWorker.Status = "Rejected";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ManageServiceProviders");
         }
         public IActionResult ManageServiceProviders()
         {
@@ -147,7 +218,7 @@ namespace Master_Piece.Controllers
                                          from sw in swj.DefaultIfEmpty()
                                          join s in _context.MainServices on sw.ServiceId equals s.ServiceId into sj
                                          from s in sj.DefaultIfEmpty()
-                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
+                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId 
                                          select new EmployeeWithServiceViewModel
                                          {
                                              UserId = u.UserId,

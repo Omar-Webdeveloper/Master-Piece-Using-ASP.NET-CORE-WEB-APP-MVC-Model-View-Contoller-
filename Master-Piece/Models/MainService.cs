@@ -18,4 +18,6 @@ public partial class MainService
     public byte[]? Image { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+    public virtual ICollection<ServiceWorkersJunctionTable> ServiceWorkersJunctionTables { get; set; } = new List<ServiceWorkersJunctionTable>();
 }

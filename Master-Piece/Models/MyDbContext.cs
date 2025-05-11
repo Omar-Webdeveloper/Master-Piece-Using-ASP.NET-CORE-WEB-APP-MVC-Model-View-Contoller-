@@ -44,7 +44,7 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<WorkerAchievement> WorkerAchievements { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=DESKTOP-T6EH1VU;Database=Home_Business_Services_Managment_Database;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -252,19 +252,24 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<ServiceWorkersJunctionTable>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Service_Workers_JunctionTable");
+            entity.HasKey(e => e.Id).HasName("PK__Service___3214EC27460D9A5B");
 
+            entity.ToTable("Service_Workers_JunctionTable");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValue("Pending");
             entity.Property(e => e.WrokerId).HasColumnName("WrokerID");
 
-            entity.HasOne(d => d.Service).WithMany()
+            entity.HasOne(d => d.Service).WithMany(p => p.ServiceWorkersJunctionTables)
                 .HasForeignKey(d => d.ServiceId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Service_W__Servi__5535A963");
 
-            entity.HasOne(d => d.Wroker).WithMany()
+            entity.HasOne(d => d.Wroker).WithMany(p => p.ServiceWorkersJunctionTables)
                 .HasForeignKey(d => d.WrokerId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Service_W__Wroke__5441852A");

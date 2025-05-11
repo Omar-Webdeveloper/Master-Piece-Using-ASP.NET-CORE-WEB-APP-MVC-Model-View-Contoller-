@@ -5,14 +5,13 @@
     Layout = "~/Views/Shared/_Manager_Layout.cshtml";
 }
 <style>
-
     .popup-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
+        height: 100vh; /* full height */
+        background: rgba(0, 0, 0, 0.5); /* optional background */
         display: none;
         justify-content: center;
         align-items: center;
@@ -21,10 +20,12 @@
 
     .popup {
         background: #fff;
-        padding: 20px 30px;
+        padding: 30px 40px;
         border-radius: 10px;
-        width: 450px;
-        max-width: 90%;
+        width: 600px;
+        max-width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         position: relative;
     }
@@ -33,9 +34,47 @@
         position: absolute;
         top: 10px;
         right: 15px;
-        font-size: 20px;
+        font-size: 22px;
         cursor: pointer;
         color: #333;
+    }
+
+    form input[type="text"],
+    form input[type="Email"],
+    form input[type="password"],
+    form input[type="date"],
+    form input[type="file"],
+    form select,
+    form textarea {
+        width: 100%;
+        padding: 8px 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    form textarea {
+        resize: vertical;
+        height: 80px;
+    }
+
+    form table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    form td {
+        padding: 10px;
+        vertical-align: top;
+    }
+
+    form button[type="submit"] {
+        margin-top: 20px;
+        width: 100%;
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
     }
 
     button {
@@ -48,90 +87,78 @@
         cursor: pointer;
     }
 
-    form input[type="text"],
-    form textarea,
-    form input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+    </style>
 
-    form textarea {
-        resize: vertical;
-        height: 80px;
-    }
-
-    form button[type="submit"] {
-        margin-top: 10px;
-        width: 100%;
-        background-color: #28a745;
-    }</style>
 <h2>Manage Employees</h2>
-<a asp-controller="Manager" asp-action="Adding_New_Employee">Add New Employee</a>
-<!-- Popup Modal -->
+<button onclick="openPopup()">Add New Employee</button>
+
 <div class="popup-overlay" id="popupOverlay">
     <div class="popup">
         <span class="close-btn" onclick="closePopup()">&times;</span>
-        <h2>Book a Service</h2>
+        <h2>Add New Employee</h2>
         <form asp-action="AddNewEmployee" asp-controller="Manager" method="post" enctype="multipart/form-data">
-            <div>
-                <h5>Add New Employee</h5>
-                <button type="button"></button>
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        <label>First Name</label>
+                        <input name="FirstName" class="form-control" required />
+                    </td>
+                    <td>
+                        <label>Last Name</label>
+                        <input name="LastName" class="form-control" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Email</label>
+                        <input name="Email" class="form-control" required />
+                    </td>
+                    <td>
+                        <label>Password</label>
+                        <input type="password" name="Password" class="form-control" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Phone</label>
+                        <input type="text" name="PhoneNumber" class="form-control" />
+                    </td>
+                    <td>
+                        <label>Gender</label>
+                        <select name="Gender" class="form-control">
+                            <option value="">Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Date of Birth</label>
+                        <input type="date" name="DateOfBirth" class="form-control" />
+                    </td>
+                    <td>
+                        <label>Address</label>
+                        <input type="text" name="PersonalAddress" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>Intro</label>
+                        <textarea name="WorkerIntro" class="form-control"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>Image</label>
+                        <input type="file" name="PersonalImage" class="form-control" accept="image/*" />
+                    </td>
+                </tr>
+            </table>
 
-            <div>
-                <div>
-                    <label class="form-label">First Name</label>
-                    <input name="FirstName" class="form-control" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Last Name</label>
-                    <input name="LastName" class="form-control" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Email</label>
-                    <input name="Email" class="form-control" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="Password" class="form-control" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Phone</label>
-                    <input type="text" name="PhoneNumber" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Gender</label>
-                    <select name="Gender" class="form-select">
-                        <option value="">Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Date of Birth</label>
-                    <input type="date" name="DateOfBirth" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Address</label>
-                    <input type="text" name="PersonalAddress" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Intro</label>
-                    <textarea name="WorkerIntro" class="form-control"></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Image</label>
-                    <input type="file" name="PersonalImage" class="form-control" accept="image/*" />
-                </div>
-            </div>
-
-            <div class="modal-footer">
+            <div class="modal-footer" style="margin-top: 10px; display: flex; justify-content: space-between;">
                 <button type="submit" class="btn btn-success">Save Employee</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" onclick="closePopup()">Cancel</button>
             </div>
         </form>
     </div>
@@ -139,13 +166,14 @@
 
 <script>
     function openPopup() {
-      document.getElementById("popupOverlay").style.display = "flex";
+        document.getElementById("popupOverlay").style.display = "flex";
     }
 
     function closePopup() {
-      document.getElementById("popupOverlay").style.display = "none";
+        document.getElementById("popupOverlay").style.display = "none";
     }
 </script>
+
 
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
@@ -158,7 +186,6 @@
             <th>Gender</th>
             <th>DOB</th>
             <th>Service</th>
-            <th>Service Type</th>
             <th>Rating</th>
             <th>Intro</th>
             <th>Active</th>
@@ -186,8 +213,7 @@
                 <td>@emp.PhoneNumber</td>
                 <td>@emp.Gender</td>
                 <td>@emp.DateOfBirth?.ToString("yyyy-MM-dd")</td>
-                <td>@emp.ServiceName ?? "Not Assigned"</td>
-                <td>@emp.WorkerServiceType</td>
+                <td>@emp.ServiceName </td>
                 <td>@emp.WorkerRating</td>
                 <td>@emp.WorkerIntro</td>
                 <td>@(emp.IsActive == true ? "Yes" : "No")</td>
@@ -197,68 +223,3 @@
     </tbody>
 </table>
 
-
-<div >
-    <div >
-        <div class="modal-content">
-            <form asp-action="AddNewEmployee" asp-controller="Manager" method="post" enctype="multipart/form-data">
-                <div >
-                    <h5 >Add New Employee</h5>
-                    <button type="button" ></button>
-                </div>
-
-                <div >
-                    <div >
-                        <label  class="form-label">First Name</label>
-                        <input  name="FirstName" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Last Name</label>
-                        <input  name="LastName" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Email</label>
-                        <input  name="Email" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Password</label>
-                        <input type="password" name="Password" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Phone</label>
-                        <input  type="text" name="PhoneNumber" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Gender</label>
-                        <select  name="Gender" class="form-select">
-                            <option value="">Select</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Date of Birth</label>
-                        <input  type="date" name="DateOfBirth" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Address</label>
-                        <input  type="text" name="PersonalAddress" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label  class="form-label">Intro</label>
-                        <textarea name="WorkerIntro" class="form-control"></textarea>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Image</label>
-                        <input type="file" name="PersonalImage" class="form-control" accept="image/*" />
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Save Employee</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
