@@ -1,0 +1,155 @@
+﻿@model List<MainService>
+
+@{
+    ViewData["Title"] = "Show Services";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<h2>Service List</h2>
+
+<!-- Add Service Button -->
+<button class="btn btn-primary" onclick="openAddServicePopup()">Add Service</button>
+
+<!-- Add Service Popup -->
+<div id="addServicePopup" class="popup-container" style="display:none;">
+    <div class="popup" style="background: white; padding: 20px; border-radius: 10px; width: 600px;">
+        <span class="close-btn" onclick="closeAddServicePopup()" style="float:right; cursor:pointer;">&times;</span>
+        <h3>Add Service</h3>
+        <form method="post" asp-action="Add_Service" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Service Name</label>
+                <input type="text" name="ServiceName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="Description" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" name="ServicePrice" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" name="ServiceImage" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success">Add Service</button>
+        </form>
+    </div>
+</div>
+
+<!-- Service Table -->
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Created At</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.ServiceId</td>
+                <td>@service.ServiceName</td>
+                <td>@service.Description</td>
+                <td>@service.ServicePrice?.ToString("C")</td>
+                <td>@service.CreatedAt?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (service.Image != null)
+                    {
+                        var base64 = Convert.ToBase64String(service.Image);
+                        var imgSrc = $"data:image/png;base64,{base64}";
+                        <img src="@imgSrc" alt="Service Image" style="width: 60px; height: 60px; border-radius: 5%;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-warning" onclick="openEditServicePopup(@service.ServiceId, '@service.ServiceName', '@service.Description', '@service.ServicePrice')">Edit</button>
+                    <button class="btn btn-danger" onclick="openDeleteServicePopup(@service.ServiceId)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Edit Service Popup -->
+<div id="editServicePopup" class="popup-container" style="display:none;">
+    <div class="popup">
+        <span class="close-btn" onclick="closeEditServicePopup()">&times;</span>
+        <h3>Edit Service</h3>
+        <form method="post" asp-action="Update_Service" enctype="multipart/form-data">
+            <input type="hidden" id="editServiceId" name="ServiceId" />
+            <div class="form-group">
+                <label>Service Name</label>
+                <input type="text" id="editServiceName" name="ServiceName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="editDescription" name="Description" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" id="editServicePrice" name="ServicePrice" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Upload New Image</label>
+                <input type="file" name="ServiceImage" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Service Popup -->
+<div id="deleteServicePopup" class="popup-container" style="display:none;">
+    <div class="popup">
+        <span class="close-btn" onclick="closeDeleteServicePopup()">&times;</span>
+        <h3>Delete Service</h3>
+        <p>Are you sure you want to delete this service?</p>
+        <form method="post" asp-action="Delete_Service">
+            <input type="hidden" id="deleteServiceId" name="ServiceId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteServicePopup()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openAddServicePopup() {
+        document.getElementById("addServicePopup").style.display = "block";
+    }
+
+    function closeAddServicePopup() {
+        document.getElementById("addServicePopup").style.display = "none";
+    }
+
+    function openEditServicePopup(serviceId, name, description, price) {
+        document.getElementById("editServiceId").value = serviceId;
+        document.getElementById("editServiceName").value = name;
+        document.getElementById("editDescription").value = description;
+        document.getElementById("editServicePrice").value = price;
+        document.getElementById("editServicePopup").style.display = "block";
+    }
+
+    function closeEditServicePopup() {
+        document.getElementById("editServicePopup").style.display = "none";
+    }
+
+    function openDeleteServicePopup(serviceId) {
+        document.getElementById("deleteServiceId").value = serviceId;
+        document.getElementById("deleteServicePopup").style.display = "block";
+    }
+
+    function closeDeleteServicePopup() {
+        document.getElementById("deleteServicePopup").style.display = "none";
+    }
+</script>

@@ -29,7 +29,7 @@ namespace Master_Piece.Models
         public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Password is required")]
-        [StringLength(16, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 16 characters")]
+        [StringLength(50, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 16 characters")]
 
         public string? PasswordHash { get; set; }
         [Required(ErrorMessage = "Confirm Password is required")]

@@ -1,7 +1,158 @@
-﻿@model List<Master_Piece.Models.AssignedBookingViewModel>
+﻿@model ManageEmployeesPageViewModel
 @{
     ViewData["Title"] = "AssginTask";
+    Layout = "~/Views/Shared/_Manager_Layout.cshtml";
+
 }
+<style>
+    form input[type="text"],
+    form input[type="Email"],
+    form input[type="password"],
+    form input[type="date"],
+    form input[type="file"],
+    form input[type="number"],
+    form select,
+    form textarea {
+        width: 100%;
+        padding: 8px 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
 
-<h1>AssginTask</h1>
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+</style>
+<h2>Assgin Tasks to Our Employees</h2>
+<button id="assignTaskButton" class="btn btn-primary" onclick="openAssignTaskPopup()" disabled>Assign Task</button>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Select</th>
+            <th>Image</th>
+            <th>Full Name</th>
+            <th>Rating</th>
+            <th>Intro</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>DOB</th>
+            <th>Service</th>
+            <th>Active</th>
+            <th>Registered At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model.EmployeesWithServices.Where(emp => emp.WorkerRating != null && emp.WorkerIntro != null))
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="selectedEmployee_@emp.UserId" value="@emp.UserId" />
+                </td>
+                <td>
+                    @if (emp.PersonalImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(emp.PersonalImage);
+                        <img src="data:image/jpeg;base64,@base64" width="50" height="50" style="border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@emp.FullName</td>
+                <td>@emp.WorkerRating</td>
+                <td>@emp.WorkerIntro</td>
+                <td>@emp.Email</td>
+                <td>@emp.PersonalAddress</td>
+                <td>@emp.PhoneNumber</td>
+                <td>@emp.Gender</td>
+                <td>@emp.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                <td>@emp.ServiceName </td>
+                <td>@(emp.IsActive == true ? "Yes" : "No")</td>
+                <td>@emp.CreatedAt?.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="assignTaskPopup" class="popup-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div class="popup" style="background: white; padding: 20px; border-radius: 10px; width: 600px;">
+        <span class="close-btn" onclick="closeAssignTaskPopup()" style="float:right; cursor:pointer;">&times;</span>
+        <h3>Add Task</h3>
+        <form method="post" asp-action="AssignTaskToEmployees" enctype="multipart/form-data">
+            <input type="hidden" name="employeeIds" id="assignTaskUserId" />
 
+            <div class="form-group">
+                <label>Task Name</label>
+                <input type="text" name="TaskName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" name="StartDate" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>End Date</label>
+                <input type="date" name="EndDate" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <input type="text" name="TaskStatus" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Task Details</label>
+                <textarea name="TasksDetails" class="form-control" required></textarea>
+            </div>            
+            <div class="form-group">
+                <label>Before Photo</label>
+                <input type="file" name="BeforePhoto" class="form-control" required />
+            </div>            
+            <div class="form-group">
+                <label>After Photo</label>
+                <input type="file" name="AfterPhoto" class="form-control" required />
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-success">Assign</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAssignTaskPopup()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const assignButton = document.getElementById("assignTaskButton");
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="selectedEmployee_"]');
+
+        function toggleButtonState() {
+            const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            assignButton.disabled = !anyChecked;
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", toggleButtonState);
+        });
+
+        toggleButtonState(); // Ensure initial state
+    });
+
+    function openAssignTaskPopup() {
+        const selectedEmployees = Array.from(document.querySelectorAll('input[type="checkbox"][name^="selectedEmployee_"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        document.getElementById("assignTaskUserId").value = selectedEmployees.join(",");
+        document.getElementById("assignTaskPopup").style.display = "flex";
+    }
+
+    function closeAssignTaskPopup() {
+        document.getElementById("assignTaskPopup").style.display = "none";
+    }
+</script>

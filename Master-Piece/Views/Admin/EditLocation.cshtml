@@ -1,0 +1,40 @@
+﻿@model LocationAreaViewModel
+
+@{
+    ViewData["Title"] = "Edit Location";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<h1>Edit Location</h1>
+
+<div id="editLocationPopup" class="popup-container">
+    <div class="popup">
+        <h3>Edit Location</h3>
+        <form method="post" asp-action="UpdateLocation">
+            <input type="hidden" asp-for="OneLocation.LocationId" id="editLocationId" />
+
+            <div class="form-group">
+                <label>Areas Covered</label>
+                <input type="text" asp-for="OneLocation.AreasCovered" id="editAreasCovered" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label>Current Manager</label>
+                <input type="text" class="form-control" value="@Model.OneLocation.Manager?.FirstName @Model.OneLocation.Manager?.LastName" disabled />
+            </div>
+
+            <div class="form-group">
+                <label>Select New Manager</label>
+                <select name="OneLocation.ManagerId" id="editManagerId" class="form-control">
+                    <option value="">Select a Manager</option>
+                    @foreach (var manager in ViewBag.Managers)
+                    {
+                        <option value="@manager.Value" selected="@(manager.Value == Model.OneLocation.ManagerId.ToString())">@manager.Text</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+        </form>
+    </div>
+</div>

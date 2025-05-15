@@ -2,8 +2,9 @@
     Layout = "~/Views/Shared/_Manager_Layout.cshtml";
 }
 @{
-    ViewData["Title"] = "Admin_Dashboard";
+    ViewData["Title"] = "Manager_Dashboard";
 }
+@using Newtonsoft.Json
 
 
 <style>
@@ -83,30 +84,32 @@
             font-weight: 500;
         }
 
-    /* Chart Container */
     .chart-container {
         width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 25px;
-        background-color: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #f9fafb;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         text-align: center;
-        border: 2px dashed var(--accent);
+        border: 1px solid #e5e7eb;
+        position: relative;
     }
 
+        /* Chart Title */
         .chart-container h3 {
-            margin-bottom: 20px;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #111827;
         }
 
-    /* Chart Styling */
-    #weeklyProgressChart {
+    /* Chart Canvas Styling */
+    #monthlyProgressChart {
         width: 100% !important;
-        height: auto !important;
+        height: 400px !important;
+        max-height: 100%;
     }
 
     /* Custom Scrollbar for Horizontal Scrolling (optional) */
@@ -120,21 +123,21 @@
     }
 
     /* Responsive Adjustments */
-    @@media (max-width: 768px) {
-        .stats-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
+    /* @@media (max-width: 768px) { */
+    /*     .stats-container { */
+    /*         flex-direction: column; */
+    /*         align-items: stretch; */
+    /*     } */
 
-        .stat-card {
-            width: 100%;
-        }
+    /*     .stat-card { */
+    /*         width: 100%; */
+    /*     } */
 
-        .dashboard-container {
-            margin-left: 0;
-            padding: 20px;
-        }
-    }
+    /*     .dashboard-container { */
+    /*         margin-left: 0; */
+    /*         padding: 20px; */
+    /*     } */
+    /* } */
 </style>
 <!-- Dashboard Content -->
 <div class="dashboard-container">
@@ -166,26 +169,29 @@
 
     </div>
 
-
-
-
     <div class="chart-container">
-        <h3>Weekly Task Progress</h3>
-        <canvas id="weeklyProgressChart"></canvas>
+        <h3>Monthly Completed Jobs</h3>
+        <canvas id="monthlyProgressChart"></canvas>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+            const ctx = document.getElementById('monthlyProgressChart').getContext('2d');
 
-            const weeklyProgressChart = new Chart(ctx, {
+            const labels = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartLabels));
+            const data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartData));
+
+            const maxValue = Math.max(...data);
+            const minValue = data.every(x => x === 0) ? 0 : 1;
+
+            const monthlyProgressChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: @Html.Raw(Json.Serialize(ViewBag.ChartLabels)), // e.g., ["1", "2", "3"]
+                    labels: labels,
                     datasets: [{
                         label: 'Completed Jobs',
-                        data: @Html.Raw(Json.Serialize(ViewBag.ChartData)), // e.g., [3, 5, 7]
+                        data: data,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         tension: 0.4,
@@ -193,9 +199,19 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
+                            min: minValue,
+                            max: maxValue < 5 ? 5 : maxValue + 1,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function (value) {
+                                    return Number.isInteger(value) ? value : '';
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: 'Jobs Completed'
@@ -212,5 +228,6 @@
             });
         });
     </script>
+
 
 </div>

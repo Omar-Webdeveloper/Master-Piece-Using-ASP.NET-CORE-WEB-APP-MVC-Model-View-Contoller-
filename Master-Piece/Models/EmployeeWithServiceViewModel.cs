@@ -24,6 +24,5 @@
         public string? Status { get; set; }
         public int ServiceId { get; set; }
 
-
     }
 }

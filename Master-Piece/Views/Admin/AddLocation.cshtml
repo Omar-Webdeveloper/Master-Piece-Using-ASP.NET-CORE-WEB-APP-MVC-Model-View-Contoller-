@@ -1,0 +1,33 @@
+﻿@model LocationAreaViewModel
+
+@{
+    ViewData["Title"] = "Add Location";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+<h2>Add Location</h2>
+
+<div id="addLocationPopup" class="popup-container" >
+    <div class="popup">
+        <h3>Add Location</h3>
+        <form method="post" asp-action="AddLocation">
+            <div class="form-group">
+                <label>Areas Covered</label>
+                <input type="text" name="AreasCovered" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label>Manager</label>
+                <select name="OneLocation.ManagerId" class="form-control" required>
+                    <option value="">Select a Manager</option>
+                    @foreach (var manager in ViewBag.Managers)
+                    {
+                        <option value="@manager.Value">@manager.Text</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+</div>

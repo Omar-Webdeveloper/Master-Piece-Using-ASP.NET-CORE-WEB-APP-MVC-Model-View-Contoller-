@@ -4,6 +4,35 @@
     Layout = "~/Views/Shared/_Manager_Layout.cshtml";
 
 }
+<style>
+    .action-button {
+        padding: 6px 14px;
+        font-size: 14px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 2px;
+    }
+
+    .approve-btn {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .approve-btn:hover {
+            background-color: #218838;
+        }
+
+    .reject-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .reject-btn:hover {
+            background-color: #c82333;
+        }
+</style>
 
 <h2>Request To Join Us</h2>
 
@@ -18,10 +47,8 @@
             <th>Date of Birth</th>
             <th>Gender</th>
             <th>Service Name</th>
-            <th>Rating</th>
-            <th>Intro</th>
             <th>Created At</th>
-            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -47,21 +74,18 @@
                 <td>@emp.DateOfBirth?.ToString("yyyy-MM-dd")</td>
                 <td>@emp.Gender</td>
                 <td>@emp.ServiceName</td>
-                <td>@emp.WorkerRating</td>
-                <td>@emp.WorkerIntro</td>
                 <td>@emp.CreatedAt?.ToString("yyyy-MM-dd")</td>
-                <td>@emp.Status</td>
                 <td>
                     <form asp-action="ApproveServiceProvider" method="post" style="display:inline;">
                         <input type="hidden" name="userId" value="@emp.UserId" />
                         <input type="hidden" name="serviceId" value="@emp.ServiceId" />
-                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        <button type="submit" class="action-button approve-btn">Confirm</button>
                     </form>
 
                     <form asp-action="RejectServiceProvider" method="post" style="display:inline;">
                         <input type="hidden" name="userId" value="@emp.UserId" />
                         <input type="hidden" name="serviceId" value="@emp.ServiceId" />
-                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        <button type="submit" class="action-button reject-btn">Dismiss</button>
                     </form>
                 </td>
 
@@ -70,4 +94,3 @@
         }
     </tbody>
 </table>
-

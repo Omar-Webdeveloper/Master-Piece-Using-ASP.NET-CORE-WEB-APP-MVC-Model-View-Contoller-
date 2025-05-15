@@ -83,40 +83,36 @@ namespace Master_Piece.Controllers
 
 
 
-            int managerId = HttpContext.Session.GetInt32("UserID") ?? 0;
-
-
-
-
-
-            // Step 3: Get all employee IDs under the same location
+            // Get employees under the same location
             var employeeIds = (from u in _context.Users
                                join ur in _context.UserRoles on u.UserId equals ur.UserId
                                where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId
                                select u.UserId).ToList();
 
-            // Step 4: Get completed bookings by those employees, grouped by date
-            var currentMonth = DateTime.Now.Month;
             var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+            int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
 
-            var completedJobsByDate = _context.Bookings
+            // Get completed bookings grouped by day
+            var completedJobs = _context.Bookings
                 .Where(b => employeeIds.Contains(b.WorkerId ?? 0)
-                            && b.Status == "Completed"
-                            && b.BookingEndDate.HasValue
-                            && b.BookingEndDate.Value.Month == currentMonth
-                            && b.BookingEndDate.Value.Year == currentYear)
-                .GroupBy(b => b.BookingEndDate.Value.Date)
-                .Select(g => new
-                {
-                    Day = g.Key.Day,
-                    Count = g.Count()
-                })
-                .OrderBy(x => x.Day)
-                .ToList();
+                    && b.Status == "Completed"
+                    && b.BookingEndDate.HasValue
+                    && b.BookingEndDate.Value.Month == currentMonth
+                    && b.BookingEndDate.Value.Year == currentYear)
+                .GroupBy(b => b.BookingEndDate.Value.Day)
+                .Select(g => new { Day = g.Key, Count = g.Count() })
+                .ToDictionary(g => g.Day, g => g.Count);
 
-            // Step 5: Prepare arrays for chart
-            ViewBag.ChartLabels = completedJobsByDate.Select(x => x.Day.ToString()).ToArray();
-            ViewBag.ChartData = completedJobsByDate.Select(x => x.Count).ToArray();
+            // Prepare data for the chart
+            ViewBag.ChartLabels = Enumerable.Range(1, daysInMonth)
+                .Select(day => day.ToString())
+                .ToArray();
+
+            ViewBag.ChartData = Enumerable.Range(1, daysInMonth)
+                .Select(day => completedJobs.ContainsKey(day) ? completedJobs[day] : 0)
+                .ToArray();
+
 
 
             return View();
@@ -218,7 +214,7 @@ namespace Master_Piece.Controllers
                                          from sw in swj.DefaultIfEmpty()
                                          join s in _context.MainServices on sw.ServiceId equals s.ServiceId into sj
                                          from s in sj.DefaultIfEmpty()
-                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId 
+                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId && sw.Status == "Accepted"
                                          select new EmployeeWithServiceViewModel
                                          {
                                              UserId = u.UserId,
@@ -238,30 +234,53 @@ namespace Master_Piece.Controllers
                                              IsActive = u.IsActive,
                                              ServiceName = s.ServiceName
                                          }).ToList();
+            var services = _context.MainServices.ToList();
 
-            return View(employeesWithServices);
+            var locations = _context.LocationAreas
+                .Where(l => l.ManagerId == ManagerId)
+                .ToList();
+            var viewModel = new ManageEmployeesPageViewModel
+            {
+                EmployeesWithServices = employeesWithServices,
+                Services = services,
+                Locations = locations
+            };
+            // If you want to pass the employee data as well, create a new wrapper class:
+            ViewBag.EmployeesWithServices = employeesWithServices;
+
+            return View(viewModel);
         }
         [HttpPost]
         public async Task<IActionResult> AddNewEmployee(IFormCollection form, IFormFile? PersonalImage)
         {
             int managerId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
+            // Parse form values
+            int.TryParse(form["LocationId"], out int locationId);
+            int.TryParse(form["ServiceId"], out int serviceId);
+
             var newUser = new User
             {
                 FirstName = form["FirstName"],
                 LastName = form["LastName"],
                 Email = form["Email"],
-                PasswordHash = form["Password"], // You should hash it securely
+                PasswordHash = form["Password"], // Ideally hash the password
                 PhoneNumber = form["PhoneNumber"],
                 Gender = form["Gender"],
                 PersonalAddress = form["PersonalAddress"],
                 WorkerIntro = form["WorkerIntro"],
-                DateOfBirth = string.IsNullOrWhiteSpace(form["DateOfBirth"]) ? null : DateOnly.Parse(form["DateOfBirth"]),
+                DateOfBirth = string.IsNullOrWhiteSpace(form["DateOfBirth"])
+                              ? null
+                              : DateOnly.Parse(form["DateOfBirth"]),
+                WorkerRating = string.IsNullOrWhiteSpace(form["WorkerRating"])
+                               ? null
+                               : double.Parse(form["WorkerRating"]),
                 CreatedAt = DateTime.Now,
                 IsActive = true,
-                LocationId = _context.Users.FirstOrDefault(u => u.UserId == managerId)?.LocationId
+                LocationId = locationId // <-- use selected LocationId from form
             };
 
+            // Handle image upload
             if (PersonalImage != null && PersonalImage.Length > 0)
             {
                 using var ms = new MemoryStream();
@@ -269,29 +288,261 @@ namespace Master_Piece.Controllers
                 newUser.PersonalImage = ms.ToArray();
             }
 
+            // Save user
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
             // Assign "Employee" role
             var employeeRoleId = _context.Roles.FirstOrDefault(r => r.RoleName == "Employee")?.RoleId ?? 0;
-            _context.UserRoles.Add(new UserRole { UserId = newUser.UserId, RoleId = employeeRoleId });
+            _context.UserRoles.Add(new UserRole
+            {
+                UserId = newUser.UserId,
+                RoleId = employeeRoleId
+            });
+            await _context.SaveChangesAsync();
+
+            // Add entry to ServiceWorkersJunctionTable
+            var serviceLink = new ServiceWorkersJunctionTable
+            {
+                WrokerId = newUser.UserId,
+                ServiceId = serviceId,
+                Status = "Accepted" // or "Accepted" depending on your logic
+            };
+            _context.ServiceWorkersJunctionTables.Add(serviceLink);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ManageServiceProviders");
         }
 
-        public IActionResult Edit_Employee_Info()
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmployeeInfo(int UserId, string WorkerIntro, double WorkerRating)
         {
+            var user = await _context.Users.FindAsync(UserId);
+            if (user != null)
+            {
+                user.WorkerIntro = WorkerIntro;
+                user.WorkerRating = WorkerRating;
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction("ManageServiceProviders");
         }
-        //        public IActionResult ManageServices()
-        //        {
-        //            return View();
-        //        }
+        [HttpPost]
+        public IActionResult SubmitEvaluation(IFormCollection form)
+        {
+            try
+            {
+                // Parse the WorkerId
+                int workerId = int.Parse(form["WorkerId"]);
+
+                // Sum the answers from Q1 to Q10
+                double totalScore = 0;
+                for (int i = 1; i <= 10; i++)
+                {
+                    string key = $"Q{i}";
+                    if (form.ContainsKey(key) && double.TryParse(form[key], out double score))
+                    {
+                        totalScore += score;
+                    }
+                }
+
+                // Get the comment (optional)
+                string comments = form["Comments"];
+
+                // Create the Evaluation record
+                Evaluation evaluation = new Evaluation
+                {
+                    WrokerId = workerId,
+                    Score = totalScore,
+                    Comments = string.IsNullOrWhiteSpace(comments) ? null : comments,
+                    CreatedAt = DateTime.Now,
+                    EvaluationYear = DateTime.Now.Year
+                };
+
+                // Save to DB
+                _context.Evaluations.Add(evaluation);
+                _context.SaveChanges();
+
+                TempData["SuccessMessage"] = "Evaluation submitted successfully!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "There was an error submitting the evaluation.";
+                // Log error (optional): _logger.LogError(ex, "Evaluation failed.");
+            }
+
+            return RedirectToAction("ManageServiceProviders"); // Change to your actual return view
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAgainEmployeeInfo(UpdateEmployeeInfoViewModel model)
+        {
+            var user = await _context.Users.FindAsync(model.UserId);
+            if (user == null)
+                return NotFound();
+
+            // Update intro and rating
+            user.WorkerRating = model.WorkerRating;
+            user.WorkerIntro = model.WorkerIntro;
+
+            // Update location
+            user.LocationId = model.LocationId;
+
+            // Update the service junction table
+            var existingLink = await _context.ServiceWorkersJunctionTables
+                .FirstOrDefaultAsync(es => es.WrokerId == model.UserId);
+
+            if (existingLink != null)
+            {
+                existingLink.ServiceId = model.ServiceId;
+            }
+
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageServiceProviders"); // or wherever you want
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEmployee(int userId)
+        {
+            // 1. Find the user
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // 2. Remove related ServiceWorker junction records
+            var serviceLinks = await _context.ServiceWorkersJunctionTables
+                .Where(sw => sw.WrokerId == userId)
+                .ToListAsync();
+            if (serviceLinks.Any())
+            {
+                _context.ServiceWorkersJunctionTables.RemoveRange(serviceLinks);
+            }
+
+            // 3. Remove related UserRole
+            var userRoles = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .ToListAsync();
+            if (userRoles.Any())
+            {
+                _context.UserRoles.RemoveRange(userRoles);
+            }
+
+            // 4. (Optional) Remove related evaluations, tasks, etc.
+            // Example: _context.Evaluations.RemoveRange(user.Evaluations);
+
+            // 5. Remove the user
+            _context.Users.Remove(user);
+
+            // 6. Save all changes
+            await _context.SaveChangesAsync();
+
+            // 7. Redirect back to list
+            return RedirectToAction("ManageServiceProviders");
+        }
+
+
         public IActionResult AssginTask()
         {
-            return View();
+            int ManagerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            // Step 1: Get the Location_Id for the current manager
+            var managerLocationId = _context.Users
+                .Where(u => u.UserId == ManagerId)
+                .Select(u => u.LocationId)
+                .FirstOrDefault();
+
+            // Step 2: Get RoleID for 'Employee'
+            var employeeRoleId = _context.Roles
+                .Where(r => r.RoleName == "Employee")
+                .Select(r => r.RoleId)
+                .FirstOrDefault();
+
+            var employeesWithServices = (from u in _context.Users
+                                         join ur in _context.UserRoles on u.UserId equals ur.UserId
+                                         join sw in _context.ServiceWorkersJunctionTables on u.UserId equals sw.WrokerId into swj
+                                         from sw in swj.DefaultIfEmpty()
+                                         join s in _context.MainServices on sw.ServiceId equals s.ServiceId into sj
+                                         from s in sj.DefaultIfEmpty()
+                                         where ur.RoleId == employeeRoleId && u.LocationId == managerLocationId && sw.Status == "Accepted"
+                                         select new EmployeeWithServiceViewModel
+                                         {
+                                             UserId = u.UserId,
+                                             FirstName = u.FirstName,
+                                             LastName = u.LastName,
+                                             Email = u.Email,
+                                             CreatedAt = u.CreatedAt,
+                                             PersonalImage = u.PersonalImage,
+                                             PersonalAddress = u.PersonalAddress,
+                                             DateOfBirth = u.DateOfBirth,
+                                             PhoneNumber = u.PhoneNumber,
+                                             Gender = u.Gender,
+                                             LocationId = u.LocationId,
+                                             WorkerServiceType = u.WorkerServiceType,
+                                             WorkerRating = u.WorkerRating,
+                                             WorkerIntro = u.WorkerIntro,
+                                             IsActive = u.IsActive,
+                                             ServiceName = s.ServiceName
+                                         }).ToList();
+            var services = _context.MainServices.ToList();
+
+            var locations = _context.LocationAreas
+                .Where(l => l.ManagerId == ManagerId)
+                .ToList();
+            var viewModel = new ManageEmployeesPageViewModel
+            {
+                EmployeesWithServices = employeesWithServices,
+                Services = services,
+                Locations = locations
+            };
+            // If you want to pass the employee data as well, create a new wrapper class:
+            ViewBag.EmployeesWithServices = employeesWithServices;
+
+            return View(viewModel);
         }
+        [HttpPost]
+        public async Task<IActionResult> AssignTaskToEmployees(string employeeIds, string TaskName, DateOnly StartDate, DateOnly EndDate, string TaskStatus, string TasksDetails, IFormFile BeforePhoto, IFormFile AfterPhoto)
+        {
+            if (string.IsNullOrWhiteSpace(employeeIds))
+                return BadRequest("No employees selected.");
+
+            var employeeIdList = employeeIds.Split(',').Select(int.Parse).ToList();
+
+            // Save task for each employee  
+            foreach (var empId in employeeIdList)
+            {
+                var task = new Models.Task
+                {
+                    WrokerId = empId,
+                    TaskName = TaskName,
+                    StartDate = StartDate,
+                    EndDate = EndDate,
+                    TaskStatus = TaskStatus,
+                    TasksDetails = TasksDetails,
+                    BeforePhoto = await ConvertToBytesAsync(BeforePhoto),
+                    AfterPhoto = await ConvertToBytesAsync(AfterPhoto),
+                };
+
+                _context.Tasks.Add(task);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("AssginTask"); // Or wherever you want to go after  
+        }
+
+        private async Task<byte[]> ConvertToBytesAsync(IFormFile file)
+        {
+            if (file == null) return null;
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
         public IActionResult ManagerProfile()
         {
             // Retrieve user Id from the session
@@ -383,12 +634,5 @@ namespace Master_Piece.Controllers
             return View();
         }
 
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear(); // Clears all session data
-            HttpContext.Session.Remove("Role");
-            Response.Cookies.Delete(".AspNetCore.Session");
-            return RedirectToAction("Index", "Home");
-        }
     }
 }

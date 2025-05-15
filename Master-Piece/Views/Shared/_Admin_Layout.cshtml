@@ -119,14 +119,15 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <a asp-controller="Admin" asp-action="Admin_Dashboard" class="active">Admin Dashboard</a>
-        <a asp-controller="Admin" asp-action="Add_Location">Add Location</a>
-        <a asp-controller="Admin" asp-action="Add_Manager">Manage Service Providers</a>
-        <a asp-controller="Admin" asp-action="Add_Employee">Manage Services</a>
-        <a asp-controller="Admin" asp-action="Add_User">Assign Task</a>
-        <a asp-controller="Admin" asp-action="Contact_Us_Messsages">Admin Profile</a>
-        <a asp-controller="Admin" asp-action="Check_Review_Status">Edit Admin Profile</a>
-        <a asp-controller="Admin" asp-action="Check_Review_Status">Reset Password</a>
-        <a asp-controller="Admin" asp-action="Logout">Logout</a>
+        <a asp-controller="Admin" asp-action="show_Services">show Services</a>
+        <a asp-controller="Admin" asp-action="show_Managers">show Managers</a>
+        <a asp-controller="Admin" asp-action="show_Locations">show Location</a>
+        <a asp-controller="Admin" asp-action="Check_Review_Status">Review Status</a>
+        <a asp-controller="Admin" asp-action="Contact_Us_Messsages">show meassages</a>
+        <a asp-controller="Admin" asp-action="AdminProfile">Admin Profile</a>
+        <a asp-controller="Admin" asp-action="AdminEditProfile">Edit Admin Profile</a>
+        <a asp-controller="Admin" asp-action="AdminResetPassword">Reset Password</a>
+        <a asp-controller="Home" asp-action="Logout">Logout</a>
     </div>
 
     <!-- Blur overlay -->
@@ -147,6 +148,9 @@
             toggleBtn.classList.toggle('sidebar-open');
         }
     </script>
+    <!-- SweetAlert JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 
 </body>

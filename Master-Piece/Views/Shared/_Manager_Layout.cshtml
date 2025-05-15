@@ -124,12 +124,11 @@
         <a asp-controller="Manager" asp-action="Manager_Dashboard" class="active">Manager Dashboard</a>
         <a asp-controller="Manager" asp-action="Manage_New_ServiceProviders">New Employees</a>
         <a asp-controller="Manager" asp-action="ManageServiceProviders">Manage Service Providers</a>
-        <a asp-controller="Manager" asp-action="ManageServices">Manage Services</a>
         <a asp-controller="Manager" asp-action="AssginTask">Assign Task</a>
         <a asp-controller="Manager" asp-action="ManagerProfile">Manager Profile</a>
         <a asp-controller="Manager" asp-action="ManagerEditProfile">Edit Manager Profile</a>
         <a asp-controller="Manager" asp-action="ManagerResetPassword">Reset Manager Password</a>
-        <a asp-controller="Manager" asp-action="Logout">Logout</a>
+        <a asp-controller="Home" asp-action="Logout">Logout</a>
     </div>
 
     <!-- Blur overlay -->
@@ -150,6 +149,9 @@
             toggleBtn.classList.toggle('sidebar-open');
         }
     </script>
+    <!-- SweetAlert JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 
 </body>
