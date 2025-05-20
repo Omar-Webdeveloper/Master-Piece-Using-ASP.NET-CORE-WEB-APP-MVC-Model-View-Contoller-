@@ -69,7 +69,7 @@
 
 
     section.card {
-        width: 900px;
+        width: 875px;
         height: 215px;
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -78,7 +78,7 @@
         margin: 20px 0;
         padding: 20px;
         position: relative;
-        margin-left: 50px;
+        margin-left: 170px;
     }
 
     section.card-image-section {
@@ -118,6 +118,14 @@
         margin-bottom: 10px;
     }
 
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
     .action-button {
         padding: 10px 20px;
         background-color: #007bff;
@@ -199,12 +207,12 @@
     }
 
 </style>
-<div class="second_section">
-    <div class="search-container">
-        <input type="text" class="search-box" placeholder="Search...">
-        <button class="search-button">Search</button>
-    </div>
-</div>
+@* <div class="second_section"> *@
+@*     <div class="search-container"> *@
+@*         <input type="text" class="search-box" placeholder="Search..."> *@
+@*         <button class="search-button">Search</button> *@
+@*     </div> *@
+@* </div> *@
 
 
 <div class="providers-container">
@@ -213,7 +221,13 @@
         <section class="card">
             <!-- Provider Image -->
             <section class="card-image-section">
-                <img src="@provider.PersonalImage" alt="Provider Image" class="card-image">
+                @if (provider.PersonalImage != null)
+                {
+                    var base64Image = Convert.ToBase64String(provider.PersonalImage);
+                    var imgSrc = $"data:image/jpeg;base64,{base64Image}";
+                    <img src="@imgSrc" alt="Profile Image" class="profile-image" />
+                }
+                @* <img src="@provider.PersonalImage" alt="Provider Image" class="card-image"> *@
             </section>
 
             <!-- Provider Content -->
@@ -238,7 +252,7 @@
                 <h3>$130.00</h3>
                 <h6>Starting Price</h6>
                 <h6>Feature projects:</h6>
-                <img src="./master pictures/nozzle-repair-before-after.jpg" alt="Additional Image" class="extra-image">
+                <img src="~/master pictures/Handyman Services.jpg" alt="Additional Image" class="extra-image">
                 <button class="action-button">
                     <a asp-controller="User" asp-action="More_Details_About_ThatWorker" asp-route-id="@provider.UserId" asp-route-serviceId="@Model.ServiceId">More Details</a>
                 </button>
@@ -277,3 +291,4 @@
         </section>
     }
     }
+    </div>

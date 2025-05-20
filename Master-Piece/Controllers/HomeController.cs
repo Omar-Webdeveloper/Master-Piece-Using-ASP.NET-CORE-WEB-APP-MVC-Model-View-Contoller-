@@ -214,18 +214,41 @@ namespace Master_Piece.Controllers
             }
 
                 // Load default image from wwwroot
-                string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
-            byte[] defaultImageBytes = System.IO.File.ReadAllBytes(defaultImagePath);
+                byte[] imageBytes;
+                if (model.PersonalImage != null && model.PersonalImage.Length > 0)
+                {
+                    // Convert uploaded image to byte[]
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        model.PersonalImage.CopyTo(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
+                else
+                {
+                    // Load default image from wwwroot (if you still want to support this case)
+                    string defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Guest_User_Image.jpg");
+                    imageBytes = System.IO.File.ReadAllBytes(defaultImagePath);
+                }
 
-            // Create a new User entity and map from ViewModel
-            var user = new User
+                // Create a new User entity and map from ViewModel
+                var user = new User
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
                 PasswordHash = model.PasswordHash,
-                PersonalImage = defaultImageBytes
-            };
+                PersonalImage = imageBytes,
+                    PersonalAddress = model.PersonalAddress,
+                    DateOfBirth = model.DateOfBirth,
+                    Gender= model.Gender,
+                    PhoneNumber = model.PhoneNumber,
+                    WorkerServiceType = model.WorkerServiceType,
+                    CreatedAt = DateTime.Now,
+                    IsActive = true
+
+
+                };
 
             // Add user to database
             _context.Users.Add(user);
@@ -362,6 +385,7 @@ namespace Master_Piece.Controllers
             HttpContext.Session.Clear(); // Clears all session data
             HttpContext.Session.Remove("Role");
             Response.Cookies.Delete(".AspNetCore.Session");
+            TempData["SuccessMessage"] = "You have successfully logged out. See you next time!";
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Privacy()

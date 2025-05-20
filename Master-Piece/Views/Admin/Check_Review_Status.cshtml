@@ -1,9 +1,317 @@
-﻿
-@{
-    ViewData["Title"] = "Check_Review_Status";
-    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+﻿@model Master_Piece.Models.HomePageViewModel
 
+@{
+    ViewData["Title"] = "Check Review Status";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
 }
 
-<h1>Check_Review_Status</h1>
+<h2 class="text-center my-4">Review Status</h2>
 
+<!-- Custom CSS Styling -->
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+    }
+
+        table thead th {
+            background-color: #2e3b55;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px;
+            text-align: left;
+        }
+
+        table tbody td {
+            font-size: 0.95rem;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:hover {
+            background-color: #f5f7fa;
+            cursor: pointer;
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .custom-btn {
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        min-width: 140px;
+        text-align: center;
+    }
+
+        .custom-btn:hover {
+            background-color: #27ae60;
+            transform: scale(1.05);
+        }
+
+        .custom-btn.secondary {
+            background-color: #7f8c8d;
+        }
+
+            .custom-btn.secondary:hover {
+                background-color: #636e72;
+            }
+
+        .custom-btn.neutral {
+            background-color: #3498db;
+        }
+
+            .custom-btn.neutral:hover {
+                background-color: #2980b9;
+            }
+
+    h2 {
+        font-weight: bold;
+        color: #2e3b55;
+    }
+
+    .img-thumbnail {
+        border-radius: 8px;
+        max-width: 100px;
+    }
+</style>
+
+<div class="container">
+    <div class="table-responsive shadow-sm p-3 bg-light rounded-4">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Before Image</th>
+                    <th>After Image</th>
+                    <th>Service Name</th>
+                    <th>Worker Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.RandomReviews.Where(status => status.ReviewStatus == "Pending"))
+                {
+                    <tr>
+                        <td>
+                            @if (review.ImageWhereTheIssueLocated != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageWhereTheIssueLocated)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>
+                            @if (review.ImageAfterFixing != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageAfterFixing)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>@review.ServiceName</td>
+                        <td>@review.WorkerName</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">@review.Rating ★</span>
+                        </td>
+                        <td>@review.Comment</td>
+                        <td>
+                            <div class="action-buttons">
+                                <form asp-action="AcceptReview" asp-controller="Admin" method="post">
+                                    <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                    <button type="submit" class="custom-btn">Accept Review</button>
+                                </form>
+
+                                <form asp-action="TransferToManager" asp-controller="Admin" method="post">
+                                    <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                    <button type="submit" class="custom-btn secondary">Send to Manager</button>
+                                </form>
+
+                                <form asp-action="SetNeutralReview" asp-controller="Admin" method="post">
+                                    <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                    <button type="submit" class="custom-btn neutral">Mark as Neutral</button>
+                                </form>
+                            </div>
+                        </td>
+
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h2>Accepted Reviews</h2>
+
+<div class="container">
+    <div class="table-responsive shadow-sm p-3 bg-light rounded-4">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Before Image</th>
+                    <th>After Image</th>
+                    <th>Service Name</th>
+                    <th>Worker Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.RandomReviews.Where(status => status.ReviewStatus == "Accepted_To_Show_All"))
+                {
+                    <tr>
+                        <td>
+                            @if (review.ImageWhereTheIssueLocated != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageWhereTheIssueLocated)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>
+                            @if (review.ImageAfterFixing != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageAfterFixing)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>@review.ServiceName</td>
+                        <td>@review.WorkerName</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">@review.Rating ★</span>
+                        </td>
+                        <td>@review.Comment</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<h2>Netural Reviews</h2>
+
+<div class="container">
+    <div class="table-responsive shadow-sm p-3 bg-light rounded-4">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Before Image</th>
+                    <th>After Image</th>
+                    <th>Service Name</th>
+                    <th>Worker Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.RandomReviews.Where(status => status.ReviewStatus == "Netural"))
+                {
+                    <tr>
+                        <td>
+                            @if (review.ImageWhereTheIssueLocated != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageWhereTheIssueLocated)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>
+                            @if (review.ImageAfterFixing != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageAfterFixing)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>@review.ServiceName</td>
+                        <td>@review.WorkerName</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">@review.Rating ★</span>
+                        </td>
+                        <td>@review.Comment</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<h2>Rejected Transfer To Manager Reviews</h2>
+<div class="container">
+    <div class="table-responsive shadow-sm p-3 bg-light rounded-4">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Before Image</th>
+                    <th>After Image</th>
+                    <th>Service Name</th>
+                    <th>Worker Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.RandomReviews.Where(status => status.ReviewStatus == "Rejected_Transfer_To_Manager"))
+                {
+                    <tr>
+                        <td>
+                            @if (review.ImageWhereTheIssueLocated != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageWhereTheIssueLocated)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>
+                            @if (review.ImageAfterFixing != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(review.ImageAfterFixing)" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td>@review.ServiceName</td>
+                        <td>@review.WorkerName</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">@review.Rating ★</span>
+                        </td>
+                        <td>@review.Comment</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

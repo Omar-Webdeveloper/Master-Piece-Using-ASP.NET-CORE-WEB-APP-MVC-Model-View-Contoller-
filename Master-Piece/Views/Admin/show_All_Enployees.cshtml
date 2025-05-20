@@ -1,0 +1,73 @@
+﻿@model Master_Piece.Models.AllManagersViewModel
+
+@{
+    ViewData["Title"] = "show_All_Enployees";
+    Layout = "~/Views/Shared/_Admin_Layout.cshtml";
+}
+
+
+<style>
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+    }
+
+        table thead th {
+            background-color: #2e3b55;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px;
+            text-align: left;
+        }
+
+        table tbody td {
+            font-size: 0.95rem;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:hover {
+            background-color: #f5f7fa;
+            cursor: pointer;
+        }
+
+</style>
+<h1>show_All_Enployees</h1>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Image</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Address</th>
+            <th>Registered On</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.All_Employees)
+        {
+            <tr>
+                <td>
+                    @if (user.PersonalImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(user.PersonalImage);
+                        <img src="data:image/jpeg;base64,@base64" width="50" height="50" style="border-radius: 50%;" />
+                    }
+                </td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Gender</td>
+                <td>@(user.DateOfBirth?.ToString("yyyy-MM-dd"))</td>
+                <td>@user.PersonalAddress</td>
+                <td>@(user.CreatedAt?.ToString("yyyy-MM-dd"))</td>
+            </tr>
+        }
+    </tbody>
+</table>

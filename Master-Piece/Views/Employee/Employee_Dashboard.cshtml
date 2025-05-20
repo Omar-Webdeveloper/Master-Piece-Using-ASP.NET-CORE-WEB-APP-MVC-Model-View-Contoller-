@@ -186,56 +186,57 @@
 
 
 
-    <div class="chart-container" style="margin-top: 30px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-        <h3 style="text-align: center;">Job Completions This Month</h3>
-        <canvas id="dailyJobChart"></canvas>
+    @* <div class="chart-container" style="margin-top: 30px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"> *@
+    @*     <h3 style="text-align: center;">Job Completions This Month</h3> *@
+    @*     <canvas id="dailyJobChart"></canvas> *@
+    @* </div> *@
+
+    @* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> *@
+    @* <script> *@
+    @*     document.addEventListener("DOMContentLoaded", function () { *@
+    @*         const ctx = document.getElementById('dailyJobChart').getContext('2d'); *@
+
+    @*         const labels = @Html.Raw(Json.Serialize(ViewBag.ChartLabels)); *@
+    @*         const data = @Html.Raw(Json.Serialize(ViewBag.ChartData)); *@
+
+    @*         new Chart(ctx, { *@
+    @*             type: 'line', *@
+    @*             data: { *@
+    @*                 labels: labels, *@
+    @*                 datasets: [{ *@
+    @*                     label: 'Completed Jobs per Day', *@
+    @*                     data: data, *@
+    @*                     borderColor: '#4CAF50', *@
+    @*                     backgroundColor: 'rgba(76, 175, 80, 0.2)', *@
+    @*                     tension: 0.3, *@
+    @*                     fill: true, *@
+    @*                     pointRadius: 4, *@
+    @*                     pointBackgroundColor: '#4CAF50' *@
+    @*                 }] *@
+    @*             }, *@
+    @*             options: { *@
+    @*                 responsive: true, *@
+    @*                 scales: { *@
+    @*                     y: { *@
+    @*                         beginAtZero: true, *@
+    @*                         title: { *@
+    @*                             display: true, *@
+    @*                             text: 'Jobs Completed' *@
+    @*                         } *@
+    @*                     }, *@
+    @*                     x: { *@
+    @*                         title: { *@
+    @*                             display: true, *@
+    @*                             text: 'Date of the Month' *@
+    @*                         }, *@
+    @*                         ticks: { *@
+    @*                             maxRotation: 90, *@
+    @*                             minRotation: 45 *@
+    @*                         } *@
+    @*                     } *@
+    @*                 } *@
+    @*             } *@
+    @*         }); *@
+    @*     }); *@
+    @* </script> *@
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('dailyJobChart').getContext('2d');
-
-            const labels = @Html.Raw(Json.Serialize(ViewBag.ChartLabels));
-            const data = @Html.Raw(Json.Serialize(ViewBag.ChartData));
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Completed Jobs per Day',
-                        data: data,
-                        borderColor: '#4CAF50',
-                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                        tension: 0.3,
-                        fill: true,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#4CAF50'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jobs Completed'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date of the Month'
-                            },
-                            ticks: {
-                                maxRotation: 90,
-                                minRotation: 45
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>

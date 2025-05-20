@@ -1,162 +1,150 @@
-﻿@model User  
-  <style>  
-      .body-content {  
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
-          background-color: #f4f7fb;  
-          margin: 0;  
-          padding: 0;  
-          min-height: 100vh;  
-      }  
+﻿@model User
+<style>
+    .body-content {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fb;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
 
-      .header {  
-          background-color: #f4f7fb;  
-          padding: 12px 30px;  
-          font-size: 18px;  
-          font-weight: 600;  
-          border-bottom: 1px solid #ccc;  
-      }  
+    .smallheader {
+        background-color: #f4f7fb;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        border-bottom: 1px solid #ccc;
+        width: 75%;
+        margin: 85px auto 0;
+        text-align: center;
+        gap: 10px;
+        display: flex;
+    }
 
-          .header a {  
-              color: #2b4c7e;  
-              text-decoration: none;  
-              margin-right: 25px;  
-              font-weight: 500;  
-          }  
+        .smallheader a {
+            color: #2b4c7e;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
 
-              .header a:hover {  
-                  text-decoration: underline;  
-              }  
+            .smallheader a:hover {
+                text-decoration: underline;
+            }
 
-      .profile-table {  
-          width: 90%;  
-          max-width: 1100px;  
-          margin: 40px auto;  
-          border-spacing: 40px;  
-      }  
+    .profile-container {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    }
 
-          .profile-table td {  
-              width: 50%;  
-              vertical-align: top;  
-          }  
+    .profile-table {
+        width: 80%;
+        max-width: 900px;
+        margin: 40px auto;
+    }
 
-      .profile-container {  
-          background-color: #fff;  
-          padding: 25px;  
-          border-radius: 12px;  
-          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);  
-      }  
+    .profile-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
 
-      .profile-image img {  
-          max-width: 100%;  
-          border-radius: 12px;  
-          display: block;  
-          margin: 0 auto;  
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);  
-      }  
+        .profile-item label {
+            font-weight: bold;
+            color: #444;
+            flex: 1;
+        }
 
-      h2 {  
-          text-align: center;  
-          color: #355c8c;  
-          margin-bottom: 25px;  
-      }  
+        .profile-item p {
+            flex: 2;
+            text-align: left;
+            color: #666;
+        }
 
-      .profile-item {  
-          margin-bottom: 20px;  
-      }  
+    .edit-profile-btn {
+        display: block;
+        width: fit-content;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #355c8c;
+        color: #fff;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+    }
 
-          .profile-item label {  
-              display: block;  
-              font-weight: 600;  
-              color: #444;  
-              margin-bottom: 6px;  
-          }  
+        .edit-profile-btn:hover {
+            background-color: #2b4c7e;
+        }
+</style>
 
-          .profile-item p {  
-              margin: 0;  
-              color: #666;  
-          }  
-         
-      /* media (max-width: 768px) { */  
-     /*     .profile-table  
+<div class="body-content">
+    <div class="smallheader">
+        <a asp-action="Profile" asp-controller="User">Profile</a>
+        <a asp-action="BookedServicesHistory" asp-controller="User">Order History</a>
+        <a asp-action="Reset_Password" asp-controller="User">Reset Password</a>
+    </div>
 
-      /* { */  
-      /*     display: block; */  
-      /* } */  
-
-      /* .profile-table tr, */  
-      /* .profile-table td { */  
-      /*     display: block; */  
-      /*     width: 100%; */  
-      /* } */  
-
-      /* .profile-table td { */  
-      /*     margin-bottom: 20px; */  
-      /* } */  
-
-      /* } */  
-  </style>  
-
-  <div class="body-content">  
-      <div class="header">  
-          <a asp-action="Profile" asp-controller="User">Profile</a>  
-          <a asp-action="EditProfile" asp-controller="User" asp-route-id="@Model.UserId">Edit Profile</a>  
-          <a asp-action="BookedServicesHistory" asp-controller="User">Order History</a>  
-          <a asp-action="Reset_Password" asp-controller="User">Reset Password</a>  
-      </div>  
-
-      <table class="profile-table">  
-          <tr>  
-              <td class="profile-image">  
-                  <div class="profile-container">
+    <table class="profile-table">
+        <tr style="    display: flex
+;">
+            <td class="profile-image" style="
+    margin-right: 110px;
+">
+                <div class="profile-container">
                     @if (@Model.PersonalImage != null)
                     {
                         var base64Image = Convert.ToBase64String(@Model.PersonalImage);
                         var imgSrc = $"data:image/jpeg;base64,{base64Image}";
-                        <img src="@imgSrc" alt="Issue Image" style="width: 80px; height: 80px; object-fit: cover;" />
+                        <img src="@imgSrc" alt="Profile Image" style="width: 80px; height: 80px; object-fit: cover;" />
                     }
                     else
                     {
                         <span>No Image</span>
                     }
+                </div>
+            </td>
+            <td style="width: 100%;">
+                <div class="profile-container">
+                    <h2>@Model.FirstName's Profile</h2>
+                    <div class="profile-item">
+                        <label>First Name:</label>
+                        <p>@Model.FirstName</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Last Name:</label>
+                        <p>@Model.LastName</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Email:</label>
+                        <p>@Model.Email</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Phone:</label>
+                        <p>@Model.PhoneNumber</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Address:</label>
+                        <p>@Model.PersonalAddress</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Date of Birth:</label>
+                        <p>@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>
+                    </div>
+                    <div class="profile-item">
+                        <label>Gender:</label>
+                        <p>@Model.Gender</p>
+                    </div>
+                    <a class="edit-profile-btn" asp-action="EditProfile" asp-route-id="@Model.UserId">Edit Profile</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 
-                  </div>  
-              </td>  
-              <td>  
-                  <div class="profile-container">  
-                      <h2>User Profile</h2>  
-                      <div class="profile-item">  
-                          <label>First Name:</label>  
-                          <p>@Model.FirstName</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Last Name:</label>  
-                          <p>@Model.LastName</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Email:</label>  
-                          <p>@Model.Email</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Phone:</label>  
-                          <p>@Model.PhoneNumber</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Address:</label>  
-                          <p>@Model.PersonalAddress</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Date of Birth:</label>  
-                          <p>@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>  
-                      </div>  
-                      <div class="profile-item">  
-                          <label>Gender:</label>  
-                          <p>@Model.Gender</p>  
-                      </div>  
-                      <div>  
-                          <button><a asp-action="EditProfile" asp-route-id="@Model.UserId">Edit Profile</a></button>  
-                      </div>  
-                  </div>  
-              </td>  
-          </tr>  
-      </table>  
-  </div>
+

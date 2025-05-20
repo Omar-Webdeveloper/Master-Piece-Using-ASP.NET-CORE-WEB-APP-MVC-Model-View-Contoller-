@@ -4,16 +4,107 @@
     ViewData["Title"] = "Add Location";
     Layout = "~/Views/Shared/_Admin_Layout.cshtml";
 }
+<style>
+    .popup-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(6px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup {
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        width: 500px;
+        max-width: 90%;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #2e3b55;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+
+    .form-control {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .btn-success {
+        background-color: #2ecc71;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+    .btn-warning {
+        background-color: #f39c12;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+    .validation-message {
+        color: red;
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none; /* Removes underline from anchor buttons */
+        display: inline-block;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    .btn-lg {
+        font-size: 1.1rem;
+        padding: 12px 28px;
+    }
+
+    .btn-warning {
+        color: white;
+    }
+
+        .btn-warning:hover {
+            color: white;
+        }
+
+</style>
+
 
 <h2>Add Location</h2>
 
-<div id="addLocationPopup" class="popup-container" >
+<div id="addLocationPopup" class="popup-container">
     <div class="popup">
         <h3>Add Location</h3>
-        <form method="post" asp-action="AddLocation">
+        <form method="post" asp-action="AddLocation" onsubmit="return validateAreasCovered('addAreasCovered', 'addValidationMsg')">
             <div class="form-group">
                 <label>Areas Covered</label>
-                <input type="text" name="AreasCovered" class="form-control" required />
+                <input type="text" name="OneLocation.AreasCovered" id="addAreasCovered" class="form-control" required />
+                <span id="addValidationMsg" class="validation-message"></span>
             </div>
 
             <div class="form-group">
@@ -26,8 +117,27 @@
                     }
                 </select>
             </div>
+            <div class="form-group d-flex justify-content-between">
+                <button type="submit" class="btn btn-success btn-lg px-4">Add</button>
+                <a asp-action="show_Locations" asp-controller="Admin" class="btn btn-warning btn-lg px-4">Cancel</a>
+            </div>
 
-            <button type="submit" class="btn btn-success">Add</button>
         </form>
     </div>
 </div>
+
+<script>
+    function validateAreasCovered(inputId, messageId) {
+        const pattern = /^([A-Za-z]+(?: [A-Za-z]+)?)(,([A-Za-z]+(?: [A-Za-z]+)?))*$/;
+        const input = document.getElementById(inputId);
+        const message = document.getElementById(messageId);
+
+        if (!pattern.test(input.value.trim())) {
+            message.innerText = "Enter valid names separated by commas, e.g. 'Amman,Zarqa,Tafila' or 'North Area,South Area' and with no apostrophe (')";
+            return false;
+        } else {
+            message.innerText = "";
+            return true;
+        }
+    }
+</script>

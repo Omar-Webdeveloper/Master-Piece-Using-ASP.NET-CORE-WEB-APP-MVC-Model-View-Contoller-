@@ -12,7 +12,10 @@
         <form asp-action="ManagerEditProfile" method="post" enctype="multipart/form-data">
             <!-- Profile Image Section -->
             <div class="image-section text-center">
-                <img src="~/Images/profile.jpg" alt="Profile Image" class="profile-image" />
+                <img id="profileImagePreview"
+                     src="@(Model.PersonalImage != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.PersonalImage)}" : Url.Content("~/Images/profile.jpg"))"
+                     alt="Profile Image"
+                     class="profile-image" />
                 <div class="form-group">
                     <label>Profile Image</label>
                     <input type="file" name="PersonalImage" />
@@ -22,12 +25,14 @@
             <!-- Info Section -->
             <div class="form-group">
                 <label asp-for="FirstName">First Name</label>
-                <input asp-for="FirstName" value="@Model.FirstName" />
+                <input asp-for="FirstName" value="@Model.FirstName" oninput="validateManagerFirstName()" />
+                <span id="ManagerFirstNameError" class="error-message"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="LastName">Last Name</label>
-                <input asp-for="LastName" value="@Model.LastName" />
+                <input asp-for="LastName" value="@Model.LastName" oninput="validateManagerLastName()" />
+                <span id="ManagerLastNameError" class="error-message"></span>
 
             </div>
 
@@ -38,28 +43,34 @@
 
             <div class="form-group">
                 <label asp-for="PhoneNumber">Phone Number</label>
-                <input asp-for="PhoneNumber" value="@Model.PhoneNumber" />
+                <input asp-for="PhoneNumber" value="@Model.PhoneNumber" oninput="validateManagerPhone()" />
+                <span id="ManagerPhoneError" class="error-message"></span>
             </div>
 
             <div class="form-group">
-                <select asp-for="Gender" class="form-control">
+                <label asp-for="Gender">Select Gender</label>
+                <select asp-for="Gender" class="form-control" onchange="validateManagerGender()">
                     <option value="">-- Select Gender --</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
+                <span id="ManagerGenderError" class="error-message"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="DateOfBirth">Date of Birth</label>
-                <input asp-for="DateOfBirth" type="date" value="@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))" />
+                <input asp-for="DateOfBirth" type="date" value="@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))" onchange="validateManagerDOB()" />
+                <span id="ManagerDOBError" class="error-message"></span>
 
             </div>
 
             <div class="form-group">
                 <label asp-for="PersonalAddress">Address</label>
-                <input asp-for="PersonalAddress" value="@Model.PersonalAddress" />
+                <input asp-for="PersonalAddress" value="@Model.PersonalAddress" oninput="validateManagerAddress()" />
+                <span id="ManagerAddressError" class="error-message"></span>
+
             </div>
-            <button type="submit">Save Canges</button>
+            <button type="submit" class="btn-submit">Save Canges</button>
         </form>
         <!-- End form -->
 
@@ -67,6 +78,23 @@
 </div>
 
 <style>
+    .btn-submit {
+        width: 105%;
+        padding: 12px;
+        background-color: #4e73df;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #3b5cc4;
+        }
+
     .profile-container {
         display: flex;
         justify-content: center;
@@ -76,7 +104,7 @@
 
     .profile-card {
         background-color: #ffffff;
-        padding: 30px;
+        padding: 50px;
         border-radius: 12px;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         width: 100%;
@@ -114,6 +142,16 @@
         color: #343a40;
     }
 
+    form select {
+        width: 105%;
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        background-color: #f8f9fc;
+        color: #343a40;
+        cursor: pointer;
+    }
     form input {
         width: 100%;
         padding: 10px 14px;
@@ -128,7 +166,96 @@
             background-color: #f1f3f7;
             cursor: not-allowed;
         }
+
+    .error-message {
+        color: #d93025;
+        font-size: 0.875rem;
+        margin-top: 4px;
+        display: block;
+    }
 </style>
 
+<script>
+    function validateManagerFirstName() {
+        const input = document.querySelector('input[name="FirstName"]');
+        const error = document.getElementById("ManagerFirstNameError");
+        if (!input.value.trim()) {
+            error.textContent = "First name is required.";
+        } else {
+            error.textContent = "";
+        }
+    }
 
+    function validateManagerLastName() {
+        const input = document.querySelector('input[name="LastName"]');
+        const error = document.getElementById("ManagerLastNameError");
+        if (!input.value.trim()) {
+            error.textContent = "Last name is required.";
+        } else {
+            error.textContent = "";
+        }
+    }
+
+    function validateManagerPhone() {
+        const input = document.querySelector('input[name="PhoneNumber"]');
+        const error = document.getElementById("ManagerPhoneError");
+        const regex = /^\+962\d{9}$/;
+        if (!input.value.trim()) {
+            error.textContent = "Phone number is required.";
+        } else if (!regex.test(input.value.trim())) {
+            error.textContent = "Phone number must start with +962 followed by 9 digits.";
+        } else {
+            error.textContent = "";
+        }
+    }
+
+    function validateManagerGender() {
+        const select = document.querySelector('select[name="Gender"]');
+        const error = document.getElementById("ManagerGenderError");
+        if (!select.value) {
+            error.textContent = "Gender is required.";
+        } else {
+            error.textContent = "";
+        }
+    }
+
+    function validateManagerDOB() {
+        const input = document.querySelector('input[name="DateOfBirth"]');
+        const error = document.getElementById("ManagerDOBError");
+        if (!input.value) {
+            error.textContent = "Date of Birth is required.";
+        } else {
+            error.textContent = "";
+        }
+    }
+
+    function validateManagerAddress() {
+        const input = document.querySelector('input[name="PersonalAddress"]');
+        const error = document.getElementById("ManagerAddressError");
+        const val = input.value.trim();
+        const parts = val.split(',');
+        if (!val) {
+            error.textContent = "Address is required.";
+        } else if (parts.length < 3) {
+            error.textContent = "Address must include city, governorate, and the name of the street.";
+        } else {
+            error.textContent = "";
+        }
+    }
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        validateManagerFirstName();
+        validateManagerLastName();
+        validateManagerPhone();
+        validateManagerGender();
+        validateManagerDOB();
+        validateManagerAddress();
+
+        const hasErrors = Array.from(document.querySelectorAll(".error-message")).some(span => span.textContent !== "");
+        if (hasErrors) {
+            e.preventDefault();
+            alert("Please fix errors in the form before submitting.");
+        }
+    });
+</script>
 

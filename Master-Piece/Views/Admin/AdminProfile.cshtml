@@ -12,16 +12,20 @@
         <form>
             <!-- Profile Image Section -->
             <div class="image-section text-center">
-                @if (Model.PersonalImage != null)
-                {
-                    var base64Image = Convert.ToBase64String(Model.PersonalImage);
-                    var imgSrc = $"data:image/jpeg;base64,{base64Image}";
-                    <img src="@imgSrc" alt="Profile Image" class="profile-image" />
-                }
-                else
-                {
-                    <img src="~/Images/profile.jpg" alt="User Profile Image" class="profile-image" />
-                }
+                <img id="profileImagePreview"
+                     src="@(Model.PersonalImage != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.PersonalImage)}" : Url.Content("~/Images/profile.jpg"))"
+                     alt="Profile Image"
+                     class="profile-image" />
+                @* @if (Model.PersonalImage != null) *@
+                @* { *@
+                @*     var base64Image = Convert.ToBase64String(Model.PersonalImage); *@
+                @*     var imgSrc = $"data:image/jpeg;base64,{base64Image}"; *@
+                @*     <img src="@imgSrc" alt="Profile Image" class="profile-image" /> *@
+                @* } *@
+                @* else *@
+                @* { *@
+                @*     <img src="~/Images/profile.jpg" alt="User Profile Image" class="profile-image" /> *@
+                @* } *@
             </div>
 
             <!-- Info Section -->
@@ -75,7 +79,7 @@
 
     .profile-card {
         background-color: #ffffff;
-        padding: 30px;
+        padding: 50px;
         border-radius: 12px;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         width: 100%;

@@ -110,6 +110,27 @@
                 display: block;
             }
         }
+
+
+
+
+
+
+
+        /* Translate box container */
+        .translate-box {
+            margin: 20px;
+            padding: 10px;
+            background-color: #1c2537;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #3e4a65;
+        }
+
+   
+
     </style>
 </head>
 <body>
@@ -119,6 +140,8 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <a asp-controller="Admin" asp-action="Admin_Dashboard" class="active">Admin Dashboard</a>
+        <a asp-controller="Admin" asp-action="show_All_Users">show users</a>
+        <a asp-controller="Admin" asp-action="show_All_Enployees">show employees</a>
         <a asp-controller="Admin" asp-action="show_Services">show Services</a>
         <a asp-controller="Admin" asp-action="show_Managers">show Managers</a>
         <a asp-controller="Admin" asp-action="show_Locations">show Location</a>
@@ -128,6 +151,8 @@
         <a asp-controller="Admin" asp-action="AdminEditProfile">Edit Admin Profile</a>
         <a asp-controller="Admin" asp-action="AdminResetPassword">Reset Password</a>
         <a asp-controller="Home" asp-action="Logout">Logout</a>
+        <div id="google_translate_element" class="translate-box"></div>
+
     </div>
 
     <!-- Blur overlay -->
@@ -150,6 +175,17 @@
     </script>
     <!-- SweetAlert JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'ar',
+            includedLanguages: 'ar,en,fr,de,es,tr',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 

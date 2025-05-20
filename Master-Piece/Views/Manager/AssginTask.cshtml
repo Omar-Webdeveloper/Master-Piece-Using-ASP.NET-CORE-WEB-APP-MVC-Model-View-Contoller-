@@ -5,6 +5,116 @@
 
 }
 <style>
+    .custom-checkbox {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        padding-left: 28px;
+        user-select: none;
+        font-size: 16px;
+    }
+
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .custom-checkbox .checkmark {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            height: 20px;
+            width: 20px;
+            background-color: #f0f0f0;
+            border: 2px solid #2e3b55;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #3498db;
+            border-color: #2980b9;
+        }
+
+        .custom-checkbox .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+    h2 {
+        font-weight: bold;
+        color: #2e3b55;
+        margin-bottom: 20px;
+    }
+
+    .custom-btn {
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        min-width: 120px;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .custom-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .custom-btn.add {
+            background-color: #3498db;
+            margin-bottom: 15px;
+        }
+
+            .custom-btn.add:hover {
+                background-color: #2980b9;
+            }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+    }
+
+        table thead th {
+            background-color: #2e3b55;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px;
+            text-align: left;
+        }
+
+        table tbody td {
+            font-size: 0.95rem;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:hover {
+            background-color: #f5f7fa;
+            cursor: pointer;
+        }
     form input[type="text"],
     form input[type="Email"],
     form input[type="password"],
@@ -32,7 +142,7 @@
     }
 </style>
 <h2>Assgin Tasks to Our Employees</h2>
-<button id="assignTaskButton" class="btn btn-primary" onclick="openAssignTaskPopup()" disabled>Assign Task</button>
+<button id="assignTaskButton" class="custom-btn add" onclick="openAssignTaskPopup()" disabled>Assign Task</button>
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
@@ -56,7 +166,12 @@
         {
             <tr>
                 <td>
-                    <input type="checkbox" name="selectedEmployee_@emp.UserId" value="@emp.UserId" />
+                    @* <input type="checkbox" name="selectedEmployee_@emp.UserId" value="@emp.UserId" /> *@
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="selectedEmployee_@emp.UserId" value="@emp.UserId" />
+                        <span class="checkmark"></span>
+                    </label>
+
                 </td>
                 <td>
                     @if (emp.PersonalImage != null)
@@ -115,14 +230,11 @@
                 <label>Before Photo</label>
                 <input type="file" name="BeforePhoto" class="form-control" required />
             </div>            
-            <div class="form-group">
-                <label>After Photo</label>
-                <input type="file" name="AfterPhoto" class="form-control" required />
-            </div>
+
 
             <div class="text-end mt-3">
-                <button type="submit" class="btn btn-success">Assign</button>
-                <button type="button" class="btn btn-secondary" onclick="closeAssignTaskPopup()">Cancel</button>
+                <button type="submit" class="custom-btn add">Assign</button>
+                <button type="button" class="custom-btn edit" onclick="closeAssignTaskPopup()">Cancel</button>
             </div>
         </form>
     </div>

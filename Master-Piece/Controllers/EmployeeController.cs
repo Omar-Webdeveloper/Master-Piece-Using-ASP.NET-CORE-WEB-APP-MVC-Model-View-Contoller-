@@ -149,7 +149,7 @@ namespace Master_Piece.Controllers
                 return RedirectToAction("Login", "Home");
             }
         }
-        public IActionResult Assgined_Task()
+        public IActionResult Bookinging_Task()
         {
             int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
 
@@ -177,6 +177,26 @@ namespace Master_Piece.Controllers
                                     }).ToList();
             return View(assignedBookings);
         }
+        public IActionResult EmployeeTasks()
+        {
+            int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
+
+            var assignedTasks = _context.Tasks
+                .Where(t => t.WrokerId == workerId)
+                .Select(t => new AssignedTaskViewModel
+                {
+                    TaskId = t.TaskId,
+                    TaskName = t.TaskName,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate,
+                    TaskStatus = t.TaskStatus,
+                    TasksDetails = t.TasksDetails,
+                    BeforePhoto = t.BeforePhoto,
+                    AfterPhoto = t.AfterPhoto
+                }).ToList();
+
+            return View(assignedTasks);
+        }
         public IActionResult ConfirmBooking(int id)
         {
             var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == id);
@@ -186,7 +206,7 @@ namespace Master_Piece.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Assgined_Task");
+            return RedirectToAction("Bookinging_Task");
         }
         [HttpPost]
         public async Task<IActionResult> CompleteBooking(int BookingId, IFormFile FixedImage)
@@ -208,31 +228,88 @@ namespace Master_Piece.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Assgined_Task");
+            return RedirectToAction("WorkHistory");
         }
+        public IActionResult Confirmtask(int id)
+        {
+            var booking = _context.Tasks.FirstOrDefault(b => b.TaskId == id);
+            if (booking != null)
+            {
+                booking.TaskStatus = "Confirmed";
+                _context.SaveChanges();
+            }
 
+            return RedirectToAction("EmployeeTasks");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Completetask(int taskid, IFormFile FixedImage)
+        {
+            var task = await _context.Tasks.FindAsync(taskid);
+
+            if (task != null)
+            {
+                if (FixedImage != null && FixedImage.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await FixedImage.CopyToAsync(ms);
+                        task.AfterPhoto = ms.ToArray(); // Ensure your model has this property
+                    }
+                }
+
+                task.TaskStatus = "Completed"; // Mark as completed
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("WorkHistory");
+        }
         public IActionResult WorkHistory()
         {
             int workerId = HttpContext.Session.GetInt32("UserID") ?? 0;
-            
-            var Work_history = (from b in _context.Bookings
-                                join u in _context.Users on b.UserId equals u.UserId
-                                join s in _context.MainServices on b.ServiceId equals s.ServiceId
-                                where b.WorkerId == workerId && b.Status == "Completed"
-                                select new AssignedBookingViewModel
-                                {
-                                    FirstName = u.FirstName,
-                                    ServiceName = s.ServiceName,
-                                    Booking_Start_Date = (DateTime)b.BookingStartDate,
-                                    BookingTittle = b.BookingTittle,
-                                    BookingMessae = b.BookingMessae,
-                                    BookingNotes = b.BookingNotes,
-                                    ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
-                                    ImageAfterFixing = b.ImageAfterFixing,
-                                    Status = b.Status,
-                                }).ToList();
-            return View(Work_history);
+
+            // Fetch completed bookings
+            var completedBookings = (from b in _context.Bookings
+                                     join u in _context.Users on b.UserId equals u.UserId
+                                     join s in _context.MainServices on b.ServiceId equals s.ServiceId
+                                     where b.WorkerId == workerId && b.Status == "Completed"
+                                     select new AssignedBookingViewModel
+                                     {
+                                         FirstName = u.FirstName,
+                                         ServiceName = s.ServiceName,
+                                         Booking_Start_Date = (DateTime)b.BookingStartDate,
+                                         BookingTittle = b.BookingTittle,
+                                         BookingMessae = b.BookingMessae,
+                                         BookingNotes = b.BookingNotes,
+                                         ImageWhereTheIssueLocated = b.ImageWhereTheIssueLocated,
+                                         ImageAfterFixing = b.ImageAfterFixing,
+                                         Status = b.Status,
+                                     }).ToList();
+
+            // Fetch completed tasks
+            var completedTasks = _context.Tasks
+                .Where(t => t.WrokerId == workerId && t.TaskStatus == "Completed")
+                .Select(t => new AssignedTaskViewModel
+                {
+                    TaskId = t.TaskId,
+                    TaskName = t.TaskName,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate,
+                    TaskStatus = t.TaskStatus,
+                    TasksDetails = t.TasksDetails,
+                    BeforePhoto = t.BeforePhoto,
+                    AfterPhoto = t.AfterPhoto
+                }).ToList();
+
+            // Combine into a single view model
+            var viewModel = new WorkHistoryViewModel
+            {
+                CompletedBookings = completedBookings,
+                CompletedTasks = completedTasks
+            };
+
+            return View(viewModel);
         }
+
         public IActionResult EmployeeProfile()
         {
             // Retrieve user Id from the session

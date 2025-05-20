@@ -1,114 +1,143 @@
 ﻿@model List<BookingHistoryViewModel>
 
 <style>
-    .body-content {
-        font-family: Arial, sans-serif;
-        background-color: #f4f7fb;
-        padding: 30px;
-        min-height: 100vh;
-    }
-
-    h2 {
-        color: #2b4c7e;
-        margin-bottom: 20px;
-    }
-
     table {
-        width: 100%;
+        width: 90%;
+        margin: 30px auto;
         border-collapse: collapse;
-        background: #fff;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #ffffff;
         border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     }
 
-    th, td {
-        padding: 14px;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-    }
-
-    th {
-        background-color: #eaf0fb;
-        color: #333;
-    }
-
-    td {
-        color: #555;
-    }
-
-        td a {
-            color: #2b4c7e;
-            text-decoration: none;
+        table thead {
+            background-color: #2b4c7e;
+            color: white;
         }
 
-            td a:hover {
-                text-decoration: underline;
-            }
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:hover {
+            background-color: #f0f4ff;
+        }
 
     .no-data {
-        color: #777;
+        text-align: center;
+        color: #666;
         margin-top: 20px;
     }
+
+    button {
+        padding: 6px 12px;
+        background-color: #355c8c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+        button:hover {
+            background-color: #2b4c7e;
+        }
 </style>
 
 <style>
-    /* (keep your existing styles here...) */
-
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
+    .body-content {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fb;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
     }
 
-    .popup {
-        background: #fff;
-        padding: 20px 30px;
-        border-radius: 10px;
-        width: 450px;
-        max-width: 90%;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        position: relative;
-    }
-
-    .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 20px;
-        cursor: pointer;
-        color: #333;
-    }
-
-    form input[type="text"],
-    form textarea,
-    form input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    form button[type="submit"] {
-        margin-top: 10px;
-        width: 100%;
-        background-color: #28a745;
-        color: white;
+    .smallheader {
+        background-color: #f4f7fb;
+        padding: 10px 20px;
         font-size: 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
+        font-weight: 600;
+        border-bottom: 1px solid #ccc;
+        width: 75%;
+        margin: 85px auto 0;
+        text-align: center;
+        gap: 10px;
+        display: flex;
     }
+
+        .smallheader a {
+            color: #2b4c7e;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+            .smallheader a:hover {
+                text-decoration: underline;
+            }
+
+    .profile-container {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    }
+
+    .profile-table {
+        width: 80%;
+        max-width: 900px;
+        margin: 40px auto;
+    }
+
+    .profile-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .profile-item label {
+            font-weight: bold;
+            color: #444;
+            flex: 1;
+        }
+
+        .profile-item p {
+            flex: 2;
+            text-align: left;
+            color: #666;
+        }
+
+    .edit-profile-btn {
+        display: block;
+        width: fit-content;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #355c8c;
+        color: #fff;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .edit-profile-btn:hover {
+            background-color: #2b4c7e;
+        }
 </style>
+
 <div class="body-content">
+    <div class="smallheader">
+        <a asp-action="Profile" asp-controller="User">Profile</a>
+        <a asp-action="BookedServicesHistory" asp-controller="User">Order History</a>
+        <a asp-action="Reset_Password" asp-controller="User">Reset Password</a>
+    </div>
     <h2>Your Booking History</h2>
 
     @if (Model != null && Model.Any())
@@ -155,8 +184,7 @@
                         <td>
                         <td>
                             <button onclick="openPaymentPopup(@booking.BookingId)">Pay</button>
-                        </td>
-                        <td>
+
                             <button onclick="openReviewPopup(@booking.BookingId)">Review</button>
                         </td>
                     </tr>
@@ -169,6 +197,8 @@
         <p class="no-data">No booking history found.</p>
     }
 </div>
+
+ </div>
 
 <!-- Payment Popup -->
 <div class="popup-overlay" id="paymentPopup">
@@ -223,3 +253,65 @@
         document.getElementById('reviewPopup').style.display = 'none';
     }
 </script>
+<style>
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+
+    .popup {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+        .popup h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #2b4c7e;
+        }
+
+        .popup input, .popup textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .popup button[type="submit"] {
+            width: 100%;
+            background-color: #2b4c7e;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+    .close-btn {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+    }
+
+        .close-btn:hover {
+            color: #333;
+        }
+</style>

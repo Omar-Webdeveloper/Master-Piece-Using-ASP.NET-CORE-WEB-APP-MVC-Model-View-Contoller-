@@ -21,9 +21,8 @@ namespace Master_Piece.Models
         [Compare("PasswordHash", ErrorMessage = "The password and confirmation password do not match.")]
         public string? ConfirmPassword { get; set; }
 
-
-        public byte[]? PersonalImage { get; set; }
-        [Required(ErrorMessage = "Personal Address is required")]
+        [Required(ErrorMessage = "Please upload a personal image.")]
+        public IFormFile PersonalImage { get; set; } // Use IFormFile for file uploads
         public string? PersonalAddress { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]
@@ -36,5 +35,7 @@ namespace Master_Piece.Models
 
         [Required(ErrorMessage = "Gender is required")]
         public string? Gender { get; set; }
+        public string? WorkerServiceType { get; set; }
+
     }
 }

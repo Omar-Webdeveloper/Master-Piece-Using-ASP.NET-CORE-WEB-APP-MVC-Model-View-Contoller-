@@ -263,7 +263,7 @@ namespace Master_Piece.Controllers
 
             if (userId == null )
             {
-                return RedirectToAction("Login", "Account"); // or wherever your login is
+                return RedirectToAction("Login", "Home"); // or wherever your login is
             }
 
             var workerDetails = (from u in _context.Users
@@ -338,19 +338,18 @@ namespace Master_Piece.Controllers
         {
             // Save payment to database linked to bookingId
             // Example pseudo-code
-            /*
+
             var payment = new Payment
             {
                 BookingId = bookingId,
-                AmountPaid = amountPaid,
-                PaymentNotes = paymentNotes,
-                PaymentDate = DateTime.Now
+                Amount = (double?)amountPaid,
+                PaymentMethod = paymentNotes,
             };
             _context.Payments.Add(payment);
             _context.SaveChanges();
-            */
 
-            return RedirectToAction("BookingHistory"); // or wherever you want
+
+            return RedirectToAction("BookedServicesHistory"); // or wherever you want
         }
 
         [HttpPost]
@@ -359,19 +358,17 @@ namespace Master_Piece.Controllers
         {
             // Save review to database linked to bookingId
             // Example pseudo-code
-            /*
             var review = new Review
             {
                 BookingId = bookingId,
                 Rating = rating,
-                ReviewText = reviewText,
-                ReviewDate = DateTime.Now
+                Comment = reviewText,
+                CreatedAt = DateTime.Now
             };
             _context.Reviews.Add(review);
             _context.SaveChanges();
-            */
 
-            return RedirectToAction("BookingHistory");
+            return RedirectToAction("BookedServicesHistory");
         }
 
     }

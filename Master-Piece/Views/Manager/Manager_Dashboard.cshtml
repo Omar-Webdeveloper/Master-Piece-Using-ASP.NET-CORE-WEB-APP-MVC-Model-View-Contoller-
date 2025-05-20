@@ -169,65 +169,65 @@
 
     </div>
 
-    <div class="chart-container">
-        <h3>Monthly Completed Jobs</h3>
-        <canvas id="monthlyProgressChart"></canvas>
-    </div>
+    @* <div class="chart-container"> *@
+    @*     <h3>Monthly Completed Jobs</h3> *@
+    @*     <canvas id="monthlyProgressChart"></canvas> *@
+    @* </div> *@
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('monthlyProgressChart').getContext('2d');
+    @* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> *@
+    @* <script> *@
+    @*     document.addEventListener("DOMContentLoaded", function () { *@
+    @*         const ctx = document.getElementById('monthlyProgressChart').getContext('2d'); *@
 
-            const labels = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartLabels));
-            const data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartData));
+    @*         const labels = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartLabels)); *@
+    @*         const data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ChartData)); *@
 
-            const maxValue = Math.max(...data);
-            const minValue = data.every(x => x === 0) ? 0 : 1;
+    @*         const maxValue = Math.max(...data); *@
+    @*         const minValue = data.every(x => x === 0) ? 0 : 1; *@
 
-            const monthlyProgressChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Completed Jobs',
-                        data: data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            min: minValue,
-                            max: maxValue < 5 ? 5 : maxValue + 1,
-                            ticks: {
-                                stepSize: 1,
-                                callback: function (value) {
-                                    return Number.isInteger(value) ? value : '';
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Jobs Completed'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Days of the Month'
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
+    @*         const monthlyProgressChart = new Chart(ctx, { *@
+    @*             type: 'line', *@
+    @*             data: { *@
+    @*                 labels: labels, *@
+    @*                 datasets: [{ *@
+    @*                     label: 'Completed Jobs', *@
+    @*                     data: data, *@
+    @*                     borderColor: 'rgba(75, 192, 192, 1)', *@
+    @*                     backgroundColor: 'rgba(75, 192, 192, 0.2)', *@
+    @*                     tension: 0.4, *@
+    @*                     fill: true *@
+    @*                 }] *@
+    @*             }, *@
+    @*             options: { *@
+    @*                 responsive: true, *@
+    @*                 maintainAspectRatio: false, *@
+    @*                 scales: { *@
+    @*                     y: { *@
+    @*                         beginAtZero: true, *@
+    @*                         min: minValue, *@
+    @*                         max: maxValue < 5 ? 5 : maxValue + 1, *@
+    @*                         ticks: { *@
+    @*                             stepSize: 1, *@
+    @*                             callback: function (value) { *@
+    @*                                 return Number.isInteger(value) ? value : ''; *@
+    @*                             } *@
+    @*                         }, *@
+    @*                         title: { *@
+    @*                             display: true, *@
+    @*                             text: 'Jobs Completed' *@
+    @*                         } *@
+    @*                     }, *@
+    @*                     x: { *@
+    @*                         title: { *@
+    @*                             display: true, *@
+    @*                             text: 'Days of the Month' *@
+    @*                         } *@
+    @*                     } *@
+    @*                 } *@
+    @*             } *@
+    @*         }); *@
+    @*     }); *@
+    @* </script> *@
 
 
 </div>

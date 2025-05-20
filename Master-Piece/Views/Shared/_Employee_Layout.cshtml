@@ -110,6 +110,18 @@
                 display: block;
             }
         }
+        /* Translate box container */
+        .translate-box {
+            margin: 20px;
+            padding: 10px;
+            background-color: #1c2537;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #3e4a65;
+        }
+
     </style>
 </head>
 <body>
@@ -119,12 +131,15 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <a asp-controller="Employee" asp-action="Employee_Dashboard">Dashboard</a>
-        <a asp-controller="Employee" asp-action="Assgined_Task">Assigned Tasks</a>
+        <a asp-controller="Employee" asp-action="Bookinging_Task">Booked Worker</a>
+        <a asp-controller="Employee" asp-action="EmployeeTasks">Assigned Tasks</a>
+        <a asp-controller="Employee" asp-action="WorkHistory">Work History</a>
         <a asp-controller="Employee" asp-action="EmployeeProfile">Profile</a>
         <a asp-controller="Employee" asp-action="EmployeeEditProfile">Edit Profile</a>
         <a asp-controller="Employee" asp-action="EmployeeResetPassword">Reset Password</a>
-        <a asp-controller="Employee" asp-action="WorkHistory">Work History</a>
         <a asp-controller="Home" asp-action="Logout">Logout</a>
+        <div id="google_translate_element" class="translate-box"></div>
+
     </div>
 
     <!-- Blur overlay -->
@@ -145,6 +160,17 @@
             toggleBtn.classList.toggle('sidebar-open');
         }
     </script>
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'ar',
+            includedLanguages: 'ar,en,fr,de,es,tr',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <!-- SweetAlert JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

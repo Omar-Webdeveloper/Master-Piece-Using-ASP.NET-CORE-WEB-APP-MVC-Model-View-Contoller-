@@ -24,11 +24,9 @@
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
-            /* font-variation-settings: "wdth" 100, "YTLC" 500; */
-            font-stretch: 100%; /* Equivalent to "wdth" */
-            font-weight: 500; /* Adjust weight instead of "YTLC" */
+            font-stretch: 100%;
+            font-weight: 500;
         }
-
 
         .header {
             background-color: #d9eafd;
@@ -36,7 +34,7 @@
             padding: 10px 20px;
             position: static;
             width: 97%;
-            height: auto;
+            height: 60px;
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -50,21 +48,11 @@
             gap: 10px;
         }
 
-        /* .logo-container { */
-        /*     display: flex; */
-        /*     align-items: center; */
-        /*     text-decoration: none; /* Removes the default underline from the link */ */
-        /*     color: #003366; */
-        /* } */
         .logo {
             width: 40px;
             height: 40px;
         }
 
-        /* .brand-text { */
-        /*     font-size: 24px; */
-        /*     font-weight: bold; */
-        /* } */
         .hello-user {
             font-weight: 600;
             color: #000;
@@ -93,8 +81,9 @@
             border: 1px solid #ccc;
         }
 
+        /* CHANGED: Updated to ensure button is hidden by default */
         .menu-toggle {
-            display: none;
+            display: none; /* Hidden by default */
             font-size: 24px;
             background: none;
             border: none;
@@ -143,17 +132,15 @@
             gap: 10px;
         }
 
-        .nav-item a 
-        {
+        .nav-item a {
             color: white;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
-        .nav-item a:hover 
-        {
+            .nav-item a:hover {
                 color: #0073e6;
-        }
+            }
 
         .map {
             flex: 1;
@@ -187,6 +174,7 @@
                 .seventh-container a:hover {
                     color: #0073e6;
                 }
+
         @@media (max-width: 768px) {
             .menu-toggle
 
@@ -216,35 +204,33 @@
 <body>
     <div class="header">
         <a href="index.html">
-            <img class="logo" src="~/master pictures/Black_and_Grey_Flat_Illustrated_Computer_Repair_Services_Logo.png" alt="Work Image" style="width: 50px;height: 50px;" />
-            @* <span class="brand-text">Take Care Home Services</span>  <!-- Text next to the icon --> *@
+            @* <img class="logo" src="~/master pictures/Black_and_Grey_Flat_Illustrated_Computer_Repair_Services_Logo.png" alt="Work Image" style="width: 50px;height: 50px;" /> *@
+            Complete Propery care
         </a>
-        <select class="language-select" id="language-select">
-            <option value="ar">Arabic</option>
-            <option value="en" selected>English</option>
-        </select>
-        <div class="nav">
-            <a asp-controller="Home" asp-action="test">test</a></a>
+        <div id="google_translate_element" class="language-select"></div>
+        <!-- Google Translate Script -->
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'ar',
+                includedLanguages: 'ar,en,fr,de,es,tr',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+              }, 'google_translate_element');
+            }
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+        <button id="menu-toggle" class="toggle-btn">☰</button>
+
+        <div id="nav" class="nav">
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
             <a class="nav-link" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a>
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>
-            <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
-            <!-- Conditional links based on TempData -->
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
+
             @if (role != null)
             {
-
-
-                if (role == "Manager")
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Manager Dashboard</a>
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
-                }
-                else if (role == "Employee")
-                {
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Employee Dashboard</a>
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log out</a>
-                }
-                else if (role == "User")
+                if (role == "User")
                 {
                     <a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">User Profile</a>
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
@@ -252,29 +238,17 @@
             }
             else
             {
-                <!-- Links for guests -->
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a>
             }
-
-          
-           
-
-
-
-
         </div>
     </div>
-
 
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
- 
-   
 
     <div class="Sixth_container">
         <div class="foot_text">
@@ -285,45 +259,24 @@
         </div>
         <div class="sixth_text">
             <div class="navbar-nav">
-
-                <!-- Links visible to all users -->
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a>
                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a>
 
-                <!-- Conditional links based on TempData -->
                 @if (role != null)
                 {
-                    @* string role = HttpContext.Session.GetString("Role"); *@
-
-                    if (role == "Manager")
-                    {
-                        <a class="nav-item nav-link active" asp-area="" asp-controller="Admin" asp-action="Admin_Dashboard">Admin Dashboard</a>
-                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
-
-                    }
-                    else if (role == "ServiceProvider")
-                    {
-                        <a class="nav-item nav-link active" asp-area="" asp-controller="Employee" asp-action="Employee_Dashboard">Employee Dashboard</a>
-                        <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
-
-                    }
-                    else if (role == "User")
+                    if (role == "User")
                     {
                         <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Profile">Profile</a>
                         <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a>
-
                     }
                 }
                 else
                 {
-                    <!-- Links for guests -->
                     <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a>
                     <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a>
                 }
-
-     
             </div>
         </div>
         <div class="map">
@@ -332,7 +285,7 @@
     </div>
     <div class="seventh-container">
         <hr />
-        <p>&copy; 2025 Complete Property Care.com</p>
+        <p>© 2025 Complete Property Care.com</p>
 
         <section class="social-buttons py-5 bg-light">
             <div class="container">
@@ -351,7 +304,6 @@
                             <a href="#" class="btn btn-success btn-lg">
                                 <i class="bi bi-whatsapp me-2"></i>
                             </a>
-
                             <a href="#" class="btn btn-primary btn-lg" style="background-color: #d9eafd; border-color: #0077b5;">
                                 <i class="bi bi-linkedin me-2"></i>
                             </a>
@@ -360,16 +312,31 @@
                 </div>
             </div>
         </section>
-
     </div>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = document.getElementById("menu-toggle");
             const nav = document.getElementById("nav");
 
-            if (toggleBtn) {
+            // CHANGED: Added function to control toggle button visibility
+            function toggleButtonVisibility() {
+                if (window.innerWidth <= 768) {
+                    toggleBtn.style.display = "block";
+                } else {
+                    toggleBtn.style.display = "none";
+                    nav.classList.remove("active"); // Ensure nav is closed on larger screens
+                }
+            }
+
+            // CHANGED: Run on page load
+            toggleButtonVisibility();
+
+            // CHANGED: Run on window resize
+            window.addEventListener("resize", toggleButtonVisibility);
+
+            // Existing toggle functionality
+            if (toggleBtn && nav) {
                 toggleBtn.addEventListener("click", () => {
                     nav.classList.toggle("active");
                 });
@@ -388,3 +355,382 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+@* @{ *@
+@*     var role = Context.Session.GetString("UserRole"); *@
+@* } *@
+@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="utf-8" /> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
+@*     <title>@ViewData["Title"] - Master_Piece</title> *@
+@*     <link rel="preconnect" href="https://fonts.googleapis.com" /> *@
+@*     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> *@
+@*     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" *@
+@*           rel="stylesheet" /> *@
+@*     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> *@
+@*     <!-- SweetAlert CDN --> *@
+@*     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.css" rel="stylesheet"> *@
+
+@*     @RenderSection("Styles", required: false) *@
+@*     <style> *@
+@*         * { *@
+@*             margin: 0px; *@
+@*             padding: 0px; *@
+@*             font-family: "Nunito Sans", serif; *@
+@*             font-optical-sizing: auto; *@
+@*             font-weight: 400; *@
+@*             font-style: normal; *@
+@*             /* font-variation-settings: "wdth" 100, "YTLC" 500; */ *@
+@*             font-stretch: 100%; /* Equivalent to "wdth" */ *@
+@*             font-weight: 500; /* Adjust weight instead of "YTLC" */ *@
+@*         } *@
+
+
+@*         .header { *@
+@*             background-color: #d9eafd; *@
+@*             opacity: 70%; *@
+@*             padding: 10px 20px; *@
+@*             position: static; *@
+@*             width: 97%; *@
+@*             height: auto; *@
+@*             z-index: 1000; *@
+@*             display: flex; *@
+@*             align-items: center; *@
+@*             justify-content: space-between; *@
+@*             flex-wrap: wrap; *@
+@*         } *@
+
+@*         .left-section { *@
+@*             display: flex; *@
+@*             align-items: center; *@
+@*             gap: 10px; *@
+@*         } *@
+
+@*         /* .logo-container { */ *@
+@*         /*     display: flex; */ *@
+@*         /*     align-items: center; */ *@
+@*         /*     text-decoration: none; /* Removes the default underline from the link */ */ *@
+@*         /*     color: #003366; */ *@
+@*         /* } */ *@
+@*         .logo { *@
+@*             width: 40px; *@
+@*             height: 40px; *@
+@*         } *@
+
+@*         /* .brand-text { */ *@
+@*         /*     font-size: 24px; */ *@
+@*         /*     font-weight: bold; */ *@
+@*         /* } */ *@
+@*         .hello-user { *@
+@*             font-weight: 600; *@
+@*             color: #000; *@
+@*         } *@
+
+@*         .nav { *@
+@*             display: flex; *@
+@*             gap: 10px; *@
+@*             flex-wrap: wrap; *@
+@*         } *@
+
+@*         .nav-link { *@
+@*             text-decoration: none; *@
+@*             color: #000; *@
+@*             font-weight: bold; *@
+@*             transition: color 0.3s ease; *@
+@*         } *@
+
+@*             .nav-link:hover { *@
+@*                 color: #0073e6; *@
+@*             } *@
+
+@*         .language-select { *@
+@*             padding: 4px; *@
+@*             border-radius: 4px; *@
+@*             border: 1px solid #ccc; *@
+@*         } *@
+
+@*         .menu-toggle { *@
+@*             display: none; *@
+@*             font-size: 24px; *@
+@*             background: none; *@
+@*             border: none; *@
+@*             cursor: pointer; *@
+@*         } *@
+
+@*         .Sixth_container { *@
+@*             display: flex; *@
+@*             flex-wrap: wrap; *@
+@*             justify-content: space-between; *@
+@*             padding: 20px; *@
+@*             background-color: #d9eafd; *@
+@*             color: rgb(0, 0, 0); *@
+@*         } *@
+
+@*         .foot_text { *@
+@*             flex: 1; *@
+@*             text-align: left; *@
+@*             min-width: 200px; *@
+@*         } *@
+
+@*             .foot_text p { *@
+@*                 margin: 5px 0; *@
+@*             } *@
+
+@*             .foot_text a { *@
+@*                 color: rgb(0, 0, 0); *@
+@*                 text-decoration: none; *@
+@*             } *@
+
+@*         .footer-logo { *@
+@*             width: 100px; *@
+@*             height: 60px; *@
+@*             margin-top: 10px; *@
+@*         } *@
+
+@*         .sixth_text { *@
+@*             flex: 1; *@
+@*             text-align: center; *@
+@*             min-width: 200px; *@
+@*         } *@
+
+@*         .navbar-nav { *@
+@*             display: flex; *@
+@*             flex-direction: column; *@
+@*             gap: 10px; *@
+@*         } *@
+
+@*         .nav-item a  *@
+@*         { *@
+@*             color: white; *@
+@*             text-decoration: none; *@
+@*             transition: color 0.3s ease; *@
+@*         } *@
+
+@*         .nav-item a:hover  *@
+@*         { *@
+@*                 color: #0073e6; *@
+@*         } *@
+
+@*         .map { *@
+@*             flex: 1; *@
+@*             text-align: right; *@
+@*             min-width: 200px; *@
+@*         } *@
+
+@*         .seventh-container { *@
+@*             text-align: center; *@
+@*             padding: 10px; *@
+@*             background-color: #d9eafd; *@
+@*             color: rgb(0, 0, 0); *@
+@*         } *@
+
+@*             .seventh-container hr { *@
+@*                 border-color: #555; *@
+@*             } *@
+
+@*             .seventh-container p { *@
+@*                 margin: 10px 0; *@
+@*             } *@
+
+@*             .seventh-container a { *@
+@*                 margin: 0 10px; *@
+@*                 color: rgb(0, 0, 0); *@
+@*                 text-decoration: none; *@
+@*                 font-size: 24px; *@
+@*                 transition: color 0.3s ease; *@
+@*             } *@
+
+@*                 .seventh-container a:hover { *@
+@*                     color: #0073e6; *@
+@*                 } *@
+@*         @@media (max-width: 768px) { *@
+@*             .menu-toggle *@
+
+@*         { *@
+@*             display: block; *@
+@*             margin-left: auto; *@
+@*         } *@
+
+@*         .nav { *@
+@*             display: none; *@
+@*             flex-direction: column; *@
+@*             width: 100%; *@
+@*             margin-top: 10px; *@
+@*         } *@
+
+@*             .nav.active { *@
+@*                 display: flex; *@
+@*             } *@
+
+@*         .nav-link { *@
+@*             padding: 10px 0; *@
+@*         } *@
+
+@*         } *@
+@*     </style> *@
+@* </head> *@
+@* <body> *@
+@*     <div class="header"> *@
+@*         <a href="index.html"> *@
+@*             <img class="logo" src="~/master pictures/Black_and_Grey_Flat_Illustrated_Computer_Repair_Services_Logo.png" alt="Work Image" style="width: 50px;height: 50px;" /> *@
+@*             @* <span class="brand-text">Take Care Home Services</span>  <!-- Text next to the icon --> *@ 
+@*         </a> *@
+@*         <div id="google_translate_element"  class="language-select"></div> *@
+@*         <!-- Google Translate Script --> *@
+@*         <script type="text/javascript"> *@
+@*             function googleTranslateElementInit() { *@
+@*               new google.translate.TranslateElement({ *@
+@*                 pageLanguage: 'ar', *@
+@*                 includedLanguages: 'ar,en,fr,de,es,tr', *@
+@*                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE *@
+@*               }, 'google_translate_element'); *@
+@*             } *@
+@*         </script> *@
+@*         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> *@
+
+@*         <button id="menu-toggle" class="toggle-btn">☰</button> *@
+
+@*         <div id="nav" class="nav"> *@
+@*             @* <a asp-controller="Home" asp-action="test">test</a></a> *@ 
+@*             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+@*             <a class="nav-link" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a> *@
+@*             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a> *@
+@*             <a  class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a> *@
+
+@*             <!-- Conditional links based on TempData --> *@
+@*             @if (role != null) *@
+@*             { *@
+
+
+@*                  if (role == "User") *@
+@*                 { *@
+@*                     <a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">User Profile</a> *@
+@*                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a> *@
+@*                 } *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 <!-- Links for guests --> *@
+@*                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a> *@
+@*                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a> *@
+@*             } *@
+
+          
+           
+
+
+
+
+@*         </div> *@
+@*     </div> *@
+
+
+@*     <div class="container"> *@
+@*         <main role="main" class="pb-3"> *@
+@*             @RenderBody() *@
+@*         </main> *@
+@*     </div> *@
+
+ 
+   
+
+@*     <div class="Sixth_container"> *@
+@*         <div class="foot_text"> *@
+@*             <p><a href="#">📞+00962 79 297 1776</a></p> *@
+@*             <p><a href="#">✉️omarabojolban9@gmail.com</a></p> *@
+@*             <p><a href="#">📍 Jordan, Amman</a></p> *@
+@*             <img src="~/master pictures/Black_and_Grey_Flat_Illustrated_Computer_Repair_Services_Logo.png" alt="Logo" class="footer-logo"> *@
+@*         </div> *@
+@*         <div class="sixth_text"> *@
+@*             <div class="navbar-nav"> *@
+
+@*                 <!-- Links visible to all users --> *@
+@*                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+@*                 <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Show_All_Services">Services</a> *@
+@*                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="About_US">About Us</a> *@
+@*                 <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Contact_US">Contact Us</a> *@
+
+@*                 <!-- Conditional links based on TempData --> *@
+@*                 @if (role != null) *@
+@*                 { *@
+@*                  if (role == "User") *@
+@*                     { *@
+@*                         <a class="nav-item nav-link active" asp-area="" asp-controller="User" asp-action="Profile">Profile</a> *@
+@*                         <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Logout">Log out</a> *@
+
+@*                     } *@
+@*                 } *@
+@*                 else *@
+@*                 { *@
+@*                     <!-- Links for guests --> *@
+@*                     <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Login">Login/Registration</a> *@
+@*                     <a class="nav-item nav-link active" asp-area="" asp-controller="Home" asp-action="Register_New_Employee">Join Our Network</a> *@
+@*                 } *@
+
+     
+@*             </div> *@
+@*         </div> *@
+@*         <div class="map"> *@
+@*             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3363.0097298110522!2d35.85224372511936!3d32.55258557375814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c7715f2c2e7ab%3A0x51755840c8ddbefd!2sOrange%20Digital%20Village%20Irbid!5e0!3m2!1sar!2sjo!4v1734852423304!5m2!1sar!2sjo" width="325" height="275" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> *@
+@*         </div> *@
+@*     </div> *@
+@*     <div class="seventh-container"> *@
+@*         <hr /> *@
+@*         <p>&copy; 2025 Complete Property Care.com</p> *@
+
+@*         <section class="social-buttons py-5 bg-light"> *@
+@*             <div class="container"> *@
+@*                 <div class="row justify-content-center"> *@
+@*                     <div class="col-md-8"> *@
+@*                         <div class="d-flex flex-wrap justify-content-center gap-3"> *@
+@*                             <a href="#" class="btn btn-primary btn-lg"> *@
+@*                                 <i class="bi bi-facebook me-2"></i> *@
+@*                             </a> *@
+@*                             <a href="#" class="btn btn-info btn-lg text-white"> *@
+@*                                 <i class="bi bi-twitter me-2"></i> *@
+@*                             </a> *@
+@*                             <a href="#" class="btn btn-danger btn-lg"> *@
+@*                                 <i class="bi bi-instagram me-2"></i> *@
+@*                             </a> *@
+@*                             <a href="#" class="btn btn-success btn-lg"> *@
+@*                                 <i class="bi bi-whatsapp me-2"></i> *@
+@*                             </a> *@
+
+@*                             <a href="#" class="btn btn-primary btn-lg" style="background-color: #d9eafd; border-color: #0077b5;"> *@
+@*                                 <i class="bi bi-linkedin me-2"></i> *@
+@*                             </a> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </section> *@
+
+@*     </div> *@
+
+
+@*     <script> *@
+@*         document.addEventListener("DOMContentLoaded", function () { *@
+@*             const toggleBtn = document.getElementById("menu-toggle"); *@
+@*             const nav = document.getElementById("nav"); *@
+
+@*             if (toggleBtn && nav) { *@
+@*                 toggleBtn.addEventListener("click", () => { *@
+@*                     nav.classList.toggle("active"); *@
+@*                 }); *@
+@*             } *@
+@*         }); *@
+
+@*     </script> *@
+@*     <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+@*     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+@*     <script src="~/js/site.js" asp-append-version="true"></script> *@
+@*     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script> *@
+@*     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script> *@
+@*     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/dist/jquery.validate.unobtrusive.min.js"></script> *@
+@*     <!-- SweetAlert JS CDN --> *@
+@*     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script> *@
+
+@*     @await RenderSectionAsync("Scripts", required: false) *@
+@* </body> *@
+@* </html> *@

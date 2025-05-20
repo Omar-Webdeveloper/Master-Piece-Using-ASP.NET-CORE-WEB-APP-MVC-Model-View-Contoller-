@@ -1,6 +1,54 @@
 ﻿@model Master_Piece.Models.WorkerDetailsAndPreBookingViewModel  
 
-  <style>  
+  <style>
+    .card-bill {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 20px; /* pill shape */
+        padding: 30px;
+        max-width: 600px;
+        margin: 30px auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+        .card-bill form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card-bill input[type="text"],
+        .card-bill input[type="date"],
+        .card-bill input[type="file"],
+        .card-bill textarea {
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .card-bill textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .card-bill button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .card-bill button:hover {
+                background-color: #0056b3;
+            }
+
       .Contact_Card {  
           margin-left: 20px;  
           margin-right: 20px;  

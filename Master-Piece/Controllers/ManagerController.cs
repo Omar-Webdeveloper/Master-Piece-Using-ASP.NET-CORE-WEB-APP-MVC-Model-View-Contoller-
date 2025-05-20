@@ -190,7 +190,7 @@ namespace Master_Piece.Controllers
                 serviceWorker.Status = "Rejected";
                 _context.SaveChanges();
             }
-            return RedirectToAction("ManageServiceProviders");
+            return RedirectToAction("Manage_New_ServiceProviders");
         }
         public IActionResult ManageServiceProviders()
         {
@@ -504,7 +504,7 @@ namespace Master_Piece.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> AssignTaskToEmployees(string employeeIds, string TaskName, DateOnly StartDate, DateOnly EndDate, string TaskStatus, string TasksDetails, IFormFile BeforePhoto, IFormFile AfterPhoto)
+        public async Task<IActionResult> AssignTaskToEmployees(string employeeIds, string TaskName, DateOnly StartDate, DateOnly EndDate, string TaskStatus, string TasksDetails, IFormFile BeforePhoto)
         {
             if (string.IsNullOrWhiteSpace(employeeIds))
                 return BadRequest("No employees selected.");
@@ -523,7 +523,6 @@ namespace Master_Piece.Controllers
                     TaskStatus = TaskStatus,
                     TasksDetails = TasksDetails,
                     BeforePhoto = await ConvertToBytesAsync(BeforePhoto),
-                    AfterPhoto = await ConvertToBytesAsync(AfterPhoto),
                 };
 
                 _context.Tasks.Add(task);
@@ -541,6 +540,59 @@ namespace Master_Piece.Controllers
                 await file.CopyToAsync(memoryStream);
                 return memoryStream.ToArray();
             }
+        }
+        public IActionResult check_Bookings_Tasks_Status()
+        {
+            int? managerId = HttpContext.Session.GetInt32("UserID");
+            if (managerId == null)
+                return RedirectToAction("Login", "Home");
+
+            // Get all employees managed by this manager
+            var employeeIds = _context.Users
+                .Where(u => u.Location.ManagerId == managerId)
+                .Select(u => u.UserId)
+                .ToList();
+
+            // Get completed bookings assigned to these employees
+            var completedBookings = _context.Bookings
+                .Where(b => employeeIds.Contains((int)b.WorkerId) && b.Status == "Completed")
+                .ToList();
+
+            // Get completed tasks assigned to these employees
+            var completedTasks = _context.Tasks
+                .Where(t => employeeIds.Contains((int)t.WrokerId) && t.TaskStatus == "Completed")
+                .ToList();
+
+            var viewModel = new BookingsTasksStatusViewModel
+            {
+                CompletedBookings = completedBookings,
+                CompletedTasks = completedTasks
+            };
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult SetBookingStatus(int bookingId, string status)
+        {
+            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
+            if (booking != null && (status == "Pending" || status == "Confirmed" || status == "Completed"))
+            {
+                booking.Status = status;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("check_Bookings_Tasks_Status");
+        }
+        [HttpPost]
+        public IActionResult SetTaskStatus(int taskId, string status)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+            if (task != null && (status == "Pending" || status == "Confirmed" || status == "Completed"))
+            {
+                task.TaskStatus = status;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("check_Bookings_Tasks_Status");
         }
 
         public IActionResult ManagerProfile()

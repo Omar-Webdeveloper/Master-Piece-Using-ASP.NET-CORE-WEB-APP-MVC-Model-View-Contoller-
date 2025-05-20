@@ -23,12 +23,20 @@ namespace Master_Piece.Models
 
     public class ReviewViewModel
     {
+        public string? ReviewStatus { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; }
         public byte[] ImageWhereTheIssueLocated { get; set; }
         public byte[] ImageAfterFixing { get; set; }
         public string UserFirstName { get; set; }
         public DateTime? CreatedAt { get; set; }
+
+
+
+        public int ReviewId { get; set; }
+        public string WorkerName { get; set; }
+        public string ServiceName { get; set; }
+
 
     }
     public class ContactUs

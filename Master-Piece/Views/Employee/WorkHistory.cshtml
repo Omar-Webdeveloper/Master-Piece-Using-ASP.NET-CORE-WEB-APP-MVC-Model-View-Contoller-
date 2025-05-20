@@ -1,4 +1,4 @@
-﻿@model List<Master_Piece.Models.AssignedBookingViewModel>
+﻿@model Master_Piece.Models.WorkHistoryViewModel
 
 @{
     ViewData["Title"] = "Work History";
@@ -6,6 +6,57 @@
 }
 
 <h2>Work History</h2>
+
+<h3> Completed Tasks</h3>
+<table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 20px;">
+    <thead style="background-color: #2e3b55; color: white;">
+        <tr>
+            <th style="padding: 12px;">Task Name</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Details</th>
+            <th>Before</th>
+            <th>After</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.CompletedTasks)
+        {
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">@task.TaskName</td>
+                <td>@task.StartDate</td>
+                <td>@task.EndDate</td>
+                <td>@task.TaskStatus</td>
+                <td>@task.TasksDetails</td>
+                <td>
+                    @if (task.BeforePhoto != null)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(task.BeforePhoto)" alt="Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    @if (task.AfterPhoto != null)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(task.AfterPhoto)" alt="No Issue Image" width="60" height="60" style="border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <span>No Fixed Image</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<h3>Completed Bookings</h3>
 
 <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 20px;">
     <thead style="background-color: #2e3b55; color: white;">
@@ -21,7 +72,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var task in Model)
+        @foreach (var task in Model.CompletedBookings)
         {
             <tr style="border-bottom: 1px solid #dee2e6;">
                 <td style="padding: 10px;">@task.FirstName</td>
